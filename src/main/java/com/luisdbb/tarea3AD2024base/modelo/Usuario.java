@@ -39,7 +39,7 @@ public class Usuario {
 	@Column(name = "Perfil", nullable = false)
 	private String perfil;
 
-	@Column(name = "Email", unique = true)
+	@Column(name = "Email", nullable = true, unique = true)
 	private String email;
 
 	@Column(name = "Password", nullable = false)

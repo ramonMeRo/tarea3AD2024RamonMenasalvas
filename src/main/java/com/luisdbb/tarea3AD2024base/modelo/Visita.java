@@ -35,7 +35,7 @@ public class Visita implements Serializable {
 	@JoinColumn(name = "idParada", nullable = false)
 	private Parada parada;
 
-	@Column(name = "Fecha", nullable = false, unique = true)
+	@Column(name = "Fecha", nullable = false)
 	private LocalDate fecha;
 
 	public Visita() {
