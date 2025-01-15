@@ -21,8 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" 
-fx:controller="com.luisdbb.tarea3AD2024base.controller.UsuarioController">
+<BorderPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.luisdbb.tarea3AD2024base.controller.UsuarioController">
    <top>
       <MenuBar BorderPane.alignment="TOP_LEFT">
         <menus>
@@ -47,7 +46,7 @@ fx:controller="com.luisdbb.tarea3AD2024base.controller.UsuarioController">
    <left>
       <VBox prefHeight="571.0" prefWidth="306.0" spacing="10.0" styleClass="background" stylesheets="@../styles/Styles.css" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Add New User" textFill="WHITE">
+            <Label text="Añadir Nueva Parada" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font>
@@ -57,7 +56,7 @@ fx:controller="com.luisdbb.tarea3AD2024base.controller.UsuarioController">
             </Label>
             <HBox prefHeight="30.0" prefWidth="265.0">
                <children>
-                  <Label text="User ID - " textFill="#f8f7f7">
+                  <Label text="Datos de Parada" textFill="#f8f7f7">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -72,7 +71,7 @@ fx:controller="com.luisdbb.tarea3AD2024base.controller.UsuarioController">
                   <Insets left="25.0" />
                </VBox.margin>
             </HBox>
-            <TextField fx:id="firstName" prefHeight="30.0" prefWidth="246.0" promptText="First Name">
+            <TextField fx:id="firstName" prefHeight="30.0" prefWidth="246.0" promptText="Nombre Parada">
                <VBox.margin>
                   <Insets left="25.0" right="25.0" />
                </VBox.margin></TextField>
