@@ -8,7 +8,7 @@
 		<version>3.4.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.luisdbb</groupId>
+	<groupId>com.ramon</groupId>
 	<artifactId>tarea3AD2024base</artifactId>
 	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
@@ -62,7 +62,7 @@
 				<artifactId>javafx-maven-plugin</artifactId>
 				<version>0.0.8</version>
 				<configuration>
-					<mainClass>com.luisdbb.tarea3AD2024base.Tarea3Ad2024baseApplication</mainClass>
+					<mainClass>com.ramon.tarea3AD2024base.Tarea3Ad2024baseApplication</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>
