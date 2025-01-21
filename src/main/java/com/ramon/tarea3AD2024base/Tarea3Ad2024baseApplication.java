@@ -37,7 +37,7 @@ public class Tarea3Ad2024baseApplication extends Application {
 	 * Scene to be displayed on startup. Example: Functional tests on main window.
 	 */
 	protected void displayInitialScene() {
-		stageManager.switchScene(FxmlView.LOGIN);
+		stageManager.switchScene(FxmlView.INICIO);
 	}
 
 	private ConfigurableApplicationContext springBootApplicationContext() {

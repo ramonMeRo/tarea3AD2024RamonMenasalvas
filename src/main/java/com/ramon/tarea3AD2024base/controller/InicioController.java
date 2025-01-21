@@ -17,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -27,7 +28,7 @@ import javafx.scene.control.TextField;
  */
 
 @Controller
-public class LoginController implements Initializable{
+public class InicioController implements Initializable{
 
 	@FXML
     private Button btnLogin;
@@ -36,10 +37,12 @@ public class LoginController implements Initializable{
     private PasswordField password;
 
     @FXML
-    private TextField username;
+    private TextField txtUsuario;
 
     @FXML
     private Label lblLogin;
+    @FXML
+    private Hyperlink hlRegistro;
     
     @Autowired
     private UsuarioService userService;
@@ -52,19 +55,26 @@ public class LoginController implements Initializable{
     private void login(ActionEvent event) throws IOException{
     	if(userService.authenticate(getUsername(), getPassword())){
     		    		
-    		stageManager.switchScene(FxmlView.USER);
+    		stageManager.switchScene(FxmlView.ADMINISTRADOR);
     		
     	}else{
-    		lblLogin.setText("Login Failed.");
+    		lblLogin.setText(".");
     	}
     }
+	
+	@FXML
+	private void registrarse(ActionEvent event) {
+		if(hlRegistro.isPressed())
+			System.out.println("Registro");
+			stageManager.switchScene(FxmlView.REGISTRO);
+	}
 	
 	public String getPassword() {
 		return password.getText();
 	}
 
 	public String getUsername() {
-		return username.getText();
+		return txtUsuario.getText();
 	}
 
 	@Override

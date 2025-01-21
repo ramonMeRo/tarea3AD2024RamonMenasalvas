@@ -1,6 +1,7 @@
 package com.ramon.tarea3AD2024base.modelo;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 
@@ -32,6 +33,12 @@ public class Peregrino implements Serializable {
 	@Column(name = "Nombre", nullable = false)
 	private String nombre;
 
+	@Column(name = "Apellido", nullable = false)
+	private String apellidos;
+
+	@Column(name = "FechaNacimiento", nullable = false)
+	private LocalDate fechaNac;
+
 	@Column(name = "Nacionalidad", nullable = false)
 	private String nacionalidad;
 
@@ -52,10 +59,12 @@ public class Peregrino implements Serializable {
 	public Peregrino() {
 	}
 
-	public Peregrino(Long id, String nombre, String nacionalidad, Usuario usuario, Carnet carnet,
-			Set<Estancia> listaEstancias, Set<Visita> paradasVisitadas) {
+	public Peregrino(Long id, String nombre, String apellidos, LocalDate fechaNac, String nacionalidad, Usuario usuario,
+			Carnet carnet, Set<Estancia> listaEstancias, Set<Visita> paradasVisitadas) {
 		this.id = id;
 		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.fechaNac = fechaNac;
 		this.nacionalidad = nacionalidad;
 		this.usuario = usuario;
 		this.carnet = carnet;
@@ -77,6 +86,22 @@ public class Peregrino implements Serializable {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public String getApellidos() {
+		return apellidos;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellidos = apellido;
+	}
+
+	public LocalDate getFechaNac() {
+		return fechaNac;
+	}
+
+	public void setFechaNac(LocalDate fechaNac) {
+		this.fechaNac = fechaNac;
 	}
 
 	public String getNacionalidad() {
@@ -121,7 +146,8 @@ public class Peregrino implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(carnet, id, listaEstancias, nacionalidad, nombre, paradasVisitadas, usuario);
+		return Objects.hash(apellidos, carnet, fechaNac, id, listaEstancias, nacionalidad, nombre, paradasVisitadas,
+				usuario);
 	}
 
 	@Override
@@ -133,7 +159,8 @@ public class Peregrino implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Peregrino other = (Peregrino) obj;
-		return Objects.equals(carnet, other.carnet) && Objects.equals(id, other.id)
+		return Objects.equals(apellidos, other.apellidos) && Objects.equals(carnet, other.carnet)
+				&& Objects.equals(fechaNac, other.fechaNac) && Objects.equals(id, other.id)
 				&& Objects.equals(listaEstancias, other.listaEstancias)
 				&& Objects.equals(nacionalidad, other.nacionalidad) && Objects.equals(nombre, other.nombre)
 				&& Objects.equals(paradasVisitadas, other.paradasVisitadas) && Objects.equals(usuario, other.usuario);
@@ -141,9 +168,9 @@ public class Peregrino implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Peregrino [id=" + id + ", nombre=" + nombre + ", nacionalidad=" + nacionalidad + ", usuario=" + usuario
-				+ ", carnet=" + carnet + ", listaEstancias=" + listaEstancias + ", paradasVisitadas=" + paradasVisitadas
-				+ "]";
+		return "Peregrino [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", fechaNac=" + fechaNac
+				+ ", nacionalidad=" + nacionalidad + ", usuario=" + usuario + ", carnet=" + carnet + ", listaEstancias="
+				+ listaEstancias + ", paradasVisitadas=" + paradasVisitadas + "]";
 	}
 
 }

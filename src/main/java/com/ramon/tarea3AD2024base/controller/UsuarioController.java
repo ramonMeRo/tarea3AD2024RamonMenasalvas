@@ -13,12 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
+import com.ramon.tarea3AD2024base.Utils.VistaUtils;
 import com.ramon.tarea3AD2024base.config.StageManager;
+import com.ramon.tarea3AD2024base.modelo.Perfil;
 import com.ramon.tarea3AD2024base.modelo.Usuario;
 import com.ramon.tarea3AD2024base.services.UsuarioService;
-import com.ramon.tarea3AD2024base.view.FxmlView;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -64,9 +64,6 @@ public class UsuarioController implements Initializable {
 	private TextField firstName;
 
 	@FXML
-	private TextField lastName;
-
-	@FXML
 	private DatePicker dob;
 
 	@FXML
@@ -79,7 +76,7 @@ public class UsuarioController implements Initializable {
 	private RadioButton rbFemale;
 
 	@FXML
-	private ComboBox<String> cbRole;
+	private ComboBox<Perfil> cbRole;
 
 	@FXML
 	private TextField email;
@@ -103,16 +100,13 @@ public class UsuarioController implements Initializable {
 	private TableColumn<Usuario, String> colFirstName;
 
 	@FXML
-	private TableColumn<Usuario, String> colLastName;
-
-	@FXML
 	private TableColumn<Usuario, LocalDate> colDOB;
 
 	@FXML
 	private TableColumn<Usuario, String> colGender;
 
 	@FXML
-	private TableColumn<Usuario, String> colRole;
+	private TableColumn<Usuario, Perfil> colRole;
 
 	@FXML
 	private TableColumn<Usuario, String> colEmail;
@@ -131,11 +125,12 @@ public class UsuarioController implements Initializable {
 	private UsuarioService userService;
 
 	private ObservableList<Usuario> userList = FXCollections.observableArrayList();
-	private ObservableList<String> roles = FXCollections.observableArrayList("Admin", "User");
+	private ObservableList<Perfil> roles = FXCollections.observableArrayList(Perfil.ADMIN, Perfil.PEREGRINO,
+			Perfil.PARADA);
 
 	@FXML
-	private void exit(ActionEvent event) {
-		Platform.exit();
+	private void salir() {
+		VistaUtils.Salir();
 	}
 
 	/**
@@ -143,28 +138,27 @@ public class UsuarioController implements Initializable {
 	 */
 	@FXML
 	private void logout(ActionEvent event) throws IOException {
-		stageManager.switchScene(FxmlView.LOGIN);
+		VistaUtils.volver();
 	}
 
 	@FXML
 	void reset(ActionEvent event) {
-		clearFields();
+		limpiarCampos();
 	}
 
 	@FXML
-	private void saveUser(ActionEvent event) {
+	private void registrarUsuario(ActionEvent event) {
 
-		if (validate("First Name", getFirstName(), "[a-zA-Z]+") && validate("Last Name", getLastName(), "[a-zA-Z]+")
-				&& emptyValidation("DOB", dob.getEditor().getText().isEmpty())
-				&& emptyValidation("Role", getRole() == null)) {
+		if (validate("First Name", getFirstName(), "[a-zA-Z]+")
+				&& validacionVacia("DOB", dob.getEditor().getText().isEmpty())
+				&& validacionVacia("Role", getRole() == null)) {
 
 			if (userId.getText() == null || userId.getText() == "") {
 				if (validate("Email", getEmail(), "[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+")
-						&& emptyValidation("Password", getPassword().isEmpty())) {
+						&& validacionVacia("Password", getPassword().isEmpty())) {
 
 					Usuario user = new Usuario();
 					user.setNombre(getFirstName());
-					user.setApellido(getLastName());
 					user.setFechaNac(getDob());
 					user.setGenero(getGender());
 					user.setPerfil(getRole());
@@ -173,28 +167,27 @@ public class UsuarioController implements Initializable {
 
 					Usuario newUser = userService.save(user);
 
-					saveAlert(newUser);
+					guardarAlerta(newUser);
 				}
 
 			} else {
 				Usuario user = userService.find(Long.parseLong(userId.getText()));
 				user.setNombre(getFirstName());
-				user.setApellido(getLastName());
 				user.setFechaNac(getDob());
 				user.setGenero(getGender());
 				user.setPerfil(getRole());
 				Usuario updatedUser = userService.update(user);
-				updateAlert(updatedUser);
+				actualizarAlerta(updatedUser);
 			}
 
-			clearFields();
+			limpiarCampos();
 			loadUserDetails();
 		}
 
 	}
 
 	@FXML
-	private void deleteUsers(ActionEvent event) {
+	private void borrarUsuario(ActionEvent event) {
 		List<Usuario> users = userTable.getSelectionModel().getSelectedItems();
 
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -209,10 +202,9 @@ public class UsuarioController implements Initializable {
 		loadUserDetails();
 	}
 
-	private void clearFields() {
+	private void limpiarCampos() {
 		userId.setText(null);
 		firstName.clear();
-		lastName.clear();
 		dob.getEditor().clear();
 		rbMale.setSelected(true);
 		rbFemale.setSelected(false);
@@ -221,22 +213,22 @@ public class UsuarioController implements Initializable {
 		password.clear();
 	}
 
-	private void saveAlert(Usuario user) {
+	private void guardarAlerta(Usuario user) {
 
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("User saved successfully.");
 		alert.setHeaderText(null);
-		alert.setContentText("The user " + user.getNombre() + " " + user.getApellido() + " has been created and \n"
+		alert.setContentText("The user " + user.getNombre() + " " + " has been created and \n"
 				+ getGenderTitle(user.getGenero()) + " id is " + user.getId() + ".");
 		alert.showAndWait();
 	}
 
-	private void updateAlert(Usuario user) {
+	private void actualizarAlerta(Usuario user) {
 
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("User updated successfully.");
 		alert.setHeaderText(null);
-		alert.setContentText("The user " + user.getNombre() + " " + user.getApellido() + " has been updated.");
+		alert.setContentText("The user " + user.getNombre() + " " + " has been updated.");
 		alert.showAndWait();
 	}
 
@@ -248,19 +240,15 @@ public class UsuarioController implements Initializable {
 		return firstName.getText();
 	}
 
-	public String getLastName() {
-		return lastName.getText();
-	}
-
 	public LocalDate getDob() {
 		return dob.getValue();
 	}
 
 	public String getGender() {
-		return rbMale.isSelected() ? "Male" : "Female";
+		return rbMale.isSelected() ? "Masculino" : "Femenino";
 	}
 
-	public String getRole() {
+	public Perfil getRole() {
 		return cbRole.getSelectionModel().getSelectedItem();
 	}
 
@@ -305,7 +293,6 @@ public class UsuarioController implements Initializable {
 
 		colUserId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-		colLastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
 		colDOB.setCellValueFactory(new PropertyValueFactory<>("dob"));
 		colGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
 		colRole.setCellValueFactory(new PropertyValueFactory<>("role"));
@@ -349,7 +336,6 @@ public class UsuarioController implements Initializable {
 				private void updateUser(Usuario user) {
 					userId.setText(Long.toString(user.getId()));
 					firstName.setText(user.getNombre());
-					lastName.setText(user.getApellido());
 					dob.setValue(user.getFechaNac());
 					if (user.getGenero().equals("Male"))
 						rbMale.setSelected(true);
@@ -382,25 +368,25 @@ public class UsuarioController implements Initializable {
 			if (m.find() && m.group().equals(value)) {
 				return true;
 			} else {
-				validationAlert(field, false);
+				validacionAlerta(field, false);
 				return false;
 			}
 		} else {
-			validationAlert(field, true);
+			validacionAlerta(field, true);
 			return false;
 		}
 	}
 
-	private boolean emptyValidation(String field, boolean empty) {
+	private boolean validacionVacia(String field, boolean empty) {
 		if (!empty) {
 			return true;
 		} else {
-			validationAlert(field, true);
+			validacionAlerta(field, true);
 			return false;
 		}
 	}
 
-	private void validationAlert(String field, boolean empty) {
+	private void validacionAlerta(String field, boolean empty) {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Validation Error");
 		alert.setHeaderText(null);

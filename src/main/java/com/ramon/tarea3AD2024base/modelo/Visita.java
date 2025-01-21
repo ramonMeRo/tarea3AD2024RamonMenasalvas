@@ -27,14 +27,17 @@ public class Visita implements Serializable {
 	@Column(name = "ID", updatable = false, nullable = false)
 	private Long id;
 
+	
 	@ManyToOne
 	@JoinColumn(name = "idPeregrino", nullable = false)
 	private Peregrino peregrino;
-
+	
+	
 	@ManyToOne
 	@JoinColumn(name = "idParada", nullable = false)
 	private Parada parada;
 
+	
 	@Column(name = "Fecha", nullable = false)
 	private LocalDate fecha;
 

@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,17 +29,15 @@ public class Usuario {
 	@Column(name = "Nombre", nullable = false)
 	private String nombre;
 
-	@Column(name = "Apellido", nullable = false)
-	private String apellido;
-
 	@Column(name = "FechaNacimiento", nullable = false)
 	private LocalDate fechaNac;
 
 	@Column(name = "Genero", nullable = false)
 	private String genero;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "Perfil", nullable = false)
-	private String perfil;
+	private Perfil perfil = Perfil.INVITADO;
 
 	@Column(name = "Email", nullable = true, unique = true)
 	private String email;
@@ -48,11 +48,10 @@ public class Usuario {
 	public Usuario() {
 	}
 
-	public Usuario(long id, String nombre, String apellido, LocalDate fechaNac, String genero, String perfil,
-			String email, String password) {
+	public Usuario(long id, String nombre, LocalDate fechaNac, String genero, Perfil perfil, String email,
+			String password) {
 		this.id = id;
 		this.nombre = nombre;
-		this.apellido = apellido;
 		this.fechaNac = fechaNac;
 		this.genero = genero;
 		this.perfil = perfil;
@@ -76,14 +75,6 @@ public class Usuario {
 		this.nombre = nombre;
 	}
 
-	public String getApellido() {
-		return apellido;
-	}
-
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
-	}
-
 	public LocalDate getFechaNac() {
 		return fechaNac;
 	}
@@ -100,11 +91,11 @@ public class Usuario {
 		this.genero = genero;
 	}
 
-	public String getPerfil() {
+	public Perfil getPerfil() {
 		return perfil;
 	}
 
-	public void setPerfil(String perfil) {
+	public void setPerfil(Perfil perfil) {
 		this.perfil = perfil;
 	}
 
@@ -126,7 +117,7 @@ public class Usuario {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(apellido, email, fechaNac, genero, id, nombre, password, perfil);
+		return Objects.hash(email, fechaNac, genero, id, nombre, password, perfil);
 	}
 
 	@Override
@@ -138,16 +129,14 @@ public class Usuario {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		return Objects.equals(apellido, other.apellido) && Objects.equals(email, other.email)
-				&& Objects.equals(fechaNac, other.fechaNac) && Objects.equals(genero, other.genero) && id == other.id
-				&& Objects.equals(nombre, other.nombre) && Objects.equals(password, other.password)
-				&& perfil == other.perfil;
+		return Objects.equals(email, other.email) && Objects.equals(fechaNac, other.fechaNac)
+				&& Objects.equals(genero, other.genero) && id == other.id && Objects.equals(nombre, other.nombre)
+				&& Objects.equals(password, other.password) && perfil == other.perfil;
 	}
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", fechaNac=" + fechaNac
-				+ ", genero=" + genero + ", perfil=" + perfil + ", email=" + email + ", password=" + password + "]";
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", fechaNac=" + fechaNac + ", genero=" + genero
+				+ ", perfil=" + perfil + ", email=" + email + ", password=" + password + "]";
 	}
-
 }

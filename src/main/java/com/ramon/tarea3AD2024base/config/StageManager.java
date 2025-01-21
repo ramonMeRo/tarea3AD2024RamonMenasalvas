@@ -38,6 +38,7 @@ public class StageManager {
         
         //primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.setTitle(title);
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
         primaryStage.centerOnScreen();
