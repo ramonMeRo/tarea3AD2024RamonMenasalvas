@@ -6,7 +6,7 @@ public enum FxmlView {
 	ADMINISTRADOR {
 		@Override
 		public String getTitle() {
-			return getStringFromResourceBundle("user.title");
+			return getStringFromResourceBundle("usuario.title");
 		}
 
 		@Override

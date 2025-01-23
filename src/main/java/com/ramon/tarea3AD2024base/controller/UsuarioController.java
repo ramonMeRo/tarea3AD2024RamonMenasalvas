@@ -15,11 +15,9 @@ import org.springframework.stereotype.Controller;
 
 import com.ramon.tarea3AD2024base.Utils.VistaUtils;
 import com.ramon.tarea3AD2024base.config.StageManager;
-import com.ramon.tarea3AD2024base.modelo.Parada;
 import com.ramon.tarea3AD2024base.modelo.Perfil;
 import com.ramon.tarea3AD2024base.modelo.Usuario;
 import com.ramon.tarea3AD2024base.services.UsuarioService;
-import com.ramon.tarea3AD2024base.view.FxmlView;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,14 +29,18 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -50,25 +52,31 @@ import javafx.util.Callback;
  */
 
 @Controller
-public class AdministradorController implements Initializable {
+public class UsuarioController implements Initializable {
 
 	@FXML
-	private Button btnSalir;
+	private Button btnLogout;
 
 	@FXML
 	private Label userId;
 
 	@FXML
-	private TextField nombreParada;
+	private TextField firstName;
 
 	@FXML
-	private TextField regionParada;
+	private DatePicker dob;
 
 	@FXML
-	private TextField usuarioResponsable;
+	private RadioButton rbMale;
 
 	@FXML
-	private TextField nombreResponsable;
+	private ToggleGroup gender;
+
+	@FXML
+	private RadioButton rbFemale;
+
+	@FXML
+	private ComboBox<Perfil> cbRole;
 
 	@FXML
 	private TextField email;
@@ -77,13 +85,10 @@ public class AdministradorController implements Initializable {
 	private PasswordField password;
 
 	@FXML
-	private PasswordField passwordConf;
+	private Button reset;
 
 	@FXML
-	private Button reinicio;
-
-	@FXML
-	private Button guardarusuario;
+	private Button saveUser;
 
 	@FXML
 	private TableView<Usuario> userTable;
@@ -110,7 +115,7 @@ public class AdministradorController implements Initializable {
 	private TableColumn<Usuario, Boolean> colEdit;
 
 	@FXML
-	private MenuItem borrarUsuario;
+	private MenuItem deleteUsers;
 
 	@Lazy
 	@Autowired
@@ -120,6 +125,8 @@ public class AdministradorController implements Initializable {
 	private UsuarioService userService;
 
 	private ObservableList<Usuario> userList = FXCollections.observableArrayList();
+	private ObservableList<Perfil> roles = FXCollections.observableArrayList(Perfil.ADMIN, Perfil.PEREGRINO,
+			Perfil.PARADA);
 
 	@FXML
 	private void salir() {
@@ -131,7 +138,7 @@ public class AdministradorController implements Initializable {
 	 */
 	@FXML
 	private void logout(ActionEvent event) throws IOException {
-		stageManager.switchScene(FxmlView.INICIO);
+		VistaUtils.volver();
 	}
 
 	@FXML
@@ -142,38 +149,29 @@ public class AdministradorController implements Initializable {
 	@FXML
 	private void registrarUsuario(ActionEvent event) {
 
-		if (validate("Nombre Parada", getNombreParada(), "[a-zA-Z]+") 
-				&& !regionParada.getText().isEmpty())
-		{
+		if (validate("First Name", getFirstName(), "[a-zA-Z]+")
+				&& validacionVacia("DOB", dob.getEditor().getText().isEmpty())
+				&& validacionVacia("Role", getRole() == null)) {
 
 			if (userId.getText() == null || userId.getText() == "") {
 				if (validate("Email", getEmail(), "[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+")
-						&& validacionVacia("Password", getPassword().isEmpty()) 
-						&& validacionVacia("PasswordConf", getPasswordConf().isEmpty())
-						&& validacionVacia("Usuario Responsable", getUsuarioResponsable().isEmpty())
-						&& validacionVacia("Nombre Responsable", getNombreResponsable().isEmpty())) {
+						&& validacionVacia("Password", getPassword().isEmpty())) {
 
 					Usuario user = new Usuario();
-					user.setNombre(getUsuarioResponsable());
+					user.setNombre(getFirstName());
+					user.setPerfil(getRole());
 					user.setEmail(getEmail());
 					user.setPassword(getPassword());
-					user.setPerfil(Perfil.PARADA);
-					
-					Parada parada = new Parada();
-					parada.setNombre(getNombreParada());
-					parada.setRegion(getRegionParada());
-					parada.setResponsable(getNombreResponsable());
-					
 
 					Usuario newUser = userService.save(user);
-					
 
 					guardarAlerta(newUser);
 				}
 
 			} else {
 				Usuario user = userService.find(Long.parseLong(userId.getText()));
-				user.setNombre(getNombreParada());
+				user.setNombre(getFirstName());
+				user.setPerfil(getRole());
 				Usuario updatedUser = userService.update(user);
 				actualizarAlerta(updatedUser);
 			}
@@ -202,7 +200,11 @@ public class AdministradorController implements Initializable {
 
 	private void limpiarCampos() {
 		userId.setText(null);
-		nombreParada.clear();
+		firstName.clear();
+		dob.getEditor().clear();
+		rbMale.setSelected(true);
+		rbFemale.setSelected(false);
+		cbRole.getSelectionModel().clearSelection();
 		email.clear();
 		password.clear();
 	}
@@ -230,52 +232,20 @@ public class AdministradorController implements Initializable {
 		return (gender.equals("Male")) ? "his" : "her";
 	}
 
-	public String getNombreParada() {
-		return nombreParada.getText();
+	public String getFirstName() {
+		return firstName.getText();
 	}
 
-	public char getRegionParada() {
-		return regionParada.getText().charAt(0);
+	public LocalDate getDob() {
+		return dob.getValue();
 	}
 
-	public void setRegionParada(TextField regionParada) {
-		this.regionParada = regionParada;
+	public String getGender() {
+		return rbMale.isSelected() ? "Masculino" : "Femenino";
 	}
 
-	public String getUsuarioResponsable() {
-		return usuarioResponsable.getText();
-	}
-
-	public void setUsuarioResponsable(TextField usuarioResponsable) {
-		this.usuarioResponsable = usuarioResponsable;
-	}
-
-	public String getNombreResponsable() {
-		return nombreResponsable.getText();
-	}
-
-	public void setNombreResponsable(TextField nombreResponsable) {
-		this.nombreResponsable = nombreResponsable;
-	}
-
-	public String getPasswordConf() {
-		return passwordConf.getText();
-	}
-
-	public void setPasswordConf(PasswordField passwordConf) {
-		this.passwordConf = passwordConf;
-	}
-
-	public void setNombreParada(TextField nombreParada) {
-		this.nombreParada = nombreParada;
-	}
-
-	public void setEmail(TextField email) {
-		this.email = email;
-	}
-
-	public void setPassword(PasswordField password) {
-		this.password = password;
+	public Perfil getRole() {
+		return cbRole.getSelectionModel().getSelectedItem();
 	}
 
 	public String getEmail() {
@@ -288,6 +258,8 @@ public class AdministradorController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+
+		cbRole.setItems(roles);
 
 		userTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -359,7 +331,8 @@ public class AdministradorController implements Initializable {
 
 				private void updateUser(Usuario user) {
 					userId.setText(Long.toString(user.getId()));
-					nombreParada.setText(user.getNombre());
+					firstName.setText(user.getNombre());
+					
 				}
 			};
 			return cell;

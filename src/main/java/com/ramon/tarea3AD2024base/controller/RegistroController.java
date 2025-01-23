@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 
 import com.ramon.tarea3AD2024base.Utils.VistaUtils;
 import com.ramon.tarea3AD2024base.config.StageManager;
+import com.ramon.tarea3AD2024base.view.FxmlView;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -50,7 +51,7 @@ public class RegistroController implements Initializable {
 
 	@FXML
 	private void volver() {
-		VistaUtils.volver();
+		stageManager.switchScene(FxmlView.INICIO);
 	}
 
 	@FXML

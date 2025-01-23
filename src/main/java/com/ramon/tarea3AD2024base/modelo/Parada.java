@@ -10,7 +10,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -25,6 +27,10 @@ public class Parada implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", updatable = false, nullable = false)
 	private Long id;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "fk_usuario", nullable = false)
+	private Usuario usuario;
 
 	@Column(name = "Nombre", nullable = false)
 	private String nombre;
@@ -41,22 +47,19 @@ public class Parada implements Serializable {
 	@OneToMany(mappedBy = "parada", cascade = CascadeType.ALL)
 	private Set<Estancia> listaEstancias;
 
-	@OneToMany(mappedBy = "parada", cascade = CascadeType.ALL)
-	private Set<Visita> paradasVisitadas;
-
 	public Parada() {
 
 	}
 
-	public Parada(Long id, String nombre, char region, String responsable, Set<Carnet> listaCarnets,
+	public Parada(Long id, Usuario usuario, String nombre, char region, String responsable, Set<Carnet> listaCarnets,
 			Set<Estancia> listaEstancias, Set<Visita> paradasVisitadas) {
 		this.id = id;
+		this.usuario = usuario;
 		this.nombre = nombre;
 		this.region = region;
 		this.responsable = responsable;
 		this.listaCarnets = listaCarnets;
 		this.listaEstancias = listaEstancias;
-		this.paradasVisitadas = paradasVisitadas;
 	}
 
 	public Long getId() {
@@ -65,6 +68,14 @@ public class Parada implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	public String getNombre() {
@@ -107,17 +118,9 @@ public class Parada implements Serializable {
 		this.listaEstancias = listaEstancias;
 	}
 
-	public Set<Visita> getParadasVisitadas() {
-		return paradasVisitadas;
-	}
-
-	public void setParadasVisitadas(Set<Visita> paradasVisitadas) {
-		this.paradasVisitadas = paradasVisitadas;
-	}
-
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, listaCarnets, listaEstancias, nombre, paradasVisitadas, region, responsable);
+		return Objects.hash(id, listaCarnets, listaEstancias, nombre, region, responsable, usuario);
 	}
 
 	@Override
@@ -131,15 +134,15 @@ public class Parada implements Serializable {
 		Parada other = (Parada) obj;
 		return Objects.equals(id, other.id) && Objects.equals(listaCarnets, other.listaCarnets)
 				&& Objects.equals(listaEstancias, other.listaEstancias) && Objects.equals(nombre, other.nombre)
-				&& Objects.equals(paradasVisitadas, other.paradasVisitadas) && region == other.region
-				&& Objects.equals(responsable, other.responsable);
+				&& region == other.region && Objects.equals(responsable, other.responsable)
+				&& Objects.equals(usuario, other.usuario);
 	}
 
 	@Override
 	public String toString() {
-		return "Parada [id=" + id + ", nombre=" + nombre + ", region=" + region + ", responsable=" + responsable
-				+ ", listaCarnets=" + listaCarnets + ", listaEstancias=" + listaEstancias + ", paradasVisitadas="
-				+ paradasVisitadas + "]";
+		return "Parada [id=" + id + ", usuario=" + usuario + ", nombre=" + nombre + ", region=" + region
+				+ ", responsable=" + responsable + ", listaCarnets=" + listaCarnets + ", listaEstancias="
+				+ listaEstancias + "]";
 	}
 
 }

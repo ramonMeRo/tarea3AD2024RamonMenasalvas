@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.InicioController">
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.LoginController">
    <children>
       <Rectangle fill="#2d4491" height="602.0" layoutX="703.0" stroke="#ffffff8b" strokeType="INSIDE" strokeWidth="0.0" width="299.0" />
       <Label fx:id="lblLogin" layoutX="745.0" layoutY="94.0" prefHeight="60.0" prefWidth="225.0" style="-fx-font-weight: BOLD;" text="INICIO DE SESIÓN" textFill="WHITE">
@@ -21,9 +21,9 @@
             <Font size="26.0" />
          </font>
       </Label>
-      <TextField fx:id="txtUsuario" layoutX="745.0" layoutY="189.0" prefHeight="50.0" prefWidth="190.0" promptText="Nombre de usuario" />
+      <TextField fx:id="username" layoutX="745.0" layoutY="189.0" prefHeight="50.0" prefWidth="190.0" promptText="Nombre de usuario" />
       <PasswordField fx:id="password" layoutX="745.0" layoutY="273.0" onAction="#login" prefHeight="50.0" prefWidth="190.0" promptText="Password" />
-      <Button fx:id="btnLogin" layoutX="704.0" layoutY="441.0" mnemonicParsing="false" onAction="#login" prefHeight="31.0" prefWidth="297.0" styleClass="btnGreen" text="Inicia sesion" textFill="#2d4491">
+      <Button fx:id="btnLogin" layoutX="855.0" layoutY="441.0" mnemonicParsing="false" onAction="#login" prefHeight="31.0" prefWidth="110.0" styleClass="btnGreen" text="Inicia sesion" textFill="#2d4491">
          <font>
             <Font size="15.0" />
          </font>
@@ -37,13 +37,13 @@
       </Label>
       <ImageView disable="true" fitHeight="264.0" fitWidth="414.0" layoutX="155.0" layoutY="183.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../img/Camino.jpg" />
+            <Image url="@../img/1737045602Camino.jpg-new-Camino.jpg" />
          </image></ImageView>
       <Label layoutX="745.0" layoutY="346.0" text="¿No tienes cuenta aún?" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font></Label>
-      <Hyperlink fx:id="hlRegistro" layoutX="895.0" layoutY="344.0" onAction="#registrarse" text="Regístrate" textFill="#edc82f">
+      <Hyperlink layoutX="895.0" layoutY="344.0" text="Regístrate" textFill="#edc82f">
          <font>
             <Font size="14.0" />
          </font></Hyperlink>

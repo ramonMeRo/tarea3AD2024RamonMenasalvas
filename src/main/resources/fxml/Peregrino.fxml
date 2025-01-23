@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.AdministradorController">
+<BorderPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.PeregrinoController">
 	<top>
 		<MenuBar BorderPane.alignment="TOP_LEFT">
 			<menus>
@@ -69,22 +69,22 @@
 						<Insets left="25.0" />
 					</VBox.margin>
 				</HBox>
-				<TextField fx:id="nombreParada" prefHeight="30.0" prefWidth="246.0" promptText="Nombre Parada">
+				<TextField fx:id="firstName" prefHeight="30.0" prefWidth="246.0" promptText="Nombre Parada">
 					<VBox.margin>
 						<Insets left="25.0" right="25.0" />
 					</VBox.margin>
 				</TextField>
-				<TextField fx:id="regionParada" prefHeight="30.0" prefWidth="246.0" promptText="Region Parada">
+				<TextField fx:id="lastName" prefHeight="30.0" prefWidth="246.0" promptText="Region Parada">
 					<VBox.margin>
 						<Insets left="25.0" right="25.0" />
 					</VBox.margin>
 				</TextField>
-            <TextField fx:id="usuarioResponsable" prefHeight="30.0" prefWidth="246.0" promptText="Ususario responsable">
+            <TextField fx:id="lastName1" prefHeight="30.0" prefWidth="246.0" promptText="Ususario responsable">
                <VBox.margin>
                   <Insets left="25.0" right="25.0" />
                </VBox.margin>
             </TextField>
-            <TextField fx:id="nombreResponsable" prefHeight="30.0" prefWidth="246.0" promptText="Nombre responsable">
+            <TextField fx:id="lastName2" prefHeight="30.0" prefWidth="246.0" promptText="Nombre responsable">
                <VBox.margin>
                   <Insets left="25.0" right="25.0" />
                </VBox.margin>
@@ -99,17 +99,17 @@
 						<Insets left="25.0" right="25.0" />
 					</VBox.margin>
 				</PasswordField>
-            <PasswordField fx:id="passwordConf" prefHeight="30.0" prefWidth="246.0" promptText="Confirmar Password">
+            <PasswordField fx:id="password1" prefHeight="30.0" prefWidth="246.0" promptText="Confirmar Password">
                <VBox.margin>
                   <Insets left="25.0" right="25.0" />
                </VBox.margin>
             </PasswordField>
-						<Button fx:id="reinicio" mnemonicParsing="false" onAction="#reset" prefHeight="30.0" prefWidth="306.0" style="-fx-background-color: white;" text="Borrar campos">
+						<Button fx:id="reset" mnemonicParsing="false" onAction="#reset" prefHeight="30.0" prefWidth="306.0" style="-fx-background-color: white;" text="Borrar campos">
 							<effect>
 								<DropShadow blurType="ONE_PASS_BOX" color="#1965d0" />
 							</effect>
 						</Button>
-						<Button fx:id="gaurdarUsuario" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#registrarUsuario" prefHeight="30.0" prefWidth="306.0" styleClass="btnGreen" text="Confimar" textFill="WHITE">
+						<Button fx:id="saveUser" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#registrarUsuario" prefHeight="30.0" prefWidth="306.0" styleClass="btnGreen" text="Confimar" textFill="WHITE">
 							<font>
 								<Font size="15.0" />
 							</font>
@@ -139,7 +139,7 @@
                         <Image url="@../img/carpeta.png" />
                      </image>
                   </ImageView>
-						<Button fx:id="btnSalir" mnemonicParsing="false" onAction="#logout" prefHeight="22.0" prefWidth="70.0" styleClass="background" text="Logout" textFill="#fff9f9" textOverrun="CLIP">
+						<Button fx:id="btnLogout" mnemonicParsing="false" onAction="#logout" prefHeight="22.0" prefWidth="70.0" styleClass="background" text="Logout" textFill="#fff9f9" textOverrun="CLIP">
 							<font>
 								<Font size="14.0" />
 							</font>
@@ -172,7 +172,7 @@
 					<contextMenu>
 						<ContextMenu>
 							<items>
-								<MenuItem fx:id="BorrarUsario" mnemonicParsing="false" onAction="#borrarUsuario" text="Borrar usuario" />
+								<MenuItem fx:id="deleteUsers" mnemonicParsing="false" onAction="#borrarUsuario" text="Delete" />
 							</items>
 						</ContextMenu>
 					</contextMenu>

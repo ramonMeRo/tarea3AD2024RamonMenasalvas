@@ -39,7 +39,7 @@ public class UsuarioService {
 	}
 
 	public boolean authenticate(String username, String password) {
-		Usuario user = this.findByEmail(username);
+		Usuario user = this.findByNombreOrEmail(username);
 		if (user == null) {
 			return false;
 		} else {
@@ -50,9 +50,10 @@ public class UsuarioService {
 		}
 	}
 
-	public Usuario findByEmail(String email) {
-		return userRepository.findByEmail(email);
+	public Usuario findByNombreOrEmail(String email) {
+		return userRepository.findByNombreOrEmail(email);
 	}
+	
 
 	public void deleteInBatch(List<Usuario> users) {
 		userRepository.deleteAll(users);

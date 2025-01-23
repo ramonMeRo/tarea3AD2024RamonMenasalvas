@@ -53,7 +53,6 @@ public class Peregrino implements Serializable {
 	@OneToMany(mappedBy = "peregrino", cascade = CascadeType.ALL)
 	private Set<Estancia> listaEstancias;
 
-	@OneToMany(mappedBy = "peregrino", cascade = CascadeType.ALL)
 	private Set<Visita> paradasVisitadas;
 
 	public Peregrino() {
