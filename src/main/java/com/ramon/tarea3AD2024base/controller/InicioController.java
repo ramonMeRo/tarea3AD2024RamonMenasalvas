@@ -68,11 +68,11 @@ public class InicioController implements Initializable {
 				stageManager.switchScene(FxmlView.PEREGRINO);
 
 		} else {
-			Alert alert = new Alert(AlertType.CONFIRMATION);
+			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error de inicio de sesión");
-			alert.setHeaderText(null);
+			alert.setHeaderText("Intento de inicio de sesion");
 			alert.setContentText("Usuario y/o contraseña incorrectos");
-			Optional<ButtonType> action = alert.showAndWait();
+			alert.showAndWait();
 		}
 	}
 

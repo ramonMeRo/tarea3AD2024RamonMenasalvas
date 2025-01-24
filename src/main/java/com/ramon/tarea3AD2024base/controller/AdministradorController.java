@@ -18,6 +18,7 @@ import com.ramon.tarea3AD2024base.config.StageManager;
 import com.ramon.tarea3AD2024base.modelo.Parada;
 import com.ramon.tarea3AD2024base.modelo.Perfil;
 import com.ramon.tarea3AD2024base.modelo.Usuario;
+import com.ramon.tarea3AD2024base.services.ParadaService;
 import com.ramon.tarea3AD2024base.services.UsuarioService;
 import com.ramon.tarea3AD2024base.view.FxmlView;
 
@@ -118,6 +119,8 @@ public class AdministradorController implements Initializable {
 
 	@Autowired
 	private UsuarioService userService;
+	@Autowired
+	private ParadaService paradaService;
 
 	private ObservableList<Usuario> userList = FXCollections.observableArrayList();
 
@@ -166,7 +169,8 @@ public class AdministradorController implements Initializable {
 					
 
 					Usuario newUser = userService.save(user);
-					
+					parada.setUsuario(user);
+					Parada nuevaParada = paradaService.save(parada);
 
 					guardarAlerta(newUser);
 				}

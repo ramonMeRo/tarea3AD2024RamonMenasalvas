@@ -28,7 +28,7 @@ public class Parada implements Serializable {
 	@Column(name = "ID", updatable = false, nullable = false)
 	private Long id;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "fk_usuario", nullable = false)
 	private Usuario usuario;
 
