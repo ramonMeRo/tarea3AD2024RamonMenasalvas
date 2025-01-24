@@ -107,12 +107,12 @@
             </PasswordField>
             <HBox prefHeight="30.0" prefWidth="250.0" spacing="10.0">
                <children>
-                  <Button fx:id="reset" mnemonicParsing="false" onAction="#reset" prefHeight="30.0" prefWidth="75.0" style="-fx-background-color: white;" styleClass="btnGreen" text="Reset">
+                  <Button fx:id="reset" mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" style="-fx-background-color: white;" styleClass="btnGreen" text="Reset">
                      <effect>
                         <DropShadow blurType="ONE_PASS_BOX" color="#1965d0" />
                      </effect>
                   </Button>
-                  <Button fx:id="saveUser" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveUser" prefHeight="30.0" prefWidth="75.0" styleClass="btnGreen" text="Guardar" textFill="WHITE">
+                  <Button fx:id="saveUser" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" styleClass="btnGreen" text="Guardar" textFill="WHITE">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -142,7 +142,7 @@
          <children>
             <HBox alignment="TOP_RIGHT" prefHeight="41.0" prefWidth="640.0">
                <children>
-                  <Button fx:id="btnLogout" mnemonicParsing="false" onAction="#logout" prefHeight="22.0" prefWidth="70.0" styleClass="background" text="Logout" textFill="#fff9f9" textOverrun="CLIP">
+                  <Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="22.0" prefWidth="70.0" styleClass="background" text="Logout" textFill="#fff9f9" textOverrun="CLIP">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -171,7 +171,7 @@
                <contextMenu>
                   <ContextMenu>
                     <items>
-                      <MenuItem fx:id="deleteUsers" mnemonicParsing="false" onAction="#deleteUsers" text="Delete" />
+                      <MenuItem fx:id="deleteUsers" mnemonicParsing="false" text="Delete" />
                     </items>
                   </ContextMenu>
                </contextMenu>

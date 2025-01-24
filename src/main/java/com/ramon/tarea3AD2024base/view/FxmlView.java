@@ -3,17 +3,7 @@ package com.ramon.tarea3AD2024base.view;
 import java.util.ResourceBundle;
 
 public enum FxmlView {
-	ADMINISTRADOR {
-		@Override
-		public String getTitle() {
-			return getStringFromResourceBundle("usuario.title");
-		}
-
-		@Override
-		public String getFxmlFile() {
-			return "/fxml/Administrador.fxml";
-		}
-	},
+	
 	INICIO {
 		@Override
 		public String getTitle() {
@@ -23,6 +13,39 @@ public enum FxmlView {
 		@Override
 		public String getFxmlFile() {
 			return "/fxml/Inicio.fxml";
+		}
+	},
+	RESPONSABLE{
+		@Override
+		public String getTitle() {
+			return getStringFromResourceBundle("usuario.title");
+		}
+
+		@Override
+		public String getFxmlFile() {
+			return "/fxml/Responsable.fxml";
+		}
+	},
+	PEREGRINO{
+		@Override
+		public String getTitle() {
+			return getStringFromResourceBundle("usuario.title");
+		}
+
+		@Override
+		public String getFxmlFile() {
+			return "/fxml/Peregrino.fxml";
+		}
+	},
+	ADMINISTRADOR {
+		@Override
+		public String getTitle() {
+			return getStringFromResourceBundle("usuario.title");
+		}
+
+		@Override
+		public String getFxmlFile() {
+			return "/fxml/Administrador.fxml";
 		}
 	},
 	REGISTRO{
