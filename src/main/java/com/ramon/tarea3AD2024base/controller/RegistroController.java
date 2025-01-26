@@ -3,9 +3,14 @@ package com.ramon.tarea3AD2024base.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,33 +26,46 @@ import org.xml.sax.SAXException;
 
 import com.ramon.tarea3AD2024base.Utils.VistaUtils;
 import com.ramon.tarea3AD2024base.config.StageManager;
+import com.ramon.tarea3AD2024base.modelo.Carnet;
 import com.ramon.tarea3AD2024base.modelo.Parada;
+import com.ramon.tarea3AD2024base.modelo.Peregrino;
+import com.ramon.tarea3AD2024base.modelo.Perfil;
+import com.ramon.tarea3AD2024base.modelo.Usuario;
+import com.ramon.tarea3AD2024base.modelo.Visita;
+import com.ramon.tarea3AD2024base.services.CarnetService;
 import com.ramon.tarea3AD2024base.services.ParadaService;
+import com.ramon.tarea3AD2024base.services.PeregrinoService;
+import com.ramon.tarea3AD2024base.services.UsuarioService;
+import com.ramon.tarea3AD2024base.services.VisitaService;
 import com.ramon.tarea3AD2024base.view.FxmlView;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.StringConverter;
 
 @Controller
 public class RegistroController implements Initializable {
+	private boolean mostrarContraseña = true;
 
 	@FXML
-	private TextField usuarioRegis;
+	private TextField usuario;
 	@FXML
-	private TextField nombreRegis;
+	private TextField nombre;
 	@FXML
-	private TextField apellidosRegis;
+	private TextField apellidos;
 	@FXML
-	private TextField emailRegis;
+	private TextField email;
 	@FXML
-	private TextField passwordRegis;
+	private TextField password;
 	@FXML
-	private TextField cPasswordRegis;
+	private TextField cPassword;
 	@FXML
 	private ComboBox<String> choiceNacionalidad;
 	@FXML
@@ -57,9 +75,13 @@ public class RegistroController implements Initializable {
 	@FXML
 	private Button btnCancelar;
 	@FXML
-	private Button btnVisible1;
+	private ImageView btnVisible1;
 	@FXML
-	private Button btnVisible2;
+	private ImageView btnVisible2;
+	@FXML
+	private TextField passwordVisible1;
+	@FXML
+	private TextField passwordVisible2;
 
 	@Lazy
 	@Autowired
@@ -67,13 +89,62 @@ public class RegistroController implements Initializable {
 
 	@Autowired
 	private ParadaService paradaService;
+
+	@Autowired
+	private PeregrinoService peregrinoService;
+
+	@Autowired
+	private UsuarioService usuarioService;
 	
+	@Autowired
+	private VisitaService visitaService;
 	
+	@Autowired
+	private CarnetService carnetService;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
-		
-		
+
+		Image iconoCerrado = new Image(getClass().getResourceAsStream("/img/ojoCerrado.png"));
+		Image iconoAbierto = new Image(getClass().getResourceAsStream("/img/ojoAbierto.png"));
+
+		btnVisible1.setOnMouseClicked(event -> {
+			mostrarContraseña = !mostrarContraseña;
+
+			if (mostrarContraseña) {
+
+				btnVisible1.setImage(iconoAbierto);
+				passwordVisible1.setText(password.getText());
+				passwordVisible1.setVisible(true);
+				password.setVisible(false);
+			} else {
+
+				btnVisible1.setImage(iconoCerrado);
+				password.setText(passwordVisible1.getText());
+				passwordVisible1.setVisible(false);
+				password.setVisible(true);
+			}
+		});
+
+		btnVisible2.setOnMouseClicked(event -> {
+			mostrarContraseña = !mostrarContraseña;
+
+			if (mostrarContraseña) {
+
+				btnVisible2.setImage(iconoAbierto);
+				passwordVisible2.setText(cPassword.getText());
+				passwordVisible2.setVisible(true);
+				cPassword.setVisible(false);
+			} else {
+
+				btnVisible2.setImage(iconoCerrado);
+				cPassword.setText(passwordVisible2.getText());
+				passwordVisible2.setVisible(false);
+				cPassword.setVisible(true);
+			}
+		});
+
 		choiceParadas.setConverter(new StringConverter<>() {
 
 			@Override
@@ -114,11 +185,6 @@ public class RegistroController implements Initializable {
 		VistaUtils.Salir();
 	}
 
-	@FXML
-	private void registrar() {
-
-	}
-	
 	private void llenarChoiceConNaciones() {
 		List<String> naciones = leerNaciones();
 		choiceNacionalidad.getItems().clear();
@@ -130,136 +196,224 @@ public class RegistroController implements Initializable {
 		choiceParadas.getItems().clear();
 		choiceParadas.getItems().addAll(paradas);
 	}
-	
+
 	private List<String> leerNaciones() {
 		File naciones = new File("src/main/resources/readOnly/paises.xml");
 		List<String> listNaciones = new ArrayList<>();
-	    try {
-	        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-	        DocumentBuilder constructorDocumento = dbf.newDocumentBuilder();
-	        Document documento = constructorDocumento.parse(naciones);
+		try {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder constructorDocumento = dbf.newDocumentBuilder();
+			Document documento = constructorDocumento.parse(naciones);
 
-	        NodeList listaPais = documento.getElementsByTagName("pais");
-	        Element pais, id, nombre;
-	        
-	        
-	        int indicePais = 0;
+			NodeList listaPais = documento.getElementsByTagName("pais");
+			Element pais, id, nombre;
 
-	        while (indicePais < listaPais.getLength()) {
-	            pais = (Element) listaPais.item(indicePais);
+			int indicePais = 0;
 
-	            id = (Element) pais.getElementsByTagName("id").item(0);
-	            String nombreNacion = pais.getElementsByTagName("nombre").item(0).getTextContent();
-	            
-	            listNaciones.add(nombreNacion);
-	            
-	            indicePais++;
-	        }
-	    } catch (ParserConfigurationException e) {
-	    	// TODO Auto-generated catch block
-	        e.printStackTrace();
-	    } catch (SAXException e) {
-	    	// TODO Auto-generated catch block
-	        e.printStackTrace();
-	    } catch (IOException e) {
-	    	// TODO Auto-generated catch block
-	        e.printStackTrace();
-	    }
-	    return listNaciones;
-	}
-	
-	
-//	@FXML
-//	public void registrarPeregrino() {
-//		if (validate("Nombre de Usuario", getUsuarioReg(), "[a-zA-Z]+") 
-//				&& !regionParada.getText().isEmpty())
-//		{
-//
-//			if (userId.getText() == null || userId.getText() == "") {
-//				if (validate("Email", getEmail(), "[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+")
-//						&& validacionVacia("Password", getPassword().isEmpty()) 
-//						&& validacionVacia("PasswordConf", getPasswordConf().isEmpty())
-//						&& validacionVacia("Usuario Responsable", getUsuarioResponsable().isEmpty())
-//						&& validacionVacia("Nombre Responsable", getNombreResponsable().isEmpty())) {
-//
-//					Usuario user = new Usuario();
-//					user.setNombre(getUsuarioResponsable());
-//					user.setEmail(getEmail());
-//					user.setPassword(getPassword());
-//					user.setPerfil(Perfil.PARADA);
-//					
-//					Parada parada = new Parada();
-//					parada.setNombre(getNombreParada());
-//					parada.setRegion(getRegionParada());
-//					parada.setResponsable(getNombreResponsable());
-//					
-//
-//					Usuario newUser = userService.save(user);
-//					
-//
-//					guardarAlerta(newUser);
-//				}
-//
-//			} else {
-//				Usuario user = userService.find(Long.parseLong(userId.getText()));
-//				user.setNombre(getNombreParada());
-//				Usuario updatedUser = userService.update(user);
-//				actualizarAlerta(updatedUser);
-//			}
-//
-//			
-//		}
-//
-//	}
-	
-	
+			while (indicePais < listaPais.getLength()) {
+				pais = (Element) listaPais.item(indicePais);
 
-	public String getUsuarioRegis() {
-		return usuarioRegis.getText();
+				id = (Element) pais.getElementsByTagName("id").item(0);
+				String nombreNacion = pais.getElementsByTagName("nombre").item(0).getTextContent();
+
+				listNaciones.add(nombreNacion);
+
+				indicePais++;
+			}
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return listNaciones;
 	}
 
-	public void setUsuarioRegis(TextField usuarioRegis) {
-		this.usuarioRegis = usuarioRegis;
+	@FXML
+	public void registrarPeregrino() {
+		if (validate("Nombre de Usuario", getUsuario(), "[a-zA-Z]+")) {
+
+			{
+				if (validate("Email", getEmail(), "[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+")
+						&& validacionVacia("Password", getPassword().isEmpty())
+						&& validacionVacia("PasswordConf", getCPassword().isEmpty())
+						&& validacionVacia("Usuario", getUsuario().isEmpty())
+						&& validacionVacia("Nombre", getNombre().isEmpty())
+						&& validacionVacia("Apellidos", getApellidos().isEmpty())
+						&& validacionVacia("Email", getEmail().isEmpty())) {
+
+					if (!passwordsCoinciden(getPassword(), getCPassword())) {
+						validacionAlerta("Contraseñas no coinciden", true);
+						return;
+					}
+					if (choiceParadas.getValue() == null) {
+						validacionAlerta("Parada inicial no seleccionada", true);
+						return;
+					}
+					if (choiceNacionalidad.getValue() == null) {
+						validacionAlerta("Nacionalidad no seleccionada", true);
+						return;
+					}
+					try {
+					Usuario user = new Usuario();
+					user.setNombre(getUsuario());
+					user.setEmail(getEmail());
+					user.setPassword(getPassword());
+					user.setPerfil(Perfil.PEREGRINO);
+
+					Parada parada = getChoiceParadas().getValue();
+
+					Peregrino peregrino = new Peregrino();
+					peregrino.setNombre(getNombre());
+					peregrino.setApellido(getApellidos());
+					peregrino.setNacionalidad(choiceNacionalidad.getValue());
+					
+					Carnet carnet = new Carnet();
+					carnet.setDistancia(0.0);
+					carnet.setFechaExp(LocalDate.now());
+					carnet.setnVips(0);
+					carnet.setParadaInicial(parada);
+					carnet.setPeregrino(peregrino);
+					
+					Carnet nuevoCarnet = carnetService.save(carnet);
+					peregrino.setCarnet(nuevoCarnet);
+
+					Visita visita = new Visita();
+					visita.setFecha(LocalDate.now());
+					visita.setParada(parada);
+					visita.setPeregrino(peregrino);
+					
+					Visita nuevaVisita = visitaService.save(visita);
+					Set<Visita> visitas = new HashSet<Visita>();
+					visitas.add(nuevaVisita);
+					peregrino.setParadasVisitadas(visitas);
+
+					Usuario nuevoUsuario = usuarioService.save(user);
+					peregrino.setUsuario(nuevoUsuario);
+					
+					Peregrino nuevoPeregrino = peregrinoService.save(peregrino);
+
+					guardarAlerta(nuevoUsuario);
+					} catch (Exception e) {
+						Alert alert = new Alert(AlertType.WARNING);
+						alert.setTitle("Error durante registro");
+						alert.setHeaderText("Se ha producido un error durante el registro");
+						alert.show();
+					}
+				}
+			}
+
+		}
 	}
 
-	public String getNombreRegis() {
-		return nombreRegis.getText();
+	private boolean validate(String field, String value, String pattern) {
+		if (!value.isEmpty()) {
+			Pattern p = Pattern.compile(pattern);
+			Matcher m = p.matcher(value);
+			if (m.find() && m.group().equals(value)) {
+				return true;
+			} else {
+				validacionAlerta(field, false);
+				return false;
+			}
+		} else {
+			validacionAlerta(field, true);
+			return false;
+		}
 	}
 
-	public void setNombreRegis(TextField nombreRegis) {
-		this.nombreRegis = nombreRegis;
+	private boolean validacionVacia(String field, boolean empty) {
+		if (!empty) {
+			return true;
+		} else {
+			validacionAlerta(field, true);
+			return false;
+		}
 	}
 
-	public String getApellidosRegis() {
-		return apellidosRegis.getText();
+	private void validacionAlerta(String field, boolean empty) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Error de Validación");
+		alert.setHeaderText(null);
+		if (field.equals("choiceNacionalidad"))
+			alert.setContentText("Porfavor selecciones una nacionalidad: " + field);
+		else if (field.equals("choiceParadas"))
+			alert.setContentText("Porfavor seleccione una parada de inicio:" + field);
+		else {
+			if (empty)
+				alert.setContentText("Porfavor introduzca: " + field);
+			else
+				alert.setContentText("Porfavor introduzca:  " + field + " valido");
+		}
+		alert.showAndWait();
 	}
 
-	public void setApellidosRegis(TextField apellidosRegis) {
-		this.apellidosRegis = apellidosRegis;
+	private void guardarAlerta(Usuario user) {
+
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Ususario creado correctamente.");
+		alert.setHeaderText(null);
+		alert.setContentText("Usuario: " + user.getNombre() + " " + " creado correctamente ");
+		alert.showAndWait();
 	}
 
-	public String getEmailRegis() {
-		return emailRegis.getText();
+	private boolean passwordsCoinciden(String password, String cPassword) {
+		if (cPassword.equals(password))
+			return true;
+		else
+			return false;
 	}
 
-	public void setEmailRegis(TextField emailRegis) {
-		this.emailRegis = emailRegis;
+	public String getUsuario() {
+		return usuario.getText();
 	}
 
-	public String getPasswordRegis() {
-		return passwordRegis.getText();
+	public void setUsuario(TextField usuarioRegis) {
+		this.usuario = usuarioRegis;
 	}
 
-	public void setPasswordRegis(TextField passwordRegis) {
-		this.passwordRegis = passwordRegis;
+	public String getNombre() {
+		return nombre.getText();
 	}
 
-	public String getcPasswordRegis() {
-		return cPasswordRegis.getText();
+	public void setNombre(TextField nombreRegis) {
+		this.nombre = nombreRegis;
 	}
 
-	public void setcPasswordRegis(TextField cPasswordRegis) {
-		this.cPasswordRegis = cPasswordRegis;
+	public String getApellidos() {
+		return apellidos.getText();
+	}
+
+	public void setApellidos(TextField apellidosRegis) {
+		this.apellidos = apellidosRegis;
+	}
+
+	public String getEmail() {
+		return email.getText();
+	}
+
+	public void setEmail(TextField emailRegis) {
+		this.email = emailRegis;
+	}
+
+	public String getPassword() {
+		return password.getText();
+	}
+
+	public void setPassword(TextField passwordRegis) {
+		this.password = passwordRegis;
+	}
+
+	public String getCPassword() {
+		return cPassword.getText();
+	}
+
+	public void setCPassword(TextField cPasswordRegis) {
+		this.cPassword = cPasswordRegis;
 	}
 
 	public ComboBox<String> getChoiceNacionalidad() {
@@ -285,10 +439,5 @@ public class RegistroController implements Initializable {
 	public void setParadaService(ParadaService paradaService) {
 		this.paradaService = paradaService;
 	}
-
-
-
-	
-	
 
 }

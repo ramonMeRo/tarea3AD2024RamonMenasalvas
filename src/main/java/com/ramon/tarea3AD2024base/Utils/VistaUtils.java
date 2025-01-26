@@ -15,8 +15,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.ramon.tarea3AD2024base.config.StageManager;
-import com.ramon.tarea3AD2024base.view.FxmlView;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 
@@ -77,4 +77,5 @@ public class VistaUtils {
 	        e.printStackTrace();
 	    }
 	}
+	
 }

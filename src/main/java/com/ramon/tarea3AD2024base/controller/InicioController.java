@@ -20,6 +20,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Hyperlink;
@@ -34,9 +36,14 @@ import javafx.scene.control.TextField;
 
 @Controller
 public class InicioController implements Initializable {
+	
+	private boolean mostrarContraseña = true;
 
 	@FXML
 	private Button btnLogin;
+
+	@FXML
+	private ImageView btnVisible;
 
 	@FXML
 	private PasswordField password;
@@ -45,7 +52,11 @@ public class InicioController implements Initializable {
 	private TextField txtUsuario;
 
 	@FXML
+	private TextField passwordVisible;
+
+	@FXML
 	private Label lblLogin;
+
 	@FXML
 	private Hyperlink hlRegistro;
 
@@ -94,6 +105,26 @@ public class InicioController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-	}
+		Image iconoCerrado = new Image(getClass().getResourceAsStream("/img/ojoCerrado.png"));
+		Image iconoAbierto = new Image(getClass().getResourceAsStream("/img/ojoAbierto.png"));
 
+		btnVisible.setOnMouseClicked(event -> {
+	        mostrarContraseña = !mostrarContraseña;
+
+	        if (mostrarContraseña) {
+	            
+	            btnVisible.setImage(iconoAbierto);
+	            passwordVisible.setText(password.getText());
+	            passwordVisible.setVisible(true);
+	            password.setVisible(false);
+	        } else {
+	            
+	            btnVisible.setImage(iconoCerrado);
+	            password.setText(passwordVisible.getText());
+	            passwordVisible.setVisible(false);
+	            password.setVisible(true);
+	        }
+	    });
+
+	}
 }

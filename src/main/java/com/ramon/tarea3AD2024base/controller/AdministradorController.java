@@ -108,9 +108,6 @@ public class AdministradorController implements Initializable {
 	private TableColumn<Usuario, String> colEmail;
 
 	@FXML
-	private TableColumn<Usuario, Boolean> colEdit;
-
-	@FXML
 	private MenuItem borrarUsuario;
 
 	@Lazy
@@ -214,10 +211,9 @@ public class AdministradorController implements Initializable {
 	private void guardarAlerta(Usuario user) {
 
 		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("User saved successfully.");
+		alert.setTitle("Usuario introducido correctamente.");
 		alert.setHeaderText(null);
-		alert.setContentText("The user " + user.getNombre() + " " + " has been created and \n"
-				+ getGenderTitle(" id is " + user.getId() + "."));
+		alert.setContentText("Usuario: " + user.getNombre() + " " + " creado correctamente ");
 		alert.showAndWait();
 	}
 
@@ -226,12 +222,8 @@ public class AdministradorController implements Initializable {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("User updated successfully.");
 		alert.setHeaderText(null);
-		alert.setContentText("The user " + user.getNombre() + " " + " has been updated.");
+		alert.setContentText("Usuario " + user.getNombre() + " " + " actualizado correctamente.");
 		alert.showAndWait();
-	}
-
-	private String getGenderTitle(String gender) {
-		return (gender.equals("Male")) ? "his" : "her";
 	}
 
 	public String getNombreParada() {
@@ -325,7 +317,6 @@ public class AdministradorController implements Initializable {
 		colGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
 		colRole.setCellValueFactory(new PropertyValueFactory<>("role"));
 		colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-		colEdit.setCellFactory(cellFactory);
 	}
 
 	Callback<TableColumn<Usuario, Boolean>, TableCell<Usuario, Boolean>> cellFactory = new Callback<TableColumn<Usuario, Boolean>, TableCell<Usuario, Boolean>>() {
@@ -410,16 +401,13 @@ public class AdministradorController implements Initializable {
 
 	private void validacionAlerta(String field, boolean empty) {
 		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle("Validation Error");
+		alert.setTitle("Error de Validación");
 		alert.setHeaderText(null);
-		if (field.equals("Role"))
-			alert.setContentText("Please Select " + field);
-		else {
 			if (empty)
-				alert.setContentText("Please Enter " + field);
+				alert.setContentText("Porfavor rellena el campo: " + field);
 			else
-				alert.setContentText("Please Enter Valid " + field);
-		}
+				alert.setContentText("Porfavor introduzca un valor valido en: " + field);
+		
 		alert.showAndWait();
 	}
 }

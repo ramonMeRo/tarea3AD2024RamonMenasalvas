@@ -23,8 +23,8 @@
             <Font size="26.0" />
          </font>
       </Label>
-      <TextField fx:id="usuarioRegis" layoutX="765.0" layoutY="104.0" prefHeight="30.0" prefWidth="190.0" promptText="Nombre de usuario" />
-      <PasswordField fx:id="passwordRegis" layoutX="765.0" layoutY="349.0" prefHeight="30.0" prefWidth="190.0" promptText="Password" />
+      <TextField fx:id="usuario" layoutX="765.0" layoutY="104.0" prefHeight="30.0" prefWidth="190.0" promptText="Nombre de usuario" />
+      <PasswordField fx:id="password" layoutX="765.0" layoutY="349.0" prefHeight="30.0" prefWidth="190.0" promptText="Password" />
       <Button fx:id="btnConfirmar" layoutX="711.0" layoutY="503.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="299.0" styleClass="btnGreen" text="Confirmar" textFill="#2d4491">
          <font>
             <Font size="15.0" />
@@ -53,16 +53,14 @@
             </LinearGradient>
          </textFill>
       </Label>
-      <Button fx:id="btnVisible1" contentDisplay="CENTER" layoutX="961.0" layoutY="349.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="Button" />
       <ImageView disable="true" fitHeight="292.0" fitWidth="414.0" layoutX="155.0" layoutY="183.0" pickOnBounds="true">
          <image>
             <Image url="@../img/BuenViaje.jpg" />
          </image></ImageView>
-      <TextField fx:id="nombreRegis" layoutX="765.0" layoutY="151.0" prefHeight="30.0" prefWidth="190.0" promptText="Nombre" />
-      <TextField fx:id="apellidosRegis" layoutX="765.0" layoutY="201.0" prefHeight="30.0" prefWidth="190.0" promptText="Apellidos" />
-      <PasswordField fx:id="cPasswordRegis" layoutX="765.0" layoutY="397.0" prefHeight="30.0" prefWidth="190.0" promptText="Confirma la password" />
-      <Button fx:id="btnVisible2" contentDisplay="CENTER" layoutX="961.0" layoutY="397.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" text="Button" />
-      <TextField fx:id="emailRegis" layoutX="765.0" layoutY="300.0" prefHeight="30.0" prefWidth="190.0" promptText="Correo Electronicco" />
+      <TextField fx:id="nombre" layoutX="765.0" layoutY="151.0" prefHeight="30.0" prefWidth="190.0" promptText="Nombre" />
+      <TextField fx:id="apellidos" layoutX="765.0" layoutY="201.0" prefHeight="30.0" prefWidth="190.0" promptText="Apellidos" />
+      <PasswordField fx:id="cPassword" layoutX="765.0" layoutY="397.0" prefHeight="30.0" prefWidth="190.0" promptText="Confirma la password" />
+      <TextField fx:id="email" layoutX="765.0" layoutY="300.0" prefHeight="30.0" prefWidth="190.0" promptText="Correo Electronicco" />
       <Button fx:id="btnCancelar" layoutX="712.0" layoutY="546.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="299.0" styleClass="btnGreen" text="Cancelar" textFill="#2d4491">
          <font>
             <Font size="15.0" />
@@ -78,5 +76,17 @@
       </ImageView>
       <ComboBox fx:id="choiceNacionalidad" layoutX="764.0" layoutY="250.0" prefHeight="30.0" prefWidth="190.0" />
       <ComboBox fx:id="choiceParadas" layoutX="765.0" layoutY="442.0" prefHeight="30.0" prefWidth="190.0" />
+      <ImageView fx:id="btnVisible1" fitHeight="31.0" fitWidth="25.0" layoutX="965.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/ojoCerrado.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="btnVisible2" fitHeight="31.0" fitWidth="25.0" layoutX="964.0" layoutY="400.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/ojoCerrado.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="passwordVisible1" layoutX="765.0" layoutY="349.0" prefHeight="30.0" prefWidth="190.0" visible="false" />
+      <TextField fx:id="passwordVisible2" layoutX="765.0" layoutY="397.0" prefHeight="30.0" prefWidth="190.0" visible="false" />
    </children>
 </AnchorPane>
