@@ -3,10 +3,12 @@ package com.ramon.tarea3AD2024base.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.ramon.tarea3AD2024base.modelo.Visita;
 import com.ramon.tarea3AD2024base.repositorios.VisitaRepository;
 
+@Service
 public class VisitaService {
 
 	@Autowired

@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import com.ramon.tarea3AD2024base.modelo.Peregrino;
 import com.ramon.tarea3AD2024base.repositorios.PeregrinoRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class PeregrinoService {
 
 	@Autowired

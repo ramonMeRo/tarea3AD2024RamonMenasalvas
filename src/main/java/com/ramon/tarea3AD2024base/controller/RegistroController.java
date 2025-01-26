@@ -45,6 +45,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -82,6 +83,8 @@ public class RegistroController implements Initializable {
 	private TextField passwordVisible1;
 	@FXML
 	private TextField passwordVisible2;
+	@FXML
+	private DatePicker fechaNac;
 
 	@Lazy
 	@Autowired
@@ -95,10 +98,10 @@ public class RegistroController implements Initializable {
 
 	@Autowired
 	private UsuarioService usuarioService;
-	
+
 	@Autowired
 	private VisitaService visitaService;
-	
+
 	@Autowired
 	private CarnetService carnetService;
 
@@ -176,6 +179,19 @@ public class RegistroController implements Initializable {
 	}
 
 	@FXML
+	private void confirmar() {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Registro de peregrino");
+		alert.setHeaderText("¿Esta seguro de que estos son sus datos?");
+		alert.showAndWait();
+
+		if (true) {
+			registrarPeregrino();
+
+		}
+	}
+
+	@FXML
 	private void volver() {
 		stageManager.switchScene(FxmlView.INICIO);
 	}
@@ -244,7 +260,8 @@ public class RegistroController implements Initializable {
 						&& validacionVacia("Usuario", getUsuario().isEmpty())
 						&& validacionVacia("Nombre", getNombre().isEmpty())
 						&& validacionVacia("Apellidos", getApellidos().isEmpty())
-						&& validacionVacia("Email", getEmail().isEmpty())) {
+						&& validacionVacia("Email", getEmail().isEmpty())
+						&& validacionVacia("Fecha nacimiento", getFechaNac() == null)) {
 
 					if (!passwordsCoinciden(getPassword(), getCPassword())) {
 						validacionAlerta("Contraseñas no coinciden", true);
@@ -259,47 +276,56 @@ public class RegistroController implements Initializable {
 						return;
 					}
 					try {
-					Usuario user = new Usuario();
-					user.setNombre(getUsuario());
-					user.setEmail(getEmail());
-					user.setPassword(getPassword());
-					user.setPerfil(Perfil.PEREGRINO);
+						Usuario usuario = new Usuario();
+						usuario.setNombre(getUsuario());
+						usuario.setEmail(getEmail());
+						usuario.setPassword(getPassword());
+						usuario.setPerfil(Perfil.PEREGRINO);
 
-					Parada parada = getChoiceParadas().getValue();
+						Parada parada = getChoiceParadas().getValue();
 
-					Peregrino peregrino = new Peregrino();
-					peregrino.setNombre(getNombre());
-					peregrino.setApellido(getApellidos());
-					peregrino.setNacionalidad(choiceNacionalidad.getValue());
-					
-					Carnet carnet = new Carnet();
-					carnet.setDistancia(0.0);
-					carnet.setFechaExp(LocalDate.now());
-					carnet.setnVips(0);
-					carnet.setParadaInicial(parada);
-					carnet.setPeregrino(peregrino);
-					
-					Carnet nuevoCarnet = carnetService.save(carnet);
-					peregrino.setCarnet(nuevoCarnet);
+						Peregrino peregrino = new Peregrino();
+						peregrino.setNombre(getNombre());
+						peregrino.setApellido(getApellidos());
+						peregrino.setNacionalidad(choiceNacionalidad.getValue());
+						peregrino.setFechaNac(fechaNac.getValue());
+						
+						
+						Carnet carnet = new Carnet();
+						carnet.setDistancia(0.0);
+						carnet.setFechaExp(LocalDate.now());
+						carnet.setnVips(0);
+						carnet.setParadaInicial(parada);
+						carnet.setPeregrino(peregrino);
+						
+						
+						Visita visita = new Visita();
+						visita.setFecha(LocalDate.now());
+						visita.setParada(parada);
+						visita.setPeregrino(peregrino);
 
-					Visita visita = new Visita();
-					visita.setFecha(LocalDate.now());
-					visita.setParada(parada);
-					visita.setPeregrino(peregrino);
-					
-					Visita nuevaVisita = visitaService.save(visita);
-					Set<Visita> visitas = new HashSet<Visita>();
-					visitas.add(nuevaVisita);
-					peregrino.setParadasVisitadas(visitas);
+						Usuario nuevoUsuario = usuarioService.save(usuario);
 
-					Usuario nuevoUsuario = usuarioService.save(user);
-					peregrino.setUsuario(nuevoUsuario);
-					
-					Peregrino nuevoPeregrino = peregrinoService.save(peregrino);
+						Carnet nuevoCarnet = carnetService.save(carnet);
+		
+						Visita nuevaVisita = visitaService.save(visita);
+						Set<Visita> visitas = new HashSet<Visita>();
+						visitas.add(nuevaVisita);
+						
+						peregrino.setUsuario(usuario);
+						peregrino.setCarnet(carnet);
+						peregrino.setParadasVisitadas(visitas);
+						Peregrino nuevoPeregrino = peregrinoService.save(peregrino);
+						
+				
+						VistaUtils.ExportarCarnet(nuevoPeregrino);
 
-					guardarAlerta(nuevoUsuario);
+						stageManager.switchScene(FxmlView.PEREGRINO);
+
+						guardarAlerta(nuevoUsuario);
 					} catch (Exception e) {
-						Alert alert = new Alert(AlertType.WARNING);
+						e.printStackTrace();
+						Alert alert = new Alert(AlertType.ERROR);
 						alert.setTitle("Error durante registro");
 						alert.setHeaderText("Se ha producido un error durante el registro");
 						alert.show();
@@ -438,6 +464,14 @@ public class RegistroController implements Initializable {
 
 	public void setParadaService(ParadaService paradaService) {
 		this.paradaService = paradaService;
+	}
+
+	public DatePicker getFechaNac() {
+		return fechaNac;
+	}
+
+	public void setFechaNac(DatePicker fechaNac) {
+		this.fechaNac = fechaNac;
 	}
 
 }
