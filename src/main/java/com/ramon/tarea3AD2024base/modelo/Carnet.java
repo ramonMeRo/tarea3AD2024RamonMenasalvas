@@ -7,6 +7,7 @@ import java.util.Objects;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -42,7 +43,7 @@ public class Carnet implements Serializable {
 	@PrimaryKeyJoinColumn
 	private Peregrino peregrino;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "idParada", nullable = false)
 	private Parada paradaInicial;
 
@@ -109,7 +110,7 @@ public class Carnet implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(distancia, fechaExp, id, nVips, paradaInicial, peregrino);
+		return Objects.hash(distancia, fechaExp, id, nVips, paradaInicial);
 	}
 
 	@Override

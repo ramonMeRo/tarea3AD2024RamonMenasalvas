@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import com.ramon.tarea3AD2024base.modelo.Carnet;
 import com.ramon.tarea3AD2024base.repositorios.CarnetRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class CarnetService {
 
 	@Autowired

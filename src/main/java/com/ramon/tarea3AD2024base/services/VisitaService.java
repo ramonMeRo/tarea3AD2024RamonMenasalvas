@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import com.ramon.tarea3AD2024base.modelo.Visita;
 import com.ramon.tarea3AD2024base.repositorios.VisitaRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class VisitaService {
 
 	@Autowired

@@ -296,33 +296,32 @@ public class RegistroController implements Initializable {
 						carnet.setFechaExp(LocalDate.now());
 						carnet.setnVips(0);
 						carnet.setParadaInicial(parada);
-						carnet.setPeregrino(peregrino);
-						
+						peregrino.setCarnet(carnet);
 						
 						Visita visita = new Visita();
 						visita.setFecha(LocalDate.now());
 						visita.setParada(parada);
 						visita.setPeregrino(peregrino);
 
-						Usuario nuevoUsuario = usuarioService.save(usuario);
-
-						Carnet nuevoCarnet = carnetService.save(carnet);
+					
+					//	Usuario nuevoUsusario = usuarioService.save(usuario);
+						peregrino.setUsuario(usuario);
+						Peregrino nuevoPeregrino = peregrinoService.save(peregrino);
+						
 		
 						Visita nuevaVisita = visitaService.save(visita);
 						Set<Visita> visitas = new HashSet<Visita>();
 						visitas.add(nuevaVisita);
 						
-						peregrino.setUsuario(usuario);
-						peregrino.setCarnet(carnet);
-						peregrino.setParadasVisitadas(visitas);
-						Peregrino nuevoPeregrino = peregrinoService.save(peregrino);
 						
-				
+						peregrino.getParadasVisitadas().add(visita);
+						
+						
 						VistaUtils.ExportarCarnet(nuevoPeregrino);
 
 						stageManager.switchScene(FxmlView.PEREGRINO);
 
-						guardarAlerta(nuevoUsuario);
+						
 					} catch (Exception e) {
 						e.printStackTrace();
 						Alert alert = new Alert(AlertType.ERROR);
@@ -378,14 +377,14 @@ public class RegistroController implements Initializable {
 		alert.showAndWait();
 	}
 
-	private void guardarAlerta(Usuario user) {
-
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Ususario creado correctamente.");
-		alert.setHeaderText(null);
-		alert.setContentText("Usuario: " + user.getNombre() + " " + " creado correctamente ");
-		alert.showAndWait();
-	}
+//	private void guardarAlerta(Usuario user) {
+//
+//		Alert alert = new Alert(AlertType.INFORMATION);
+//		alert.setTitle("Ususario creado correctamente.");
+//		alert.setHeaderText(null);
+//		alert.setContentText("Usuario: " + user.getNombre() + " " + " creado correctamente ");
+//		alert.showAndWait();
+//	}
 
 	private boolean passwordsCoinciden(String password, String cPassword) {
 		if (cPassword.equals(password))

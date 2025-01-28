@@ -27,17 +27,14 @@ public class Visita implements Serializable {
 	@Column(name = "ID", updatable = false, nullable = false)
 	private Long id;
 
-	
 	@ManyToOne
 	@JoinColumn(name = "idPeregrino", nullable = false)
 	private Peregrino peregrino;
-	
-	
+
 	@ManyToOne
 	@JoinColumn(name = "idParada", nullable = false)
 	private Parada parada;
 
-	
 	@Column(name = "Fecha", nullable = false)
 	private LocalDate fecha;
 
@@ -85,7 +82,7 @@ public class Visita implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(fecha, id, parada, peregrino);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -97,8 +94,7 @@ public class Visita implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Visita other = (Visita) obj;
-		return Objects.equals(fecha, other.fecha) && Objects.equals(id, other.id)
-				&& Objects.equals(parada, other.parada) && Objects.equals(peregrino, other.peregrino);
+		return Objects.equals(id, other.id);
 	}
 
 	@Override

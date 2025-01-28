@@ -5,11 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ramon.tarea3AD2024base.modelo.Perfil;
 import com.ramon.tarea3AD2024base.modelo.Usuario;
 import com.ramon.tarea3AD2024base.repositorios.UsuarioRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class UsuarioService {
 
 	@Autowired

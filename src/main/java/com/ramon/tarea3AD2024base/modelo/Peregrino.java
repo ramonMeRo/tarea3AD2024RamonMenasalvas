@@ -2,6 +2,7 @@ package com.ramon.tarea3AD2024base.modelo;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -51,9 +52,10 @@ public class Peregrino implements Serializable {
 	private Carnet carnet;
 
 	@OneToMany(mappedBy = "peregrino", cascade = CascadeType.ALL)
-	private Set<Estancia> listaEstancias;
+	private Set<Estancia> listaEstancias = new HashSet<Estancia>();;
 
-	private Set<Visita> paradasVisitadas;
+	@OneToMany(mappedBy = "peregrino", cascade = CascadeType.ALL)
+	private Set<Visita> paradasVisitadas = new HashSet<Visita>();
 
 	public Peregrino() {
 	}
@@ -145,8 +147,7 @@ public class Peregrino implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(apellidos, carnet, fechaNac, id, listaEstancias, nacionalidad, nombre, paradasVisitadas,
-				usuario);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -158,18 +159,14 @@ public class Peregrino implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Peregrino other = (Peregrino) obj;
-		return Objects.equals(apellidos, other.apellidos) && Objects.equals(carnet, other.carnet)
-				&& Objects.equals(fechaNac, other.fechaNac) && Objects.equals(id, other.id)
-				&& Objects.equals(listaEstancias, other.listaEstancias)
-				&& Objects.equals(nacionalidad, other.nacionalidad) && Objects.equals(nombre, other.nombre)
-				&& Objects.equals(paradasVisitadas, other.paradasVisitadas) && Objects.equals(usuario, other.usuario);
+		return Objects.equals(id, other.id);
 	}
 
 	@Override
 	public String toString() {
 		return "Peregrino [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", fechaNac=" + fechaNac
 				+ ", nacionalidad=" + nacionalidad + ", usuario=" + usuario + ", carnet=" + carnet + ", listaEstancias="
-				+ listaEstancias + ", paradasVisitadas=" + paradasVisitadas + "]";
+				+ listaEstancias.size() + ", paradasVisitadas=" + paradasVisitadas.size() + "]";
 	}
 
 }
