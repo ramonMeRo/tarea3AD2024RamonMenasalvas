@@ -9,6 +9,7 @@ import java.util.Set;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -51,10 +52,10 @@ public class Peregrino implements Serializable {
 	@PrimaryKeyJoinColumn
 	private Carnet carnet;
 
-	@OneToMany(mappedBy = "peregrino", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "peregrino", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Estancia> listaEstancias = new HashSet<Estancia>();;
 
-	@OneToMany(mappedBy = "peregrino", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "peregrino", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Visita> paradasVisitadas = new HashSet<Visita>();
 
 	public Peregrino() {

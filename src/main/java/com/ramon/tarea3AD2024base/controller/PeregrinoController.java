@@ -21,11 +21,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.ramon.tarea3AD2024base.Utils.VistaUtils;
 import com.ramon.tarea3AD2024base.config.StageManager;
 import com.ramon.tarea3AD2024base.modelo.Estancia;
 import com.ramon.tarea3AD2024base.modelo.Parada;
 import com.ramon.tarea3AD2024base.modelo.Peregrino;
-import com.ramon.tarea3AD2024base.modelo.Sesion;
 import com.ramon.tarea3AD2024base.modelo.Usuario;
 import com.ramon.tarea3AD2024base.services.PeregrinoService;
 import com.ramon.tarea3AD2024base.view.FxmlView;
@@ -33,17 +33,17 @@ import com.ramon.tarea3AD2024base.view.FxmlView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 
 @Controller
 public class PeregrinoController implements Initializable {
-	
+
 	@FXML
 	private TextField nombre;
 	@FXML
@@ -72,13 +72,18 @@ public class PeregrinoController implements Initializable {
 
 	@FXML
 	private TableColumn<Estancia, Boolean> vip;
-	
+
 	@Lazy
 	@Autowired
 	private StageManager stagemanager;
 	@Autowired
 	private PeregrinoService peregrinoService;
 	
+	private Usuario usuarioSesion;
+
+	private Peregrino peregrino;
+	
+
 	@FXML
 	private void activarEdicion() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -94,28 +99,45 @@ public class PeregrinoController implements Initializable {
 			usuario.setEditable(true);
 			fechaNac.setEditable(true);
 			nacionalidad.setEditable(true);
-			
+
 			fechaNac.setDisable(false);
 			nacionalidad.setDisable(false);
-		} 
+		}
+
+		if (action.get() == ButtonType.CANCEL) {
+
+			nombre.setText(peregrino.getNombre());
+			apellidos.setText(peregrino.getApellidos());
+			usuario.setText(usuarioSesion.getNombre());
+			email.setText(usuarioSesion.getEmail());
+			fechaNac.setValue(peregrino.getFechaNac());
+			nacionalidad.setValue(peregrino.getNacionalidad());
+
+			nombre.setEditable(false);
+			apellidos.setEditable(false);
+			email.setEditable(false);
+			usuario.setEditable(false);
+			fechaNac.setDisable(true);
+			nacionalidad.setDisable(true);
+		}
 	}
-	
+
 	@FXML
-	private void actualizarDatosPeregrino() {
-		
+	private void exportarCarnetPeregrino() {
+		VistaUtils.ExportarCarnet(peregrino);
 	}
-	
+
 	@FXML
 	private void volver() {
 		stagemanager.switchScene(FxmlView.INICIO);
 	}
-	
+
 	private void llenarNaciones() {
 		List<String> naciones = leerNaciones();
 		nacionalidad.getItems().clear();
 		nacionalidad.getItems().addAll(naciones);
 	}
-	
+
 	private List<String> leerNaciones() {
 		File naciones = new File("src/main/resources/readOnly/paises.xml");
 		List<String> listNaciones = new ArrayList<>();
@@ -155,24 +177,19 @@ public class PeregrinoController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
-		Usuario usuarioSesion = InicioController.sesion.getUsuario();
-		System.out.println(usuarioSesion.getNombre().toString());
-		
-		Peregrino peregrino = peregrinoService.findByUsuario(usuarioSesion);
-		
+		usuarioSesion = InicioController.sesion.getUsuario();
+
+		peregrino = peregrinoService.findByUsuario(usuarioSesion);
+
 		nombre.setText(peregrino.getNombre());
 		apellidos.setText(peregrino.getApellidos());
 		usuario.setText(usuarioSesion.getNombre());
 		email.setText(usuarioSesion.getEmail());
 		fechaNac.setValue(peregrino.getFechaNac());
 		nacionalidad.setValue(peregrino.getNacionalidad());
-		
-		
+
 		llenarNaciones();
-		
-		
-		
-		
+
 	}
 
 }

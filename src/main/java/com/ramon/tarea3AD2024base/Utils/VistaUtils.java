@@ -194,7 +194,7 @@ public class VistaUtils {
 			}
 			System.out.println("----- Generando el fichero XML");
 			Source fuente = new DOMSource(documento);
-			File fichero = new File("src/main/resources/carnets/"+p.getNombre()+p.getApellidos() + "_peregrino.xml");
+			File fichero = new File("src/main/resources/carnets/"+p.getNombre().trim()+p.getApellidos().trim() + "_peregrino.xml");
 			Result resultado = new StreamResult(fichero);
 			TransformerFactory fabricaTransformador = TransformerFactory.newInstance();
 			Transformer transformador = fabricaTransformador.newTransformer();
