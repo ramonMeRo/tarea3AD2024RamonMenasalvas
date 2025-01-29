@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ramon.tarea3AD2024base.modelo.Peregrino;
+import com.ramon.tarea3AD2024base.modelo.Usuario;
 import com.ramon.tarea3AD2024base.repositorios.PeregrinoRepository;
 
 import jakarta.transaction.Transactional;
@@ -47,6 +48,10 @@ public class PeregrinoService {
 	
 	public Peregrino findByApellidos(String apellidos) {
 		return peregrinoRepository.findByApellidos(apellidos);
+	}
+	
+	public Peregrino findByUsuario(Usuario usuario) {
+		return peregrinoRepository.findByUsuario(usuario);
 	}
 	
 }

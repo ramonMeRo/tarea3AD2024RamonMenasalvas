@@ -30,12 +30,11 @@ import com.ramon.tarea3AD2024base.modelo.Carnet;
 import com.ramon.tarea3AD2024base.modelo.Parada;
 import com.ramon.tarea3AD2024base.modelo.Peregrino;
 import com.ramon.tarea3AD2024base.modelo.Perfil;
+import com.ramon.tarea3AD2024base.modelo.Sesion;
 import com.ramon.tarea3AD2024base.modelo.Usuario;
 import com.ramon.tarea3AD2024base.modelo.Visita;
-import com.ramon.tarea3AD2024base.services.CarnetService;
 import com.ramon.tarea3AD2024base.services.ParadaService;
 import com.ramon.tarea3AD2024base.services.PeregrinoService;
-import com.ramon.tarea3AD2024base.services.UsuarioService;
 import com.ramon.tarea3AD2024base.services.VisitaService;
 import com.ramon.tarea3AD2024base.view.FxmlView;
 
@@ -97,13 +96,7 @@ public class RegistroController implements Initializable {
 	private PeregrinoService peregrinoService;
 
 	@Autowired
-	private UsuarioService usuarioService;
-
-	@Autowired
 	private VisitaService visitaService;
-
-	@Autowired
-	private CarnetService carnetService;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -289,39 +282,34 @@ public class RegistroController implements Initializable {
 						peregrino.setApellido(getApellidos());
 						peregrino.setNacionalidad(choiceNacionalidad.getValue());
 						peregrino.setFechaNac(fechaNac.getValue());
-						
-						
+
 						Carnet carnet = new Carnet();
 						carnet.setDistancia(0.0);
 						carnet.setFechaExp(LocalDate.now());
 						carnet.setnVips(0);
 						carnet.setParadaInicial(parada);
 						peregrino.setCarnet(carnet);
-						
+
 						Visita visita = new Visita();
 						visita.setFecha(LocalDate.now());
 						visita.setParada(parada);
 						visita.setPeregrino(peregrino);
 
-					
-					//	Usuario nuevoUsusario = usuarioService.save(usuario);
 						peregrino.setUsuario(usuario);
 						Peregrino nuevoPeregrino = peregrinoService.save(peregrino);
-						
-		
+
 						Visita nuevaVisita = visitaService.save(visita);
 						Set<Visita> visitas = new HashSet<Visita>();
 						visitas.add(nuevaVisita);
-						
-						
+
 						peregrino.getParadasVisitadas().add(visita);
-						
-						
+
 						VistaUtils.ExportarCarnet(nuevoPeregrino);
+						
+						Sesion sesion = new Sesion(usuario);
 
 						stageManager.switchScene(FxmlView.PEREGRINO);
 
-						
 					} catch (Exception e) {
 						e.printStackTrace();
 						Alert alert = new Alert(AlertType.ERROR);

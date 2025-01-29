@@ -2,12 +2,13 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -44,7 +45,7 @@
 	<left>
 		<VBox prefHeight="571.0" prefWidth="306.0" spacing="10.0" styleClass="background" stylesheets="@../styles/Styles.css" BorderPane.alignment="CENTER">
 			<children>
-				<Label text="Peregrino" textFill="WHITE">
+				<Label text="Peregrino:" textFill="WHITE">
 					<font>
 						<Font size="20.0" />
 					</font>
@@ -54,12 +55,12 @@
 				</Label>
 				<HBox prefHeight="30.0" prefWidth="265.0">
 					<children>
-						<Label text="Datos de Parada" textFill="#f8f7f7">
+						<Label text="Datos de Peregrino" textFill="#f8f7f7">
 							<font>
 								<Font size="15.0" />
 							</font>
 						</Label>
-						<Label fx:id="userId">
+						<Label fx:id="peregrinoId">
 							<HBox.margin>
 								<Insets left="25.0" />
 							</HBox.margin>
@@ -69,54 +70,55 @@
 						<Insets left="25.0" />
 					</VBox.margin>
 				</HBox>
-				<TextField fx:id="firstName" prefHeight="30.0" prefWidth="246.0" promptText="Nombre Parada">
+				<TextField fx:id="nombre" editable="false" prefHeight="30.0" prefWidth="246.0" promptText="Nombre ">
 					<VBox.margin>
 						<Insets left="25.0" right="25.0" />
 					</VBox.margin>
 				</TextField>
-				<TextField fx:id="lastName" prefHeight="30.0" prefWidth="246.0" promptText="Region Parada">
+				<TextField fx:id="apellidos" editable="false" prefHeight="30.0" prefWidth="246.0" promptText="Apellidos">
 					<VBox.margin>
-						<Insets left="25.0" right="25.0" />
+						<Insets left="25.0" right="25.0" top="10.0" />
 					</VBox.margin>
 				</TextField>
-            <TextField fx:id="lastName1" prefHeight="30.0" prefWidth="246.0" promptText="Ususario responsable">
-               <VBox.margin>
-                  <Insets left="25.0" right="25.0" />
-               </VBox.margin>
-            </TextField>
-            <TextField fx:id="lastName2" prefHeight="30.0" prefWidth="246.0" promptText="Nombre responsable">
-               <VBox.margin>
-                  <Insets left="25.0" right="25.0" />
-               </VBox.margin>
-            </TextField>
-				<TextField fx:id="email" prefHeight="30.0" prefWidth="246.0" promptText="Email">
+				<TextField fx:id="usuario" editable="false" prefHeight="30.0" prefWidth="246.0" promptText="Ususario">
 					<VBox.margin>
-						<Insets left="25.0" right="25.0" />
+						<Insets left="25.0" right="25.0" top="10.0" />
 					</VBox.margin>
 				</TextField>
-				<PasswordField fx:id="password" prefHeight="30.0" prefWidth="246.0" promptText="Password">
+				<TextField fx:id="email" editable="false" prefHeight="30.0" prefWidth="246.0" promptText="Email">
 					<VBox.margin>
-						<Insets left="25.0" right="25.0" />
+						<Insets left="25.0" right="25.0" top="10.0" />
 					</VBox.margin>
-				</PasswordField>
-            <PasswordField fx:id="password1" prefHeight="30.0" prefWidth="246.0" promptText="Confirmar Password">
+				</TextField>
+				<DatePicker fx:id="fechaNac" disable="true" editable="false" prefHeight="30.0" prefWidth="246.0" promptText="Fecha de nacimiento">
+					<VBox.margin>
+						<Insets left="25.0" right="25.0" top="10.0" />
+					</VBox.margin>
+				</DatePicker>
+				<ComboBox fx:id="nacionalidad" disable="true" prefHeight="30.0" prefWidth="246.0">
+					<VBox.margin>
+						<Insets left="25.0" right="25.0" top="10.0" />
+					</VBox.margin>
+				</ComboBox>
+				<Button fx:id="reiniciar" mnemonicParsing="false" prefHeight="30.0" prefWidth="306.0" style="-fx-background-color: white;" text="Cancelar">
+					<effect>
+						<DropShadow blurType="ONE_PASS_BOX" color="#1965d0" />
+					</effect>
                <VBox.margin>
-                  <Insets left="25.0" right="25.0" />
+                  <Insets top="25.0" />
                </VBox.margin>
-            </PasswordField>
-						<Button fx:id="reset" mnemonicParsing="false" prefHeight="30.0" prefWidth="306.0" style="-fx-background-color: white;" text="Borrar campos">
-							<effect>
-								<DropShadow blurType="ONE_PASS_BOX" color="#1965d0" />
-							</effect>
-						</Button>
-						<Button fx:id="saveUser" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="306.0" styleClass="btnGreen" text="Confimar" textFill="WHITE">
-							<font>
-								<Font size="15.0" />
-							</font>
-							<effect>
-								<DropShadow blurType="ONE_PASS_BOX" color="#6468b2" />
-							</effect>
-						</Button>
+				</Button>
+				<Button fx:id="actualizar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="306.0" styleClass="btnGreen" text="Confimar" textFill="WHITE">
+					<font>
+						<Font size="15.0" />
+					</font>
+					<effect>
+						<DropShadow blurType="ONE_PASS_BOX" color="#6468b2" />
+					</effect>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+				</Button>
 			</children>
 			<padding>
 				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -131,15 +133,15 @@
 			<children>
 				<HBox alignment="TOP_RIGHT" prefHeight="41.0" prefWidth="640.0">
 					<children>
-                  <ImageView fitHeight="41.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
-                     <HBox.margin>
-                        <Insets right="40.0" />
-                     </HBox.margin>
-                     <image>
-                        <Image url="@../img/carpeta.png" />
-                     </image>
-                  </ImageView>
-						<Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="22.0" prefWidth="70.0" styleClass="background" text="Logout" textFill="#fff9f9" textOverrun="CLIP">
+						<ImageView fitHeight="41.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
+							<HBox.margin>
+								<Insets right="40.0" />
+							</HBox.margin>
+							<image>
+								<Image url="@../img/carpeta.png" />
+							</image>
+						</ImageView>
+						<Button fx:id="volver" mnemonicParsing="false" onAction="#volver" prefHeight="22.0" prefWidth="70.0" styleClass="background" text="Logout" textFill="#fff9f9" textOverrun="CLIP">
 							<font>
 								<Font size="14.0" />
 							</font>
@@ -152,16 +154,13 @@
 						</Button>
 					</children>
 				</HBox>
-				<TableView fx:id="userTable" prefHeight="300.0" prefWidth="679.0" tableMenuButtonVisible="true">
+				<TableView fx:id="estancias" prefHeight="300.0" prefWidth="679.0" tableMenuButtonVisible="true">
 					<columns>
-						<TableColumn fx:id="colUserId" maxWidth="700.0" prefWidth="20.0" text="ID" />
-						<TableColumn fx:id="colFirstName" maxWidth="4000.0" prefWidth="75.0" text="First Name" />
-						<TableColumn fx:id="colLastName" maxWidth="4000.0" prefWidth="75.0" text="Last Name" />
-						<TableColumn fx:id="colDOB" maxWidth="4000.0" prefWidth="75.0" text="Date of Birth" />
-						<TableColumn fx:id="colGender" maxWidth="4000.0" prefWidth="60.0" text="Gender" />
-						<TableColumn fx:id="colRole" maxWidth="4000.0" prefWidth="75.0" text="Role" />
-						<TableColumn fx:id="colEmail" maxWidth="6000.0" prefWidth="130.0" text="Email" />
-						<TableColumn fx:id="colEdit" maxWidth="3500.0" prefWidth="75.0" text="Edit" />
+						<TableColumn fx:id="idEstancia" maxWidth="700.0" prefWidth="20.0" text="ID" />
+						<TableColumn fx:id="nombreParada" maxWidth="4000.0" prefWidth="75.0" text="Nombre parada" />
+						<TableColumn fx:id="regionParada" maxWidth="4000.0" prefWidth="75.0" text="Region" />
+						<TableColumn fx:id="fecha" maxWidth="4000.0" prefWidth="75.0" text="Fecha" />
+						<TableColumn fx:id="vip" maxWidth="4000.0" prefWidth="60.0" text="Vip" />
 					</columns>
 					<VBox.margin>
 						<Insets left="10.0" right="5.0" />
@@ -177,6 +176,11 @@
 						</ContextMenu>
 					</contextMenu>
 				</TableView>
+            <Button mnemonicParsing="false" onAction="#activarEdicion" prefHeight="25.0" prefWidth="84.0" text="Editar datos">
+               <VBox.margin>
+                  <Insets right="80.0" top="80.0" />
+               </VBox.margin>
+            </Button>
 			</children>
 		</VBox>
 	</center>
