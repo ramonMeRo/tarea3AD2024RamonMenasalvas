@@ -93,7 +93,7 @@ public class Estancia implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(fecha, id, parada, peregrino, vip);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -105,9 +105,7 @@ public class Estancia implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Estancia other = (Estancia) obj;
-		return Objects.equals(fecha, other.fecha) && Objects.equals(id, other.id)
-				&& Objects.equals(parada, other.parada) && Objects.equals(peregrino, other.peregrino)
-				&& vip == other.vip;
+		return Objects.equals(id, other.id);
 	}
 
 	@Override

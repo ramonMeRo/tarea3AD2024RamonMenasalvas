@@ -127,6 +127,8 @@ public class ResponsableController implements Initializable {
 			visita.setParada(parada);
 			visita.setPeregrino(choicePeregrinos.getValue());
 
+			parada.getVisitas().add(visita);
+
 			Visita nuevaVisita = visitaService.save(visita);
 
 		} else if (estanciaSi.isSelected() && vipNo.isSelected()) {
@@ -150,6 +152,8 @@ public class ResponsableController implements Initializable {
 			visita.setFecha(LocalDate.now());
 			visita.setParada(parada);
 			visita.setPeregrino(choicePeregrinos.getValue());
+			
+			parada.getVisitas().add(visita);
 
 			Visita nuevaVisita = visitaService.save(visita);
 		} else if (estanciaNo.isSelected()) {
@@ -167,6 +171,8 @@ public class ResponsableController implements Initializable {
 			visita.setFecha(LocalDate.now());
 			visita.setParada(parada);
 			visita.setPeregrino(choicePeregrinos.getValue());
+
+			parada.getVisitas().add(visita);
 
 			Visita nuevaVisita = visitaService.save(visita);
 		}
@@ -193,7 +199,7 @@ public class ResponsableController implements Initializable {
 		usuario = sesion.getUsuario();
 
 		estanciaSi.setOnAction(event -> gestionarEstancia());
-	    estanciaNo.setOnAction(event -> gestionarEstancia());
+		estanciaNo.setOnAction(event -> gestionarEstancia());
 
 		choicePeregrinos.setConverter(new StringConverter<>() {
 
