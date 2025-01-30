@@ -4,6 +4,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import com.ramon.tarea3AD2024base.config.StageManager;
 import com.ramon.tarea3AD2024base.modelo.Carnet;
 import com.ramon.tarea3AD2024base.modelo.Estancia;
+import com.ramon.tarea3AD2024base.modelo.EstanciaTabla;
 import com.ramon.tarea3AD2024base.modelo.Parada;
 import com.ramon.tarea3AD2024base.modelo.Peregrino;
 import com.ramon.tarea3AD2024base.modelo.Sesion;
@@ -24,6 +26,8 @@ import com.ramon.tarea3AD2024base.services.PeregrinoService;
 import com.ramon.tarea3AD2024base.services.VisitaService;
 import com.ramon.tarea3AD2024base.view.FxmlView;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -31,9 +35,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
 
 @Controller
@@ -59,8 +65,26 @@ public class ResponsableController implements Initializable {
 	private ToggleGroup afirmacionEstancia;
 	@FXML
 	private ToggleGroup afirmacionVip;
+
 	@FXML
-	private TableView<Peregrino> tablaPeregrinos;
+	private TableView<EstanciaTabla> tablaEstancias;
+	@FXML
+	private TableColumn<EstanciaTabla, Long> idEstancia;
+	@FXML
+	private TableColumn<EstanciaTabla, String> nombreParada;
+	@FXML
+	private TableColumn<EstanciaTabla, String> nombrePeregrino;
+	@FXML
+	private TableColumn<EstanciaTabla, Boolean> columnaVip;
+	@FXML
+	private TableColumn<EstanciaTabla, LocalDate> columnaFecha;
+	@FXML
+	private DatePicker fechaInicio;
+	@FXML
+	private DatePicker fechaFin;
+
+	@FXML
+	private ObservableList<EstanciaTabla> listaFxEstancia = FXCollections.observableArrayList();
 
 	@Lazy
 	@Autowired
@@ -84,6 +108,32 @@ public class ResponsableController implements Initializable {
 	@FXML
 	private void volver() {
 		stagemanager.switchScene(FxmlView.INICIO);
+	}
+
+	@FXML
+	private void exportarParada() {
+
+		Parada parada = paradaService.findByUsuario(usuario);
+		EstanciaTabla estanciaTabla = new EstanciaTabla();
+listaFxEstancia.clear();
+		if (fechaInicio.getValue().isBefore(fechaFin.getValue())) {
+			Set<Estancia> listaEstancias = parada.getListaEstancias();
+			for (Estancia estancia : listaEstancias) {
+				estanciaTabla = new EstanciaTabla();
+				estanciaTabla.setId(estancia.getId());
+				estanciaTabla.setNombreParada(estancia.getParada().getNombre());
+				estanciaTabla.setNombrePeregrino(
+						estancia.getPeregrino().getNombre() + " " + estancia.getPeregrino().getApellidos());
+				estanciaTabla.setVip(estancia.isVip());
+				estanciaTabla.setFecha(estancia.getFecha());
+				
+				System.out.println(estanciaTabla.toString());
+				
+				
+				listaFxEstancia.add(estanciaTabla);
+			}
+			tablaEstancias.setItems(listaFxEstancia);
+		}
 	}
 
 	@FXML
@@ -113,12 +163,14 @@ public class ResponsableController implements Initializable {
 			estancia.setPeregrino(choicePeregrinos.getValue());
 			estancia.setVip(true);
 
+			@SuppressWarnings("unused")
 			Estancia nuevaEstancia = estanciaService.save(estancia);
 			Carnet carnet = choicePeregrinos.getValue().getCarnet();
 
 			carnet.setDistancia(carnet.getDistancia() + 5.00);
 			carnet.setnVips(carnet.getnVips() + 1);
 
+			@SuppressWarnings("unused")
 			Carnet actualizaCarnet = carnetService.update(carnet);
 
 			Visita visita = new Visita();
@@ -129,6 +181,7 @@ public class ResponsableController implements Initializable {
 
 			parada.getVisitas().add(visita);
 
+			@SuppressWarnings("unused")
 			Visita nuevaVisita = visitaService.save(visita);
 
 		} else if (estanciaSi.isSelected() && vipNo.isSelected()) {
@@ -139,12 +192,14 @@ public class ResponsableController implements Initializable {
 			estancia.setPeregrino(choicePeregrinos.getValue());
 			estancia.setVip(false);
 
+			@SuppressWarnings("unused")
 			Estancia nuevaEstancia = estanciaService.save(estancia);
 
 			Carnet carnet = choicePeregrinos.getValue().getCarnet();
 
 			carnet.setDistancia(carnet.getDistancia() + 5.00);
 
+			@SuppressWarnings("unused")
 			Carnet actualizaCarnet = carnetService.update(carnet);
 
 			Visita visita = new Visita();
@@ -152,9 +207,10 @@ public class ResponsableController implements Initializable {
 			visita.setFecha(LocalDate.now());
 			visita.setParada(parada);
 			visita.setPeregrino(choicePeregrinos.getValue());
-			
+
 			parada.getVisitas().add(visita);
 
+			@SuppressWarnings("unused")
 			Visita nuevaVisita = visitaService.save(visita);
 		} else if (estanciaNo.isSelected()) {
 
@@ -164,6 +220,7 @@ public class ResponsableController implements Initializable {
 
 			carnet.setDistancia(carnet.getDistancia() + 5.00);
 
+			@SuppressWarnings("unused")
 			Carnet actualizaCarnet = carnetService.update(carnet);
 
 			Visita visita = new Visita();
@@ -174,6 +231,7 @@ public class ResponsableController implements Initializable {
 
 			parada.getVisitas().add(visita);
 
+			@SuppressWarnings("unused")
 			Visita nuevaVisita = visitaService.save(visita);
 		}
 	}
@@ -198,6 +256,8 @@ public class ResponsableController implements Initializable {
 		sesion = InicioController.sesion;
 		usuario = sesion.getUsuario();
 
+		fechaFin.setValue(LocalDate.now());
+
 		estanciaSi.setOnAction(event -> gestionarEstancia());
 		estanciaNo.setOnAction(event -> gestionarEstancia());
 
@@ -220,6 +280,12 @@ public class ResponsableController implements Initializable {
 		llenarChoiceConPeregrinos();
 
 		choicePeregrinos.setOnAction(event -> llenarCamposPeregrino());
+
+		idEstancia.setCellValueFactory(new PropertyValueFactory<>("id"));
+		nombreParada.setCellValueFactory(new PropertyValueFactory<>("nombreParada"));
+		nombrePeregrino.setCellValueFactory(new PropertyValueFactory<>("nombrePeregrino"));
+		columnaVip.setCellValueFactory(new PropertyValueFactory<>("vip"));
+		columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
 	}
 
 	public ComboBox<Peregrino> getChoicePeregrinos() {
@@ -302,12 +368,12 @@ public class ResponsableController implements Initializable {
 		this.afirmacionVip = afirmacionVip;
 	}
 
-	public TableView<Peregrino> getTablaPeregrinos() {
-		return tablaPeregrinos;
+	public TableView<EstanciaTabla> getTablaEstancias() {
+		return tablaEstancias;
 	}
 
-	public void setTablaPeregrinos(TableView<Peregrino> tablaPeregrinos) {
-		this.tablaPeregrinos = tablaPeregrinos;
+	public void setTablaPeregrinos(TableView<EstanciaTabla> tablaEstancias) {
+		this.tablaEstancias = tablaEstancias;
 	}
 
 	public StageManager getStagemanager() {

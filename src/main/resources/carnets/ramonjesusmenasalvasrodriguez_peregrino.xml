@@ -7,14 +7,26 @@
 		<nombre>ramon jesus</nombre>
 		<nacionalidad>Suiza</nacionalidad>
 	</peregrino>
-	<hoy>2025-01-29</hoy>
-	<distanciaTotal>0.0</distanciaTotal>
+	<hoy>2025-01-30</hoy>
+	<distanciaTotal>5.0</distanciaTotal>
 	<paradas>
 		<parada>
 			<orden>1</orden>
 			<nombreP>gijon</nombreP>
 			<region>a</region>
 		</parada>
+		<parada>
+			<orden>2</orden>
+			<nombreP>gijon</nombreP>
+			<region>a</region>
+		</parada>
 	</paradas>
-	<estancias />
+	<estancias>
+		<estancia>
+			<idE>1</idE>
+			<fecha>2025-01-30</fecha>
+			<paradaE>gijon</paradaE>
+			<vip />
+		</estancia>
+	</estancias>
 </Carnet>

@@ -312,10 +312,9 @@ public class AdministradorController implements Initializable {
 		 */
 
 		colUserId.setCellValueFactory(new PropertyValueFactory<>("id"));
-		colFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-		colDOB.setCellValueFactory(new PropertyValueFactory<>("dob"));
-		colGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
-		colRole.setCellValueFactory(new PropertyValueFactory<>("role"));
+		colFirstName.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+		colDOB.setCellValueFactory(new PropertyValueFactory<>("fechaNac"));
+		colRole.setCellValueFactory(new PropertyValueFactory<>("perfil"));
 		colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 	}
 
