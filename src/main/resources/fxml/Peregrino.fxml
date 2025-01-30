@@ -133,25 +133,22 @@
 			<children>
 				<HBox alignment="TOP_RIGHT" prefHeight="41.0" prefWidth="640.0">
 					<children>
-						<ImageView fitHeight="41.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
+						<ImageView fitHeight="35.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
 							<HBox.margin>
-								<Insets right="40.0" />
+								<Insets right="40.0" top="3.0" />
 							</HBox.margin>
 							<image>
-								<Image url="@../img/carpeta.png" />
+								<Image url="@../img/informacion.png" />
 							</image>
 						</ImageView>
-						<Button fx:id="volver" mnemonicParsing="false" onAction="#volver" prefHeight="22.0" prefWidth="70.0" styleClass="background" text="Logout" textFill="#fff9f9" textOverrun="CLIP">
-							<font>
-								<Font size="14.0" />
-							</font>
-							<HBox.margin>
-								<Insets right="5.0" top="5.0" />
-							</HBox.margin>
-							<effect>
-								<DropShadow blurType="ONE_PASS_BOX" color="#00000091" />
-							</effect>
-						</Button>
+                  <ImageView fx:id="btnLogout" fitHeight="41.0" fitWidth="50.0" onMousePressed="#volver" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/energia.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </ImageView>
 					</children>
 				</HBox>
 				<TableView fx:id="estancias" prefHeight="300.0" prefWidth="679.0" tableMenuButtonVisible="true">

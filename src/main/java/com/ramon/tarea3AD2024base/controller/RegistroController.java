@@ -97,6 +97,8 @@ public class RegistroController implements Initializable {
 
 	@Autowired
 	private VisitaService visitaService;
+	
+	public Sesion sesion;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -306,9 +308,7 @@ public class RegistroController implements Initializable {
 
 						VistaUtils.ExportarCarnet(nuevoPeregrino);
 						
-						Sesion sesion = new Sesion(usuario);
-
-						stageManager.switchScene(FxmlView.PEREGRINO);
+						stageManager.switchScene(FxmlView.INICIO);
 
 					} catch (Exception e) {
 						e.printStackTrace();

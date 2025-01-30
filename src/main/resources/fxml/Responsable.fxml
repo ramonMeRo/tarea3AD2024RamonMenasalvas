@@ -9,13 +9,14 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -46,44 +47,55 @@
             </Label>
             <HBox prefHeight="30.0" prefWidth="265.0">
                <children>
-                  <Label text="Datos de Parada" textFill="#f8f7f7">
+                  <Label text="Sellar carnet" textFill="#f8f7f7">
                      <font>
-                        <Font size="15.0" />
+                        <Font size="20.0" />
                      </font>
-                  </Label>
-                  <Label fx:id="userId">
-                     <HBox.margin>
-                        <Insets left="25.0" />
-                     </HBox.margin>
                   </Label>
                </children>
                <VBox.margin>
                   <Insets left="25.0" />
                </VBox.margin>
             </HBox>
-            <TextField fx:id="firstName" prefHeight="30.0" prefWidth="246.0" promptText="Nombre Parada">
+            <ComboBox fx:id="choicePeregrinos" prefHeight="30.0" prefWidth="246.0" promptText="Elige el peregrino">
+               <VBox.margin>
+                  <Insets left="25.0" right="25.0" />
+               </VBox.margin>
+            </ComboBox>
+            <TextField fx:id="nombreSellar" editable="false" prefHeight="30.0" prefWidth="246.0" promptText="Nombre Parada">
                <VBox.margin>
                   <Insets left="25.0" right="25.0" />
                </VBox.margin></TextField>
-            <TextField fx:id="lastName" prefHeight="30.0" prefWidth="246.0" promptText="Last Name">
+            <TextField fx:id="apellidosSellar" editable="false" prefHeight="30.0" prefWidth="246.0" promptText="Apellidos">
                <VBox.margin>
                   <Insets left="25.0" right="25.0" />
                </VBox.margin></TextField>
-            <DatePicker fx:id="dob" editable="false" prefHeight="30.0" prefWidth="245.0" promptText="Date of Birth">
+            <DatePicker fx:id="fechaNacSellar" disable="true" editable="false" prefHeight="30.0" prefWidth="245.0" promptText="Fecha de Nacimiento">
                <VBox.margin>
                   <Insets left="25.0" />
                </VBox.margin>
             </DatePicker>
+            <Label prefHeight="30.0" prefWidth="182.0" text="¿Desea estanciarse?" textFill="WHITE">
+               <VBox.margin>
+                  <Insets left="25.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
             <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="255.0" spacing="15.0">
                <children>
-                  <RadioButton fx:id="rbMale" mnemonicParsing="false" selected="true" text="Male" textFill="WHITE">
+                  <RadioButton fx:id="estanciaSi" mnemonicParsing="false" selected="true" text="Si" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets left="65.0" />
+                     </HBox.margin>
                      <toggleGroup>
-                        <ToggleGroup fx:id="gender" />
+                        <ToggleGroup fx:id="afirmacionEstancia" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton fx:id="rbFemale" mnemonicParsing="false" text="Female" textFill="WHITE" toggleGroup="$gender">
+                  <RadioButton fx:id="estanciaNo" mnemonicParsing="false" text="No" textFill="WHITE" toggleGroup="$afirmacionEstancia">
                      <HBox.margin>
-                        <Insets left="10.0" />
+                        <Insets left="10.0" right="25.0" />
                      </HBox.margin>
                   </RadioButton>
                </children>
@@ -91,43 +103,56 @@
                   <Insets left="25.0" right="25.0" />
                </VBox.margin>
             </HBox>
-            <ComboBox fx:id="cbRole" prefHeight="30.0" prefWidth="246.0" promptText="Select Role">
+            <Label text="¿Desea una estancia VIP?" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font>
                <VBox.margin>
                   <Insets left="25.0" />
                </VBox.margin>
-            </ComboBox>
-            <TextField fx:id="email" prefHeight="30.0" prefWidth="246.0" promptText="Email">
-               <VBox.margin>
-                  <Insets left="25.0" right="25.0" />
-               </VBox.margin></TextField>
-            <PasswordField fx:id="password" prefHeight="30.0" prefWidth="246.0" promptText="Password">
-               <VBox.margin>
-                  <Insets left="25.0" right="25.0" />
-               </VBox.margin>
-            </PasswordField>
-            <HBox prefHeight="30.0" prefWidth="250.0" spacing="10.0">
-               <children>
-                  <Button fx:id="reset" mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" style="-fx-background-color: white;" styleClass="btnGreen" text="Reset">
-                     <effect>
-                        <DropShadow blurType="ONE_PASS_BOX" color="#1965d0" />
-                     </effect>
-                  </Button>
-                  <Button fx:id="saveUser" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" styleClass="btnGreen" text="Guardar" textFill="WHITE">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                     <effect>
-                        <DropShadow blurType="ONE_PASS_BOX" color="#6468b2" />
-                     </effect>
-                  </Button>
-               </children>
+            </Label>
+            <HBox prefHeight="30.0" prefWidth="255.0" spacing="15.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
                <VBox.margin>
-                  <Insets left="110.0" />
+                  <Insets left="25.0" right="25.0" />
                </VBox.margin>
+               <children>
+                  <RadioButton fx:id="vipSi" mnemonicParsing="false" selected="true" text="Si" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets left="65.0" />
+                     </HBox.margin>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="afirmacionVip" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="vipNo" mnemonicParsing="false" text="No" textFill="WHITE" toggleGroup="$afirmacionVip">
+                     <HBox.margin>
+                        <Insets left="10.0" right="25.0" />
+                     </HBox.margin>
+                  </RadioButton>
+               </children>
             </HBox>
+            <Button fx:id="cancelar" mnemonicParsing="false" prefHeight="30.0" prefWidth="299.0" style="-fx-background-color: white;" styleClass="btnGreen" text="Cancelar">
+               <effect>
+                  <DropShadow blurType="ONE_PASS_BOX" color="#1965d0" />
+               </effect>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="confirmar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#sellarCarnet" prefHeight="31.0" prefWidth="298.0" styleClass="btnGreen" text="Sellar" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <effect>
+                  <DropShadow blurType="ONE_PASS_BOX" color="#6468b2" />
+               </effect>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Button>
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -142,25 +167,30 @@
          <children>
             <HBox alignment="TOP_RIGHT" prefHeight="41.0" prefWidth="640.0">
                <children>
-                  <Button fx:id="btnLogout" mnemonicParsing="false" prefHeight="22.0" prefWidth="70.0" styleClass="background" text="Logout" textFill="#fff9f9" textOverrun="CLIP">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
+                  <ImageView fitHeight="35.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/informacion.png" />
+                     </image>
                      <HBox.margin>
-                        <Insets right="5.0" top="5.0" />
+                        <Insets right="40.0" top="3.0" />
                      </HBox.margin>
-                     <effect>
-                        <DropShadow blurType="ONE_PASS_BOX" color="#00000091" />
-                     </effect>
-                  </Button>
+                  </ImageView>
+                  <ImageView fx:id="btnLogout" fitHeight="41.0" fitWidth="50.0" onMousePressed="#volver" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/energia.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets right="5.0" />
+                     </HBox.margin>
+                  </ImageView>
                </children>
             </HBox>
-            <TableView fx:id="userTable" prefHeight="300.0" prefWidth="679.0" tableMenuButtonVisible="true">
+            <TableView fx:id="tablaPeregrinos" prefHeight="300.0" prefWidth="679.0" tableMenuButtonVisible="true">
               <columns>
-                <TableColumn fx:id="colUserId" maxWidth="700.0" prefWidth="20.0" text="ID" />
-                <TableColumn fx:id="colFirstName" maxWidth="4000.0" prefWidth="75.0" text="Nombre" />
-                  <TableColumn fx:id="colLastName" maxWidth="4000.0" prefWidth="75.0" text="Region" />
-                  <TableColumn fx:id="colDOB" maxWidth="4000.0" prefWidth="75.0" text="Responsable" />
+                <TableColumn fx:id="idPeregrino" maxWidth="700.0" prefWidth="20.0" text="ID" />
+                <TableColumn fx:id="nombrePeregrino" maxWidth="4000.0" prefWidth="75.0" text="Nombre" />
+                  <TableColumn fx:id="apellidosPeregrino" maxWidth="4000.0" prefWidth="75.0" text="Apellidos" />
+                  <TableColumn fx:id="emailPeregrino" maxWidth="4000.0" prefWidth="75.0" text="Email" />
               </columns>
                <VBox.margin>
                   <Insets left="10.0" right="5.0" />

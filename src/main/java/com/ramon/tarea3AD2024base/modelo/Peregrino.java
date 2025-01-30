@@ -166,7 +166,7 @@ public class Peregrino implements Serializable {
 	@Override
 	public String toString() {
 		return "Peregrino [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", fechaNac=" + fechaNac
-				+ ", nacionalidad=" + nacionalidad + ", usuario=" + usuario + ", carnet=" + carnet + ", listaEstancias="
+				+ ", nacionalidad=" + nacionalidad + ", usuario=" + usuario + ", carnetId=" + carnet.getId() + ", listaEstancias="
 				+ listaEstancias.size() + ", paradasVisitadas=" + paradasVisitadas.size() + "]";
 	}
 

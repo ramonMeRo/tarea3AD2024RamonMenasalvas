@@ -130,7 +130,7 @@ public class Carnet implements Serializable {
 	@Override
 	public String toString() {
 		return "Carnet [id=" + id + ", fechaExp=" + fechaExp + ", distancia=" + distancia + ", nVips=" + nVips
-				+ ", peregrino=" + peregrino + ", paradaInicial=" + paradaInicial + "]";
+				+ ", peregrinoId=" + peregrino.getId() + ", paradaInicial=" + paradaInicial + "]";
 	}
 
 }

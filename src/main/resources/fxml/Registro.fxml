@@ -19,7 +19,7 @@
 <AnchorPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.RegistroController">
    <children>
       <Rectangle fill="#2d4491" height="602.0" layoutX="703.0" stroke="#ffffff8b" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="313.0" />
-      <Label fx:id="lblRegistro" layoutX="798.0" layoutY="13.0" prefHeight="60.0" prefWidth="126.0" style="-fx-font-weight: BOLD;" text="REGISTRO" textFill="WHITE">
+      <Label layoutX="798.0" layoutY="13.0" prefHeight="60.0" prefWidth="126.0" style="-fx-font-weight: BOLD;" text="REGISTRO" textFill="WHITE">
          <font>
             <Font size="26.0" />
          </font>

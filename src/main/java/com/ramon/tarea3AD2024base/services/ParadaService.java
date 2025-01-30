@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ramon.tarea3AD2024base.modelo.Parada;
+import com.ramon.tarea3AD2024base.modelo.Usuario;
 import com.ramon.tarea3AD2024base.repositorios.ParadaRepository;
 
 @Service
@@ -36,5 +37,9 @@ public class ParadaService {
 
 	public List<Parada> findAll() {
 		return paradaRepository.findAll();
+	}
+	
+	public Parada findByUsuario(Usuario usuario) {
+		return paradaRepository.findByUsuario(usuario);
 	}
 }
