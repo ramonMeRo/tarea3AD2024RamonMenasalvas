@@ -183,7 +183,7 @@ public class AdministradorController implements Initializable {
 		}
 
 	}
-
+	
 	private void limpiarCampos() {
 		userId.setText(null);
 		regionParada.clear();

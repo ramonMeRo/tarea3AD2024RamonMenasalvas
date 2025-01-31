@@ -383,6 +383,7 @@ public class RegistroController implements Initializable {
 		alert.showAndWait();
 	}
 	
+	@FXML
 	private void limpiarCampos() {
 		usuario.clear();;
 		nombre.clear();
