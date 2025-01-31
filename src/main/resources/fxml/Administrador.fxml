@@ -136,7 +136,7 @@
                         <Insets right="40.0" />
                      </HBox.margin>
                      <image>
-                        <Image url="@../img/carpeta.png" />
+                        <Image url="@../img/informacion.png" />
                      </image>
                   </ImageView>
 						<Button fx:id="btnSalir" mnemonicParsing="false" onAction="#logout" prefHeight="22.0" prefWidth="70.0" styleClass="background" text="Logout" textFill="#fff9f9" textOverrun="CLIP">

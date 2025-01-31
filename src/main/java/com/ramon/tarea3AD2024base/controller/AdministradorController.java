@@ -3,8 +3,6 @@ package com.ramon.tarea3AD2024base.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,7 +29,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
@@ -142,12 +139,12 @@ public class AdministradorController implements Initializable {
 	@FXML
 	private void registrarUsuario(ActionEvent event) {
 
-		if (validate("Nombre Parada", getNombreParada(), "[a-zA-Z]+") 
+		if (valida("Nombre Parada", getNombreParada(), "[a-zA-Z]+") 
 				&& !regionParada.getText().isEmpty())
 		{
 
 			if (userId.getText() == null || userId.getText() == "") {
-				if (validate("Email", getEmail(), "[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+")
+				if (valida("Email", getEmail(), "[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+")
 						&& validacionVacia("Password", getPassword().isEmpty()) 
 						&& validacionVacia("PasswordConf", getPasswordConf().isEmpty())
 						&& validacionVacia("Usuario Responsable", getUsuarioResponsable().isEmpty())
@@ -167,6 +164,8 @@ public class AdministradorController implements Initializable {
 
 					Usuario newUser = userService.save(user);
 					parada.setUsuario(user);
+					
+					@SuppressWarnings("unused")
 					Parada nuevaParada = paradaService.save(parada);
 
 					guardarAlerta(newUser);
@@ -185,27 +184,15 @@ public class AdministradorController implements Initializable {
 
 	}
 
-	@FXML
-	private void borrarUsuario(ActionEvent event) {
-		List<Usuario> users = userTable.getSelectionModel().getSelectedItems();
-
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Confirmation Dialog");
-		alert.setHeaderText(null);
-		alert.setContentText("Are you sure you want to delete selected?");
-		Optional<ButtonType> action = alert.showAndWait();
-
-		if (action.get() == ButtonType.OK)
-			userService.deleteInBatch(users);
-
-		loadUserDetails();
-	}
-
 	private void limpiarCampos() {
 		userId.setText(null);
+		regionParada.clear();
+		usuarioResponsable.clear();
+		nombreResponsable.clear();
 		nombreParada.clear();
 		email.clear();
 		password.clear();
+		passwordConf.clear();
 	}
 
 	private void guardarAlerta(Usuario user) {
@@ -373,39 +360,39 @@ public class AdministradorController implements Initializable {
 	/*
 	 * Validations
 	 */
-	private boolean validate(String field, String value, String pattern) {
-		if (!value.isEmpty()) {
-			Pattern p = Pattern.compile(pattern);
-			Matcher m = p.matcher(value);
-			if (m.find() && m.group().equals(value)) {
+	private boolean valida(String campo, String valor, String patron) {
+		if (!valor.isEmpty()) {
+			Pattern p = Pattern.compile(patron);
+			Matcher m = p.matcher(valor);
+			if (m.find() && m.group().equals(valor)) {
 				return true;
 			} else {
-				validacionAlerta(field, false);
+				validacionAlerta(campo, false);
 				return false;
 			}
 		} else {
-			validacionAlerta(field, true);
+			validacionAlerta(campo, true);
 			return false;
 		}
 	}
 
-	private boolean validacionVacia(String field, boolean empty) {
-		if (!empty) {
+	private boolean validacionVacia(String campo, boolean vacio) {
+		if (!vacio) {
 			return true;
 		} else {
-			validacionAlerta(field, true);
+			validacionAlerta(campo, true);
 			return false;
 		}
 	}
 
-	private void validacionAlerta(String field, boolean empty) {
+	private void validacionAlerta(String campo, boolean vacio) {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Error de Validación");
 		alert.setHeaderText(null);
-			if (empty)
-				alert.setContentText("Porfavor rellena el campo: " + field);
+			if (vacio)
+				alert.setContentText("Porfavor rellena el campo: " + campo);
 			else
-				alert.setContentText("Porfavor introduzca un valor valido en: " + field);
+				alert.setContentText("Porfavor introduzca un valor valido en: " + campo);
 		
 		alert.showAndWait();
 	}

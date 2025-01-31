@@ -52,6 +52,7 @@ import javafx.util.StringConverter;
 
 @Controller
 public class RegistroController implements Initializable {
+
 	private boolean mostrarContraseña = true;
 
 	@FXML
@@ -97,7 +98,7 @@ public class RegistroController implements Initializable {
 
 	@Autowired
 	private VisitaService visitaService;
-	
+
 	public Sesion sesion;
 
 	@Override
@@ -175,7 +176,7 @@ public class RegistroController implements Initializable {
 
 	@FXML
 	private void confirmar() {
-		Alert alert = new Alert(AlertType.WARNING);
+		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Registro de peregrino");
 		alert.setHeaderText("¿Esta seguro de que estos son sus datos?");
 		alert.showAndWait();
@@ -204,8 +205,17 @@ public class RegistroController implements Initializable {
 
 	private void llenarChoiceConParadas() {
 		List<Parada> paradas = paradaService.findAll();
-		choiceParadas.getItems().clear();
-		choiceParadas.getItems().addAll(paradas);
+		if (paradas.isEmpty()) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText("Todavia no hay paradas en el sistema");
+			alert.showAndWait();
+
+			stageManager.switchScene(FxmlView.INICIO);
+		} else {
+			choiceParadas.getItems().clear();
+			choiceParadas.getItems().addAll(paradas);
+		}
 	}
 
 	private List<String> leerNaciones() {
@@ -246,30 +256,27 @@ public class RegistroController implements Initializable {
 
 	@FXML
 	public void registrarPeregrino() {
-		if (validate("Nombre de Usuario", getUsuario(), "[a-zA-Z]+")) {
+		if (valida("Nombre de Usuario", getUsuario(), "^[a-zA-Z0-9]+$")
+				&& valida("Email", getEmail(), "[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+")
+				&& valida("Password", getPassword(), "^\\S+$") && valida("PasswordConf", getCPassword(), "^\\S+$")
+				&& getFechaNac().getValue().isBefore(LocalDate.now())) {
 
 			{
-				if (validate("Email", getEmail(), "[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+")
-						&& validacionVacia("Password", getPassword().isEmpty())
+				if (validacionVacia("Password", getPassword().isEmpty())
 						&& validacionVacia("PasswordConf", getCPassword().isEmpty())
 						&& validacionVacia("Usuario", getUsuario().isEmpty())
 						&& validacionVacia("Nombre", getNombre().isEmpty())
 						&& validacionVacia("Apellidos", getApellidos().isEmpty())
 						&& validacionVacia("Email", getEmail().isEmpty())
-						&& validacionVacia("Fecha nacimiento", getFechaNac() == null)) {
+						&& validacionVacia("Fecha nacimiento", getFechaNac().getValue() == null)
+						&& validacionVacia("choiceNacionalidad", getChoiceNacionalidad().getValue() == null)
+						&& validacionVacia("choiceParadas", getChoiceParadas().getValue() == null)) {
 
 					if (!passwordsCoinciden(getPassword(), getCPassword())) {
 						validacionAlerta("Contraseñas no coinciden", true);
 						return;
 					}
-					if (choiceParadas.getValue() == null) {
-						validacionAlerta("Parada inicial no seleccionada", true);
-						return;
-					}
-					if (choiceNacionalidad.getValue() == null) {
-						validacionAlerta("Nacionalidad no seleccionada", true);
-						return;
-					}
+
 					try {
 						Usuario usuario = new Usuario();
 						usuario.setNombre(getUsuario());
@@ -307,7 +314,9 @@ public class RegistroController implements Initializable {
 						peregrino.getParadasVisitadas().add(visita);
 
 						VistaUtils.ExportarCarnet(nuevoPeregrino);
-						
+
+						guardarAlerta(peregrino);
+
 						stageManager.switchScene(FxmlView.INICIO);
 
 					} catch (Exception e) {
@@ -319,22 +328,31 @@ public class RegistroController implements Initializable {
 					}
 				}
 			}
-
 		}
 	}
 
-	private boolean validate(String field, String value, String pattern) {
-		if (!value.isEmpty()) {
-			Pattern p = Pattern.compile(pattern);
-			Matcher m = p.matcher(value);
-			if (m.find() && m.group().equals(value)) {
+	private void guardarAlerta(Peregrino peregrino) {
+
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Usuario introducido correctamente.");
+		alert.setHeaderText(null);
+		alert.setContentText(
+				"Usuario: " + peregrino.getNombre() + " " + peregrino.getApellidos() + " creado correctamente ");
+		alert.showAndWait();
+	}
+
+	private boolean valida(String campo, String valor, String patron) {
+		if (!valor.isEmpty()) {
+			Pattern p = Pattern.compile(patron);
+			Matcher m = p.matcher(valor);
+			if (m.find() && m.group().equals(valor)) {
 				return true;
 			} else {
-				validacionAlerta(field, false);
+				validacionAlerta(campo, false);
 				return false;
 			}
 		} else {
-			validacionAlerta(field, true);
+			validacionAlerta(campo, true);
 			return false;
 		}
 	}
@@ -364,15 +382,18 @@ public class RegistroController implements Initializable {
 		}
 		alert.showAndWait();
 	}
-
-//	private void guardarAlerta(Usuario user) {
-//
-//		Alert alert = new Alert(AlertType.INFORMATION);
-//		alert.setTitle("Ususario creado correctamente.");
-//		alert.setHeaderText(null);
-//		alert.setContentText("Usuario: " + user.getNombre() + " " + " creado correctamente ");
-//		alert.showAndWait();
-//	}
+	
+	private void limpiarCampos() {
+		usuario.clear();;
+		nombre.clear();
+		apellidos.clear();
+		fechaNac.setValue(null);
+		email.clear();
+		password.clear();
+		cPassword.clear();
+		choiceParadas.setValue(null);
+		choiceNacionalidad.setValue(null);
+	}
 
 	private boolean passwordsCoinciden(String password, String cPassword) {
 		if (cPassword.equals(password))

@@ -41,22 +41,12 @@
 				<Image url="@../img/Camino.jpg" />
 			</image>
 		</ImageView>
-		<Label layoutX="664.0" layoutY="339.0" text="¿No tienes cuenta aún?" textFill="WHITE">
-			<font>
-				<Font size="17.0" />
-			</font>
-		</Label>
-		<Hyperlink fx:id="hlRegistro" layoutX="862.0" layoutY="336.0" onAction="#registrarse" text="Regístrate" textFill="#edc82f">
+		<Hyperlink fx:id="hlRegistro" layoutX="663.0" layoutY="336.0" onAction="#registrarse" text="¿No tienes cuenta aun?" textFill="#edc82f">
 			<font>
 				<Font size="14.0" />
 			</font>
 		</Hyperlink>
-		<Label layoutX="664.0" layoutY="377.0" text="Recuerdame la password" textFill="WHITE">
-			<font>
-				<Font size="17.0" />
-			</font>
-		</Label>
-		<Hyperlink layoutX="869.0" layoutY="374.0" text="Recordar" textFill="#edc82f">
+		<Hyperlink layoutX="663.0" layoutY="374.0" text="¿Has olvidado tu contraseña?" textFill="#edc82f">
 			<font>
 				<Font size="14.0" />
 			</font>

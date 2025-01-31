@@ -56,20 +56,17 @@ public class PeregrinoController implements Initializable {
 	private DatePicker fechaNac;
 	@FXML
 	private ComboBox<String> nacionalidad;
+	
 	@FXML
 	private TableView<Estancia> estancias;
 	@FXML
 	private TableColumn<Estancia, Long> idEstancia;
-
 	@FXML
 	private TableColumn<Parada, String> nombreParada;
-
 	@FXML
 	private TableColumn<Parada, Character> regionParada;
-
 	@FXML
 	private TableColumn<Estancia, LocalDate> fecha;
-
 	@FXML
 	private TableColumn<Estancia, Boolean> vip;
 
@@ -125,6 +122,12 @@ public class PeregrinoController implements Initializable {
 	@FXML
 	private void exportarCarnetPeregrino() {
 		VistaUtils.ExportarCarnet(peregrino);
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Carnet importado correctamente.");
+		alert.setHeaderText(null);
+		alert.setContentText(
+				"Usuario: " + peregrino.getNombre() + " " + peregrino.getApellidos() + " creado correctamente ");
+		alert.showAndWait();
 	}
 
 	@FXML
