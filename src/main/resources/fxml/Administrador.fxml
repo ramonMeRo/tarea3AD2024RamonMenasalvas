@@ -171,7 +171,7 @@
 					<contextMenu>
 						<ContextMenu>
 							<items>
-								<MenuItem fx:id="BorrarUsario" mnemonicParsing="false" onAction="#borrarUsuario" text="Borrar usuario" />
+								<MenuItem mnemonicParsing="false" text="Borrar usuario" />
 							</items>
 						</ContextMenu>
 					</contextMenu>
