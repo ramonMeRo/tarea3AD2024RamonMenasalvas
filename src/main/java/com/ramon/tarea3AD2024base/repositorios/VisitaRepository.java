@@ -1,6 +1,7 @@
 package com.ramon.tarea3AD2024base.repositorios;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,5 +17,5 @@ public interface VisitaRepository extends JpaRepository<Visita, Long> {
 	
 	Visita findByParada(Parada parada);
 	
-	Visita findByPeregrino(Peregrino peregrino);
+	List<Visita> findByPeregrino(Peregrino peregrino);
 }

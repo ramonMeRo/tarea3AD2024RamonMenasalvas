@@ -134,8 +134,8 @@ public class InicioController implements Initializable {
 	            passwordVisible.setVisible(true);
 	           
 	        } else { 
+	        	
 	            btnVisible.setImage(iconoCerrado);
-	            password.setText(passwordVisible.getText());
 	            passwordVisible.setVisible(false);
 	            password.setVisible(true);
 	        }

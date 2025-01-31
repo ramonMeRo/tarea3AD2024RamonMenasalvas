@@ -149,12 +149,29 @@ listaFxEstancia.clear();
 
 	@FXML
 	private void sellarCarnet() {
+		
+		
 		if (choicePeregrinos.getValue() == null) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error durante Sellado");
 			alert.setHeaderText("Debe seleccionar un peregrino primero");
 			alert.show();
 		}
+		
+		List <Visita> visitasPeregrino = visitaService.findByPeregrino(choicePeregrinos.getValue());
+		
+		for (Visita visita : visitasPeregrino) {
+			
+			if(visita.getFecha().equals(LocalDate.now())) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Error durante Sellado");
+				alert.setHeaderText("El peregrino ya sello hoy");
+				alert.show();
+				return;
+			}
+		}
+		
+				
 		if (estanciaSi.isSelected() && vipSi.isSelected()) {
 			Estancia estancia = new Estancia();
 			estancia.setFecha(LocalDate.now());

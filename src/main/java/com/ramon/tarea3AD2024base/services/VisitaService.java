@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ramon.tarea3AD2024base.modelo.Peregrino;
 import com.ramon.tarea3AD2024base.modelo.Visita;
 import com.ramon.tarea3AD2024base.repositorios.VisitaRepository;
 
@@ -39,5 +40,9 @@ public class VisitaService {
 
 	public List<Visita> findAll() {
 		return visitaRepository.findAll();
+	}
+	
+	public List<Visita> findByPeregrino(Peregrino peregrino){
+		return visitaRepository.findByPeregrino(peregrino);
 	}
 }
