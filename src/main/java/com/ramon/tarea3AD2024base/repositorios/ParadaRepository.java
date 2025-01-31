@@ -8,6 +8,10 @@ import com.ramon.tarea3AD2024base.modelo.Usuario;
 
 @Repository
 public interface ParadaRepository extends JpaRepository<Parada, Long> {
-	
+
 	Parada findByUsuario(Usuario usuario);
+
+	boolean existsByNombre(String nombre);
+
+	boolean existsByRegion(char region);
 }

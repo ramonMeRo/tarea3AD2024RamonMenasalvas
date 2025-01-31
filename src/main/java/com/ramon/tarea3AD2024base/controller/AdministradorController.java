@@ -156,10 +156,22 @@ public class AdministradorController implements Initializable {
 					user.setPassword(getPassword());
 					user.setPerfil(Perfil.PARADA);
 					
+					
+						
 					Parada parada = new Parada();
 					parada.setNombre(getNombreParada());
 					parada.setRegion(getRegionParada());
 					parada.setResponsable(getNombreResponsable());
+					
+					if(paradaService.existsByNombre(parada.getNombre()) && paradaService.existsByRegion(parada.getRegion())) {
+						Alert alert = new Alert(AlertType.WARNING);
+						alert.setTitle("Parada ya existe.");
+						alert.setContentText("La parada que intentas introducir ya existe");
+						alert.showAndWait();
+						return;
+					}
+					
+					
 					
 
 					Usuario newUser = userService.save(user);

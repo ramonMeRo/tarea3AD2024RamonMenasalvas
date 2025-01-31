@@ -42,4 +42,12 @@ public class ParadaService {
 	public Parada findByUsuario(Usuario usuario) {
 		return paradaRepository.findByUsuario(usuario);
 	}
+	
+	public boolean existsByNombre(String nombre) {
+		return paradaRepository.existsByNombre(nombre);
+	}
+	
+	public boolean existsByRegion(char region) {
+		return paradaRepository.existsByRegion(region);
+	}
 }
