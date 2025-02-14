@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.RegistroController">
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.RegistroController" onKeyPressed="#ayudaF1">
    <children>
       <Rectangle fill="#2d4491" height="602.0" layoutX="703.0" stroke="#ffffff8b" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="313.0" />
       <Label layoutX="798.0" layoutY="13.0" prefHeight="60.0" prefWidth="126.0" style="-fx-font-weight: BOLD;" text="REGISTRO" textFill="WHITE">
@@ -90,5 +90,10 @@
       </ImageView>
       <TextField fx:id="passwordVisible1" layoutX="765.0" layoutY="349.0" prefHeight="30.0" prefWidth="190.0" visible="false" />
       <TextField fx:id="passwordVisible2" layoutX="765.0" layoutY="397.0" prefHeight="30.0" prefWidth="190.0" visible="false" />
+      <ImageView fitHeight="52.0" fitWidth="51.0" layoutX="629.0" layoutY="9.0" onMouseClicked="#ayuda" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/informacion.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

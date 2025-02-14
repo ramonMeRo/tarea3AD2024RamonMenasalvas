@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
+import com.ramon.tarea3AD2024base.Utils.VistaUtils;
 import com.ramon.tarea3AD2024base.config.StageManager;
 import com.ramon.tarea3AD2024base.modelo.Perfil;
 import com.ramon.tarea3AD2024base.modelo.Sesion;
@@ -18,6 +19,7 @@ import com.ramon.tarea3AD2024base.view.FxmlView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -27,6 +29,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.web.WebView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  * @author Ramon
@@ -35,7 +41,7 @@ import javafx.scene.image.ImageView;
 
 @Controller
 public class InicioController implements Initializable {
-	
+
 	private boolean mostrarContraseña = true;
 
 	@FXML
@@ -65,32 +71,35 @@ public class InicioController implements Initializable {
 	@Lazy
 	@Autowired
 	private StageManager stageManager;
-	
+
 	public static Sesion sesion = new Sesion();
+
+	@FXML
+	private void salir() {
+		VistaUtils.Salir();
+	}
 
 	@FXML
 	private void login(ActionEvent event) throws IOException {
 		if (userService.authenticate(getUsername(), getPassword())) {
 			Usuario usuario = userService.findByNombreOrEmail(getUsername());
-			
-			
+
 			if (usuario.getPerfil().equals(Perfil.ADMIN)) {
-				
+
 				sesion.setUsuario(usuario);
-				
+
 				stageManager.switchScene(FxmlView.ADMINISTRADOR);
 			}
-			
-			else if (usuario.getPerfil().equals(Perfil.PARADA)){
-				
+
+			else if (usuario.getPerfil().equals(Perfil.PARADA)) {
+
 				sesion.setUsuario(usuario);
-				
+
 				stageManager.switchScene((FxmlView.RESPONSABLE));
-			}
-			else if (usuario.getPerfil().equals(Perfil.PEREGRINO)) {
-				
+			} else if (usuario.getPerfil().equals(Perfil.PEREGRINO)) {
+
 				sesion.setUsuario(usuario);
-				
+
 				stageManager.switchScene(FxmlView.PEREGRINO);
 			}
 
@@ -100,6 +109,36 @@ public class InicioController implements Initializable {
 			alert.setHeaderText("Intento de inicio de sesion");
 			alert.setContentText("Usuario y/o contraseña incorrectos");
 			alert.showAndWait();
+		}
+	}
+
+	public void ayudaF1(KeyEvent event) {
+		if (event.getCode().toString().equals("F1")) {
+			ayuda();
+		}
+	}
+
+	@FXML
+	private void ayuda() {
+		try {
+			WebView webView = new WebView();
+
+			String url = getClass().getResource("/help/html/Inicio.html").toExternalForm();
+			webView.getEngine().load(url);
+
+			Stage helpStage = new Stage();
+			helpStage.setTitle("Ayuda");
+
+			Scene helpScene = new Scene(webView, 850, 520);
+
+			helpStage.setScene(helpScene);
+
+			helpStage.initModality(Modality.APPLICATION_MODAL);
+			helpStage.setResizable(true);
+			helpStage.show();
+
+		} catch (NullPointerException e) {
+			System.out.print("No se ha encontrado el HTML");
 		}
 	}
 
@@ -125,21 +164,21 @@ public class InicioController implements Initializable {
 		Image iconoAbierto = new Image(getClass().getResourceAsStream("/img/ojoAbierto.png"));
 
 		btnVisible.setOnMouseClicked(event -> {
-	        mostrarContraseña = !mostrarContraseña;
+			mostrarContraseña = !mostrarContraseña;
 
-	        if (mostrarContraseña) {
-	            
-	            btnVisible.setImage(iconoAbierto);
-	            passwordVisible.setText(password.getText());
-	            passwordVisible.setVisible(true);
-	           
-	        } else { 
-	        	
-	            btnVisible.setImage(iconoCerrado);
-	            passwordVisible.setVisible(false);
-	            password.setVisible(true);
-	        }
-	    });
+			if (mostrarContraseña) {
+
+				btnVisible.setImage(iconoAbierto);
+				passwordVisible.setText(password.getText());
+				passwordVisible.setVisible(true);
+
+			} else {
+
+				btnVisible.setImage(iconoCerrado);
+				passwordVisible.setVisible(false);
+				password.setVisible(true);
+			}
+		});
 
 	}
 }

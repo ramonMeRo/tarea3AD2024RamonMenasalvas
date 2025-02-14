@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<toc version="1.0">
+	<tocitem text="Inicio" target="Inicio">
+		<tocitem text="Registro" target="Registro" />
+		<tocitem text="Peregrino" target="Peregrino" />
+		<tocitem text="Administrador" target="Administrador" />
+		<tocitem text="Responsable" target="Responsable" />
+	</tocitem>
+</toc>

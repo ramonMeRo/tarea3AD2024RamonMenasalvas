@@ -26,6 +26,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -40,6 +41,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.web.WebView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 /**
@@ -119,15 +124,7 @@ public class AdministradorController implements Initializable {
 	private ObservableList<Usuario> userList = FXCollections.observableArrayList();
 
 	@FXML
-	private void salir() {
-		VistaUtils.Salir();
-	}
-
-	/**
-	 * Logout and go to the login page
-	 */
-	@FXML
-	private void logout(ActionEvent event) throws IOException {
+	private void volver() {
 		stageManager.switchScene(FxmlView.INICIO);
 	}
 
@@ -139,13 +136,11 @@ public class AdministradorController implements Initializable {
 	@FXML
 	private void registrarUsuario(ActionEvent event) {
 
-		if (valida("Nombre Parada", getNombreParada(), "[a-zA-Z]+") 
-				&& !regionParada.getText().isEmpty())
-		{
+		if (valida("Nombre Parada", getNombreParada(), "[a-zA-Z]+") && !regionParada.getText().isEmpty()) {
 
 			if (userId.getText() == null || userId.getText() == "") {
 				if (valida("Email", getEmail(), "[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+")
-						&& validacionVacia("Password", getPassword().isEmpty()) 
+						&& validacionVacia("Password", getPassword().isEmpty())
 						&& validacionVacia("PasswordConf", getPasswordConf().isEmpty())
 						&& validacionVacia("Usuario Responsable", getUsuarioResponsable().isEmpty())
 						&& validacionVacia("Nombre Responsable", getNombreResponsable().isEmpty())) {
@@ -155,28 +150,24 @@ public class AdministradorController implements Initializable {
 					user.setEmail(getEmail());
 					user.setPassword(getPassword());
 					user.setPerfil(Perfil.PARADA);
-					
-					
-						
+
 					Parada parada = new Parada();
 					parada.setNombre(getNombreParada());
 					parada.setRegion(getRegionParada());
 					parada.setResponsable(getNombreResponsable());
-					
-					if(paradaService.existsByNombre(parada.getNombre()) && paradaService.existsByRegion(parada.getRegion())) {
+
+					if (paradaService.existsByNombre(parada.getNombre())
+							&& paradaService.existsByRegion(parada.getRegion())) {
 						Alert alert = new Alert(AlertType.WARNING);
 						alert.setTitle("Parada ya existe.");
 						alert.setContentText("La parada que intentas introducir ya existe");
 						alert.showAndWait();
 						return;
 					}
-					
-					
-					
 
 					Usuario newUser = userService.save(user);
 					parada.setUsuario(user);
-					
+
 					@SuppressWarnings("unused")
 					Parada nuevaParada = paradaService.save(parada);
 
@@ -195,7 +186,7 @@ public class AdministradorController implements Initializable {
 		}
 
 	}
-	
+
 	private void limpiarCampos() {
 		userId.setText(null);
 		regionParada.clear();
@@ -312,7 +303,6 @@ public class AdministradorController implements Initializable {
 
 		colUserId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colFirstName.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-		colDOB.setCellValueFactory(new PropertyValueFactory<>("fechaNac"));
 		colRole.setCellValueFactory(new PropertyValueFactory<>("perfil"));
 		colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 	}
@@ -388,6 +378,36 @@ public class AdministradorController implements Initializable {
 		}
 	}
 
+	public void ayudaF1(KeyEvent event) {
+		if (event.getCode().toString().equals("F1")) {
+			ayuda();
+		}
+	}
+
+	@FXML
+	private void ayuda() {
+		try {
+			WebView webView = new WebView();
+
+			String url = getClass().getResource("/help/html/Administrador.html").toExternalForm();
+			webView.getEngine().load(url);
+
+			Stage helpStage = new Stage();
+			helpStage.setTitle("Ayuda");
+
+			Scene helpScene = new Scene(webView, 850, 520);
+
+			helpStage.setScene(helpScene);
+
+			helpStage.initModality(Modality.APPLICATION_MODAL);
+			helpStage.setResizable(true);
+			helpStage.show();
+
+		} catch (NullPointerException e) {
+			System.out.print("No se ha encontrado el HTML");
+		}
+	}
+
 	private boolean validacionVacia(String campo, boolean vacio) {
 		if (!vacio) {
 			return true;
@@ -401,11 +421,11 @@ public class AdministradorController implements Initializable {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Error de Validación");
 		alert.setHeaderText(null);
-			if (vacio)
-				alert.setContentText("Porfavor rellena el campo: " + campo);
-			else
-				alert.setContentText("Porfavor introduzca un valor valido en: " + campo);
-		
+		if (vacio)
+			alert.setContentText("Porfavor rellena el campo: " + campo);
+		else
+			alert.setContentText("Porfavor introduzca un valor valido en: " + campo);
+
 		alert.showAndWait();
 	}
 }

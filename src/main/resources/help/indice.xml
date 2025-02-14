@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<index version="1.0">
+	<indexitem name="Inicio" target="Inicio" />
+	<indexitem name="Registro" target="Registro" />
+	<indexitem name="Peregrino" target="Peregrino" />
+	<indexitem name="Administrador" target="Administrador" />
+	<indexitem name="Responsable" target="Responsable" />
+</index>

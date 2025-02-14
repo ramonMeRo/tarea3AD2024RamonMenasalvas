@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<map version="1.0">
+    <mapID target="principal" url="html/Inicio.html"/>
+    <mapID target="Registro" url="html/Registro.html"/>
+    <mapID target="Peregrino" url="html/Peregrino.html"/>
+    <mapID target="Administrador" url="html/Administrador.html"/>
+    <mapID target="Responsable" url="html/Responsable.html"/>
+</map>

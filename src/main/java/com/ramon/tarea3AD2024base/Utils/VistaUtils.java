@@ -1,10 +1,7 @@
 package com.ramon.tarea3AD2024base.Utils;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,10 +20,8 @@ import org.springframework.context.annotation.Lazy;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
-import org.xml.sax.SAXException;
 
 import com.ramon.tarea3AD2024base.config.StageManager;
 import com.ramon.tarea3AD2024base.modelo.Estancia;

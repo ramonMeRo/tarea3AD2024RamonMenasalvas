@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayuda - Responsable Controller</title>
+</head>
+<body>
+
+    <h1>Ayuda - Responsable Controller</h1>
+
+    <div class="section">
+        <h2>¿Cómo registrar un peregrino?</h2>
+        <p>Para registrar el sellado del carnet de un peregrino, sigue estos pasos:</p>
+        <ol>
+            <li>Selecciona un peregrino de la lista desplegable <span class="highlight">"Seleccionar Peregrino"</span>.</li>
+            <li>Indica si el peregrino va a quedarse en la parada, marcando <span class="highlight">"Sí" o "No"</span> en la opción <span class="highlight">"Estancia"</span>.</li>
+            <li>Si el peregrino se queda, elige si es VIP marcando <span class="highlight">"Sí" o "No"</span> en la opción <span class="highlight">"VIP"</span>.</li>
+            <li>Haz clic en <span class="highlight">"Sellar Carnet"</span> para registrar la visita y actualizar el carnet del peregrino.</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>¿Qué información se requiere?</h2>
+        <p>Para sellar el carnet de un peregrino, se requiere la siguiente información:</p>
+        <ul>
+            <li><span class="highlight">Nombre del peregrino</span>: Se autocompletará cuando selecciones el peregrino de la lista.</li>
+            <li><span class="highlight">Apellidos del peregrino</span>: También se autocompletará automáticamente.</li>
+            <li><span class="highlight">Fecha de nacimiento</span>: Información del peregrino ya registrada en su perfil.</li>
+            <li><span class="highlight">Estancia</span>: Indicar si el peregrino se queda o no en la parada.</li>
+            <li><span class="highlight">VIP</span>: Si el peregrino es VIP, se marcará esta opción.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>¿Qué pasa si el peregrino ya ha sellado el carnet hoy?</h2>
+        <p>Si el peregrino ya ha sellado el carnet el día de hoy, se mostrará un mensaje de error indicando que el peregrino no puede sellar nuevamente. Verifica si la fecha de la última visita coincide con el día actual.</p>
+        <p class="important">Recuerda que un peregrino solo puede sellar una vez por día.</p>
+    </div>
+
+    <div class="section">
+        <h2>¿Cómo exportar las estancias de un peregrino?</h2>
+        <p>Para exportar las estancias de un peregrino dentro de un rango de fechas:</p>
+        <ol>
+            <li>Selecciona las fechas de inicio y fin usando los campos <span class="highlight">"Fecha Inicio"</span> y <span class="highlight">"Fecha Fin"</span>.</li>
+            <li>Haz clic en <span class="highlight">"Exportar Parada"</span>.</li>
+            <li>El sistema mostrará todas las estancias del peregrino dentro del rango de fechas seleccionado.</li>
+        </ol>
+    </div>
+
+</body>
+</html>

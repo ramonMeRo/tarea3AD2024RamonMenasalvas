@@ -30,6 +30,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
@@ -40,6 +41,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.web.WebView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 @Controller
@@ -115,7 +120,7 @@ public class ResponsableController implements Initializable {
 
 		Parada parada = paradaService.findByUsuario(usuario);
 		EstanciaTabla estanciaTabla = new EstanciaTabla();
-listaFxEstancia.clear();
+		listaFxEstancia.clear();
 		if (fechaInicio.getValue().isBefore(fechaFin.getValue())) {
 			Set<Estancia> listaEstancias = parada.getListaEstancias();
 			for (Estancia estancia : listaEstancias) {
@@ -126,13 +131,42 @@ listaFxEstancia.clear();
 						estancia.getPeregrino().getNombre() + " " + estancia.getPeregrino().getApellidos());
 				estanciaTabla.setVip(estancia.isVip());
 				estanciaTabla.setFecha(estancia.getFecha());
-				
+
 				System.out.println(estanciaTabla.toString());
-				
-				
+
 				listaFxEstancia.add(estanciaTabla);
 			}
 			tablaEstancias.setItems(listaFxEstancia);
+		}
+	}
+
+	public void ayudaF1(KeyEvent event) {
+		if (event.getCode().toString().equals("F1")) {
+			ayuda();
+		}
+	}
+
+	@FXML
+	private void ayuda() {
+		try {
+			WebView webView = new WebView();
+
+			String url = getClass().getResource("/help/html/Responsable.html").toExternalForm();
+			webView.getEngine().load(url);
+
+			Stage helpStage = new Stage();
+			helpStage.setTitle("Ayuda");
+
+			Scene helpScene = new Scene(webView, 850, 520);
+
+			helpStage.setScene(helpScene);
+
+			helpStage.initModality(Modality.APPLICATION_MODAL);
+			helpStage.setResizable(true);
+			helpStage.show();
+
+		} catch (NullPointerException e) {
+			System.out.print("No se ha encontrado el HTML");
 		}
 	}
 
@@ -149,20 +183,19 @@ listaFxEstancia.clear();
 
 	@FXML
 	private void sellarCarnet() {
-		
-		
+
 		if (choicePeregrinos.getValue() == null) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error durante Sellado");
 			alert.setHeaderText("Debe seleccionar un peregrino primero");
 			alert.show();
 		}
-		
-		List <Visita> visitasPeregrino = visitaService.findByPeregrino(choicePeregrinos.getValue());
-		
+
+		List<Visita> visitasPeregrino = visitaService.findByPeregrino(choicePeregrinos.getValue());
+
 		for (Visita visita : visitasPeregrino) {
-			
-			if(visita.getFecha().equals(LocalDate.now())) {
+
+			if (visita.getFecha().equals(LocalDate.now())) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Error durante Sellado");
 				alert.setHeaderText("El peregrino ya sello hoy");
@@ -170,8 +203,7 @@ listaFxEstancia.clear();
 				return;
 			}
 		}
-		
-				
+
 		if (estanciaSi.isSelected() && vipSi.isSelected()) {
 			Estancia estancia = new Estancia();
 			estancia.setFecha(LocalDate.now());

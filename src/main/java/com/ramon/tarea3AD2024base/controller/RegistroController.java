@@ -40,6 +40,7 @@ import com.ramon.tarea3AD2024base.view.FxmlView;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -48,6 +49,10 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.web.WebView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 @Controller
@@ -174,6 +179,36 @@ public class RegistroController implements Initializable {
 
 	}
 
+	public void ayudaF1(KeyEvent event) {
+		if (event.getCode().toString().equals("F1")) {
+			ayuda();
+		}
+	}
+
+	@FXML
+	private void ayuda() {
+		try {
+			WebView webView = new WebView();
+
+			String url = getClass().getResource("/help/html/Registro.html").toExternalForm();
+			webView.getEngine().load(url);
+
+			Stage helpStage = new Stage();
+			helpStage.setTitle("Ayuda");
+
+			Scene helpScene = new Scene(webView, 850, 520);
+
+			helpStage.setScene(helpScene);
+
+			helpStage.initModality(Modality.APPLICATION_MODAL);
+			helpStage.setResizable(true);
+			helpStage.show();
+
+		} catch (NullPointerException e) {
+			System.out.print("No se ha encontrado el HTML");
+		}
+	}
+
 	@FXML
 	private void confirmar() {
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -227,6 +262,7 @@ public class RegistroController implements Initializable {
 			Document documento = constructorDocumento.parse(naciones);
 
 			NodeList listaPais = documento.getElementsByTagName("pais");
+			@SuppressWarnings("unused")
 			Element pais, id, nombre;
 
 			int indicePais = 0;
@@ -382,10 +418,11 @@ public class RegistroController implements Initializable {
 		}
 		alert.showAndWait();
 	}
-	
+
 	@FXML
 	private void limpiarCampos() {
-		usuario.clear();;
+		usuario.clear();
+		;
 		nombre.clear();
 		apellidos.clear();
 		fechaNac.setValue(null);
