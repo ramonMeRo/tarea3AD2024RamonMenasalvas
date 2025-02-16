@@ -44,7 +44,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -52,6 +51,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -364,18 +364,15 @@ public class PeregrinoController implements Initializable {
 
 			JasperPrint print = JasperFillManager.fillReport(reporte, parametros, conexion);
 
-			if (print.getPages().isEmpty()) {
-				System.out.println("El informe no tiene páginas. Posiblemente la consulta no retornó datos.");
-			} else {
-				System.out.println("El informe tiene " + print.getPages().size() + " páginas.");
-			}
-
 			String rutaSalida = "src/main/resources/carnets/" + peregrino.getNombre().replace(" ", "")
 					+ peregrino.getApellidos().replace(" ", "") + "_peregrino.pdf";
 
 			JasperExportManager.exportReportToPdfFile(print, rutaSalida);
 
 			System.out.println("Informe generado correctamente en: " + rutaSalida);
+
+			abrirPDF(rutaSalida);
+
 		} catch (JRException | SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -386,6 +383,20 @@ public class PeregrinoController implements Initializable {
 					e.printStackTrace();
 				}
 			}
+		}
+	}
+
+	public void abrirPDF(String rutaSalida) {
+		File archivoPDF = new File(rutaSalida);
+		if (!archivoPDF.exists()) {
+			System.err.println("El archivo no existe: " + rutaSalida);
+			return;
+		}
+		try {
+			Runtime.getRuntime().exec(new String[] { "cmd", "/c", "start", "", archivoPDF.getAbsolutePath() });
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err.println("Error al abrir el archivo PDF: " + e.getMessage());
 		}
 	}
 
