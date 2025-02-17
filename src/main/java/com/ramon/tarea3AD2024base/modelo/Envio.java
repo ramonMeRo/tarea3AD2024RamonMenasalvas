@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
 
-import jakarta.persistence.Embedded;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +20,6 @@ public class Envio implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private double peso;
@@ -29,7 +28,7 @@ public class Envio implements Serializable {
 
 	private boolean urgente = false;
 
-	@Embedded
+	@EmbeddedId
 	private Direccion direccion;
 
 	private Long idParada;
