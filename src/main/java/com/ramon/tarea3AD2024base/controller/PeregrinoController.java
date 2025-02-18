@@ -374,13 +374,13 @@ public class PeregrinoController implements Initializable {
 			abrirPDF(rutaSalida);
 
 		} catch (JRException | SQLException e) {
-			e.printStackTrace();
+			System.out.println("Error");
 		} finally {
 			if (conexion != null) {
 				try {
 					conexion.close();
 				} catch (SQLException e) {
-					e.printStackTrace();
+					System.out.println("Error");
 				}
 			}
 		}
@@ -396,7 +396,7 @@ public class PeregrinoController implements Initializable {
 			Runtime.getRuntime().exec(new String[] { "cmd", "/c", "start", "", archivoPDF.getAbsolutePath() });
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.err.println("Error al abrir el archivo PDF: " + e.getMessage());
+			System.err.println("Error al abrir el archivo PDF ");
 		}
 	}
 
