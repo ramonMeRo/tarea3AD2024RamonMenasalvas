@@ -9,7 +9,7 @@ import com.db4o.ObjectContainer;
 public class DataConnection {
 
        private static DataConnection INSTANCE = null;
-       private final String PATH = "ServiciosContratados.db4o";
+       private final String PATH = "/ServiciosContratados.db4o";
        private static ObjectContainer db;
 
        // Private constructor suppresses
