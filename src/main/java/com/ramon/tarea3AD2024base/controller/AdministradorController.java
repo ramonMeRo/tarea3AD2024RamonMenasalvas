@@ -1,7 +1,6 @@
 package com.ramon.tarea3AD2024base.controller;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -87,25 +86,19 @@ public class AdministradorController implements Initializable {
 	private Button guardarusuario;
 
 	@FXML
-	private TableView<Usuario> userTable;
+	private TableView<Parada> userTable;
 
 	@FXML
-	private TableColumn<Usuario, Long> colUserId;
+	private TableColumn<Parada, Long> colParadaId;
+	
+	@FXML
+	private TableColumn<Parada, Character> colRegion;
 
 	@FXML
-	private TableColumn<Usuario, String> colFirstName;
+	private TableColumn<Parada, String> colNombreParada;
 
 	@FXML
-	private TableColumn<Usuario, LocalDate> colDOB;
-
-	@FXML
-	private TableColumn<Usuario, String> colGender;
-
-	@FXML
-	private TableColumn<Usuario, Perfil> colRole;
-
-	@FXML
-	private TableColumn<Usuario, String> colEmail;
+	private TableColumn<Parada, String> colResponsable;
 
 	@FXML
 	private MenuItem borrarUsuario;
@@ -119,7 +112,7 @@ public class AdministradorController implements Initializable {
 	@Autowired
 	private ParadaService paradaService;
 
-	private ObservableList<Usuario> userList = FXCollections.observableArrayList();
+	private ObservableList<Parada> paradaList = FXCollections.observableArrayList();
 
 	@FXML
 	private void volver() {
@@ -285,30 +278,16 @@ public class AdministradorController implements Initializable {
 	 * Set All userTable column properties
 	 */
 	private void setColumnProperties() {
-		/*
-		 * Override date format in table
-		 * colDOB.setCellFactory(TextFieldTableCell.forTableColumn(new
-		 * StringConverter<LocalDate>() { String pattern = "dd/MM/yyyy";
-		 * DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
-		 * 
-		 * @Override public String toString(LocalDate date) { if (date != null) { return
-		 * dateFormatter.format(date); } else { return ""; } }
-		 * 
-		 * @Override public LocalDate fromString(String string) { if (string != null &&
-		 * !string.isEmpty()) { return LocalDate.parse(string, dateFormatter); } else {
-		 * return null; } } }));
-		 */
-
-		colUserId.setCellValueFactory(new PropertyValueFactory<>("id"));
-		colFirstName.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-		colRole.setCellValueFactory(new PropertyValueFactory<>("perfil"));
-		colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+		colParadaId.setCellValueFactory(new PropertyValueFactory<>("id"));
+		colNombreParada.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+		colRegion.setCellValueFactory(new PropertyValueFactory<>("region"));
+		colResponsable.setCellValueFactory(new PropertyValueFactory<>("responsable"));
 	}
 
-	Callback<TableColumn<Usuario, Boolean>, TableCell<Usuario, Boolean>> cellFactory = new Callback<TableColumn<Usuario, Boolean>, TableCell<Usuario, Boolean>>() {
+	Callback<TableColumn<Parada, Boolean>, TableCell<Parada, Boolean>> cellFactory = new Callback<TableColumn<Parada, Boolean>, TableCell<Parada, Boolean>>() {
 		@Override
-		public TableCell<Usuario, Boolean> call(final TableColumn<Usuario, Boolean> param) {
-			final TableCell<Usuario, Boolean> cell = new TableCell<Usuario, Boolean>() {
+		public TableCell<Parada, Boolean> call(final TableColumn<Parada, Boolean> param) {
+			final TableCell<Parada, Boolean> cell = new TableCell<Parada, Boolean>() {
 				Image imgEdit = new Image(getClass().getResourceAsStream("/images/edit.png"));
 				final Button btnEdit = new Button();
 
@@ -320,8 +299,8 @@ public class AdministradorController implements Initializable {
 						setText(null);
 					} else {
 						btnEdit.setOnAction(e -> {
-							Usuario user = getTableView().getItems().get(getIndex());
-							updateUser(user);
+							Parada parada = getTableView().getItems().get(getIndex());
+							updateUser(parada);
 						});
 
 						btnEdit.setStyle("-fx-background-color: transparent;");
@@ -338,7 +317,7 @@ public class AdministradorController implements Initializable {
 					}
 				}
 
-				private void updateUser(Usuario user) {
+				private void updateUser(Parada user) {
 					userId.setText(Long.toString(user.getId()));
 					nombreParada.setText(user.getNombre());
 				}
@@ -351,10 +330,10 @@ public class AdministradorController implements Initializable {
 	 * Add All users to observable list and update table
 	 */
 	private void loadUserDetails() {
-		userList.clear();
-		userList.addAll(userService.findAll());
+		paradaList.clear();
+		paradaList.addAll(paradaService.findAll());
 
-		userTable.setItems(userList);
+		userTable.setItems(paradaList);
 	}
 
 	/*

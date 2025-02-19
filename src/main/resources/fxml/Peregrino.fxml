@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.PeregrinoController" onKeyPressed="#ayudaF1">
+<BorderPane onKeyPressed="#ayudaF1" prefHeight="600.0" prefWidth="1000.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.PeregrinoController">
 	<top>
 		<MenuBar BorderPane.alignment="TOP_LEFT">
 			<menus>
@@ -154,8 +154,6 @@
 				<TableView fx:id="estancias" prefHeight="300.0" prefWidth="679.0" tableMenuButtonVisible="true">
 					<columns>
 						<TableColumn fx:id="idEstancia" maxWidth="700.0" prefWidth="20.0" text="ID" />
-						<TableColumn fx:id="nombreParada" maxWidth="4000.0" prefWidth="75.0" text="Nombre parada" />
-						<TableColumn fx:id="regionParada" maxWidth="4000.0" prefWidth="75.0" text="Region" />
 						<TableColumn fx:id="fecha" maxWidth="4000.0" prefWidth="75.0" text="Fecha" />
 						<TableColumn fx:id="vip" maxWidth="4000.0" prefWidth="60.0" text="Vip" />
 					</columns>

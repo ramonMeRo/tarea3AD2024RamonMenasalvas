@@ -33,12 +33,14 @@ import org.xml.sax.SAXException;
 import com.ramon.tarea3AD2024base.Utils.VistaUtils;
 import com.ramon.tarea3AD2024base.config.StageManager;
 import com.ramon.tarea3AD2024base.modelo.Estancia;
-import com.ramon.tarea3AD2024base.modelo.Parada;
 import com.ramon.tarea3AD2024base.modelo.Peregrino;
 import com.ramon.tarea3AD2024base.modelo.Usuario;
+import com.ramon.tarea3AD2024base.services.EstanciaService;
 import com.ramon.tarea3AD2024base.services.PeregrinoService;
 import com.ramon.tarea3AD2024base.view.FxmlView;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -51,6 +53,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
@@ -87,19 +90,19 @@ public class PeregrinoController implements Initializable {
 	@FXML
 	private TableColumn<Estancia, Long> idEstancia;
 	@FXML
-	private TableColumn<Parada, String> nombreParada;
-	@FXML
-	private TableColumn<Parada, Character> regionParada;
-	@FXML
 	private TableColumn<Estancia, LocalDate> fecha;
 	@FXML
 	private TableColumn<Estancia, Boolean> vip;
+	
+	private ObservableList<Estancia> estanciaList = FXCollections.observableArrayList();
 
 	@Lazy
 	@Autowired
 	private StageManager stagemanager;
 	@Autowired
 	private PeregrinoService peregrinoService;
+	@Autowired
+	private EstanciaService estanciaService;
 
 	private Usuario usuarioSesion;
 
@@ -331,7 +334,24 @@ public class PeregrinoController implements Initializable {
 		nacionalidad.setValue(peregrino.getNacionalidad());
 
 		llenarNaciones();
+		
+		setColumnProperties();
+		
+		loadUserDetails();
 
+	}
+	
+	private void setColumnProperties() {
+		idEstancia.setCellValueFactory(new PropertyValueFactory<>("id"));
+		fecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+		vip.setCellValueFactory(new PropertyValueFactory<>("vip"));
+	}
+	
+	private void loadUserDetails() {		
+		estanciaList.clear();
+		estanciaList.addAll(estanciaService.findAll());
+
+		estancias.setItems(estanciaList);
 	}
 
 	public void ayudaF1(KeyEvent event) {
