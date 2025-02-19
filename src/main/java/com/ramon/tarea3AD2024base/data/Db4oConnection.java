@@ -6,21 +6,21 @@ import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 
 @Component
-public class DataConnection {
+public class Db4oConnection {
 
-       private static DataConnection INSTANCE = null;
-       private final String PATH = "/ServiciosContratados.db4o";
+       private static Db4oConnection INSTANCE = null;
+       private final String PATH = "/db/ServiciosContratados.db4o";
        private static ObjectContainer db;
 
        // Private constructor suppresses
-       private DataConnection() {
+       private Db4oConnection() {
        }
 
        // Creador sincronizado para protegerse de posibles problemas multi-hilo
        // Otra prueba para evitar instanciaci�n m�ltiple
        private synchronized static void createInstance() {
 	   		if (INSTANCE == null) { 
-	   			INSTANCE = new DataConnection();
+	   			INSTANCE = new Db4oConnection();
 	   			INSTANCE.performConnection();
 	   		}
    		}

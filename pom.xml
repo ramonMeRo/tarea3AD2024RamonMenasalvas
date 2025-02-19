@@ -45,6 +45,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>io.github.nilshoffmann</groupId>
+			<artifactId>db4o-nbm</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
 			<scope>runtime</scope>
@@ -82,23 +88,6 @@
 		</dependency>
 	</dependencies>
 
-	<!--	<build>-->
-	<!--		<plugins>-->
-	<!--			<plugin>-->
-	<!--				<groupId>org.springframework.boot</groupId>-->
-	<!--				<artifactId>spring-boot-maven-plugin</artifactId>-->
-	<!--			</plugin>-->
-	<!--			<plugin>-->
-	<!--				<groupId>org.openjfx</groupId>-->
-	<!--				<artifactId>javafx-maven-plugin</artifactId>-->
-	<!--				<version>0.0.8</version>-->
-	<!--				<configuration>-->
-	<!--
-	<mainClass>com.ramon.tarea3AD2024base.Tarea3Ad2024baseApplication</mainClass>-->
-	<!--				</configuration>-->
-	<!--			</plugin>-->
-	<!--		</plugins>-->
-	<!--	</build>-->
 	<build>
 		<plugins>
 			<plugin>
