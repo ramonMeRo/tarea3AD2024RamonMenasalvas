@@ -1,6 +1,8 @@
 package com.ramon.tarea3AD2024base.modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Servicio implements Serializable {
@@ -16,12 +18,12 @@ public class Servicio implements Serializable {
 
 	private double precio;
 
-	private long idParada;
+	private List<Long> idParada = new ArrayList<Long>();
 
 	public Servicio() {
 	}
 
-	public Servicio(Long id, String nombre, double precio, long idParada) {
+	public Servicio(Long id, String nombre, double precio, List<Long> idParada) {
 		this.id = id;
 		this.nombre = nombre;
 		this.precio = precio;
@@ -52,16 +54,12 @@ public class Servicio implements Serializable {
 		this.precio = precio;
 	}
 
-	public long getIdParada() {
+	public List<Long> getIdParada() {
 		return idParada;
 	}
 
-	public void setIdParada(long idParada) {
+	public void setIdParada(List<Long> idParada) {
 		this.idParada = idParada;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 
 	@Override
@@ -78,7 +76,8 @@ public class Servicio implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Servicio other = (Servicio) obj;
-		return Objects.equals(id, other.id) && idParada == other.idParada && Objects.equals(nombre, other.nombre)
+		return Objects.equals(id, other.id) && Objects.equals(idParada, other.idParada)
+				&& Objects.equals(nombre, other.nombre)
 				&& Double.doubleToLongBits(precio) == Double.doubleToLongBits(other.precio);
 	}
 

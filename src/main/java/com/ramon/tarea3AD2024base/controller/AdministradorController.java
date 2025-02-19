@@ -63,6 +63,12 @@ public class AdministradorController implements Initializable {
 
 	@FXML
 	private TextField regionParada;
+	
+	@FXML
+	private TextField txtServicio;
+
+	@FXML
+	private TextField txtPrecio;
 
 	@FXML
 	private TextField usuarioResponsable;
@@ -84,6 +90,12 @@ public class AdministradorController implements Initializable {
 
 	@FXML
 	private Button guardarusuario;
+	
+	@FXML
+	private Button reinicioServicios;
+
+	@FXML
+	private Button confirmarServicios;
 
 	@FXML
 	private TableView<Parada> userTable;
