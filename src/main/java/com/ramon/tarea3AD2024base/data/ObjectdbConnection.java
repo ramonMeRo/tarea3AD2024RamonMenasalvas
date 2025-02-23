@@ -1,5 +1,8 @@
 package com.ramon.tarea3AD2024base.data;
 
+import java.io.IOException;
+import java.util.Properties;
+
 import org.springframework.stereotype.Component;
 
 import jakarta.persistence.EntityManager;
@@ -9,33 +12,25 @@ import jakarta.persistence.Persistence;
 @Component
 public class ObjectdbConnection {
 
-	private static ObjectdbConnection INSTANCE = null;
-	private EntityManagerFactory emf;
-	private EntityManager em;
+	private static final EntityManagerFactory emf;
 
-	private ObjectdbConnection() {
-		emf = Persistence.createEntityManagerFactory("objectdb:$objectdb/db/Envios.odb");
-		em = emf.createEntityManager();
+	static {
+		Properties properties = new Properties();
+		try {
+			properties.load(ObjectdbConnection.class.getClassLoader().getResourceAsStream("application.properties"));
+		} catch (IOException e) {
+			throw new RuntimeException("No se pudo cargar el archivo", e);
+		}
+		properties.put("objectdb.embedded.classes", "com.ramon.tarea3AD2024base.modelo.Envio");
+		String dbPath = properties.getProperty("objectdb.datasource.url");
+		emf = Persistence.createEntityManagerFactory(dbPath);
 	}
 
-	public static synchronized ObjectdbConnection getInstance() {
-		if (INSTANCE == null) {
-			INSTANCE = new ObjectdbConnection();
-		}
-		return INSTANCE;
+	public static EntityManager getEntityManager() {
+		return emf.createEntityManager();
 	}
 
-	public EntityManager getEntityManager() {
-		return em;
-	}
-
-	public void closeConnection() {
-		if (em != null && em.isOpen()) {
-			em.close();
-		}
-		if (emf != null && emf.isOpen()) {
-			emf.close();
-		}
-		INSTANCE = null;
+	public static void close() {
+		emf.close();
 	}
 }

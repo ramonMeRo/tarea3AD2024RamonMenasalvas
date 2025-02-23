@@ -18,16 +18,16 @@ public class Servicio implements Serializable {
 
 	private double precio;
 
-	private List<Long> idParada = new ArrayList<Long>();
+	private List<Long> idParadas = new ArrayList<Long>();
 
 	public Servicio() {
 	}
 
-	public Servicio(Long id, String nombre, double precio, List<Long> idParada) {
+	public Servicio(Long id, String nombre, double precio, List<Long> idParadas) {
 		this.id = id;
 		this.nombre = nombre;
 		this.precio = precio;
-		this.idParada = idParada;
+		this.idParadas = idParadas;
 	}
 
 	public Long getId() {
@@ -54,17 +54,17 @@ public class Servicio implements Serializable {
 		this.precio = precio;
 	}
 
-	public List<Long> getIdParada() {
-		return idParada;
+	public List<Long> getIdParadas() {
+		return idParadas;
 	}
 
-	public void setIdParada(List<Long> idParada) {
-		this.idParada = idParada;
+	public void setIdParadas(List<Long> idParadas) {
+		this.idParadas = idParadas;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, idParada, nombre, precio);
+		return Objects.hash(id, idParadas, nombre, precio);
 	}
 
 	@Override
@@ -76,14 +76,14 @@ public class Servicio implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Servicio other = (Servicio) obj;
-		return Objects.equals(id, other.id) && Objects.equals(idParada, other.idParada)
+		return Objects.equals(id, other.id) && Objects.equals(idParadas, other.idParadas)
 				&& Objects.equals(nombre, other.nombre)
 				&& Double.doubleToLongBits(precio) == Double.doubleToLongBits(other.precio);
 	}
 
 	@Override
 	public String toString() {
-		return "Servicio [id=" + id + ", nombre=" + nombre + ", precio=" + precio + ", idParada=" + idParada + "]";
+		return "Servicio [id=" + id + ", nombre=" + nombre + ", precio=" + precio + ", idParadas=" + idParadas + "]";
 	}
 
 }

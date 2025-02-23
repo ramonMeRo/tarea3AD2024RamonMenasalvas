@@ -10,9 +10,12 @@ import org.springframework.stereotype.Controller;
 
 import com.ramon.tarea3AD2024base.Utils.VistaUtils;
 import com.ramon.tarea3AD2024base.config.StageManager;
+import com.ramon.tarea3AD2024base.modelo.Envio;
 import com.ramon.tarea3AD2024base.modelo.Perfil;
 import com.ramon.tarea3AD2024base.modelo.Sesion;
 import com.ramon.tarea3AD2024base.modelo.Usuario;
+import com.ramon.tarea3AD2024base.services.Db4oService;
+import com.ramon.tarea3AD2024base.services.ObjectdbService;
 import com.ramon.tarea3AD2024base.services.UsuarioService;
 import com.ramon.tarea3AD2024base.view.FxmlView;
 
@@ -72,11 +75,32 @@ public class InicioController implements Initializable {
 	@Autowired
 	private StageManager stageManager;
 
+
 	public static Sesion sesion = new Sesion();
 
-	@FXML
-	private void salir() {
-		VistaUtils.Salir();
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+
+		Image iconoCerrado = new Image(getClass().getResourceAsStream("/img/ojoCerrado.png"));
+		Image iconoAbierto = new Image(getClass().getResourceAsStream("/img/ojoAbierto.png"));
+
+		btnVisible.setOnMouseClicked(event -> {
+			mostrarContraseña = !mostrarContraseña;
+
+			if (mostrarContraseña) {
+
+				btnVisible.setImage(iconoAbierto);
+				passwordVisible.setText(password.getText());
+				passwordVisible.setVisible(true);
+
+			} else {
+
+				btnVisible.setImage(iconoCerrado);
+				passwordVisible.setVisible(false);
+				password.setVisible(true);
+			}
+		});
+
 	}
 
 	@FXML
@@ -112,6 +136,26 @@ public class InicioController implements Initializable {
 		}
 	}
 
+	@FXML
+	private void registrarse(ActionEvent event) {
+		if (hlRegistro.isPressed())
+			System.out.println("Registro");
+		stageManager.switchScene(FxmlView.REGISTRO);
+	}
+
+	public String getPassword() {
+		return password.getText();
+	}
+
+	public String getUsername() {
+		return txtUsuario.getText();
+	}
+
+	@FXML
+	private void salir() {
+		VistaUtils.Salir();
+	}
+
 	public void ayudaF1(KeyEvent event) {
 		if (event.getCode().toString().equals("F1")) {
 			ayuda();
@@ -142,43 +186,4 @@ public class InicioController implements Initializable {
 		}
 	}
 
-	@FXML
-	private void registrarse(ActionEvent event) {
-		if (hlRegistro.isPressed())
-			System.out.println("Registro");
-		stageManager.switchScene(FxmlView.REGISTRO);
-	}
-
-	public String getPassword() {
-		return password.getText();
-	}
-
-	public String getUsername() {
-		return txtUsuario.getText();
-	}
-
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-
-		Image iconoCerrado = new Image(getClass().getResourceAsStream("/img/ojoCerrado.png"));
-		Image iconoAbierto = new Image(getClass().getResourceAsStream("/img/ojoAbierto.png"));
-
-		btnVisible.setOnMouseClicked(event -> {
-			mostrarContraseña = !mostrarContraseña;
-
-			if (mostrarContraseña) {
-
-				btnVisible.setImage(iconoAbierto);
-				passwordVisible.setText(password.getText());
-				passwordVisible.setVisible(true);
-
-			} else {
-
-				btnVisible.setImage(iconoCerrado);
-				passwordVisible.setVisible(false);
-				password.setVisible(true);
-			}
-		});
-
-	}
 }

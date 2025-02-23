@@ -1,6 +1,8 @@
 package com.ramon.tarea3AD2024base.controller;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,7 +14,9 @@ import org.springframework.stereotype.Controller;
 import com.ramon.tarea3AD2024base.config.StageManager;
 import com.ramon.tarea3AD2024base.modelo.Parada;
 import com.ramon.tarea3AD2024base.modelo.Perfil;
+import com.ramon.tarea3AD2024base.modelo.Servicio;
 import com.ramon.tarea3AD2024base.modelo.Usuario;
+import com.ramon.tarea3AD2024base.services.Db4oService;
 import com.ramon.tarea3AD2024base.services.ParadaService;
 import com.ramon.tarea3AD2024base.services.UsuarioService;
 import com.ramon.tarea3AD2024base.view.FxmlView;
@@ -28,11 +32,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -63,7 +69,7 @@ public class AdministradorController implements Initializable {
 
 	@FXML
 	private TextField regionParada;
-	
+
 	@FXML
 	private TextField txtServicio;
 
@@ -90,7 +96,7 @@ public class AdministradorController implements Initializable {
 
 	@FXML
 	private Button guardarusuario;
-	
+
 	@FXML
 	private Button reinicioServicios;
 
@@ -98,11 +104,14 @@ public class AdministradorController implements Initializable {
 	private Button confirmarServicios;
 
 	@FXML
-	private TableView<Parada> userTable;
+	private Button terminaServicios;
+
+	@FXML
+	private TableView<Parada> paradaTable;
 
 	@FXML
 	private TableColumn<Parada, Long> colParadaId;
-	
+
 	@FXML
 	private TableColumn<Parada, Character> colRegion;
 
@@ -111,6 +120,24 @@ public class AdministradorController implements Initializable {
 
 	@FXML
 	private TableColumn<Parada, String> colResponsable;
+
+	@FXML
+	private TableView<Servicio> serviciosTable;
+
+	@FXML
+	private TableColumn<Servicio, Long> colIdServicio;
+
+	@FXML
+	private TableColumn<Servicio, String> colNombreServicio;
+
+	@FXML
+	private TableColumn<Servicio, String> colPrecio;
+
+	@FXML
+	private TableColumn<Servicio, List<Long>> colIdParadas;
+
+	@FXML
+	private ListView<Parada> listParadas;
 
 	@FXML
 	private MenuItem borrarUsuario;
@@ -123,167 +150,62 @@ public class AdministradorController implements Initializable {
 	private UsuarioService userService;
 	@Autowired
 	private ParadaService paradaService;
+	@Autowired
+	private Db4oService db4oService;
 
 	private ObservableList<Parada> paradaList = FXCollections.observableArrayList();
 
-	@FXML
-	private void volver() {
-		stageManager.switchScene(FxmlView.INICIO);
-	}
+	private ObservableList<Servicio> servicioList = FXCollections.observableArrayList();
 
-	@FXML
-	void reset(ActionEvent event) {
-		limpiarCampos();
-	}
-
-	@FXML
-	private void registrarUsuario(ActionEvent event) {
-
-		if (valida("Nombre Parada", getNombreParada(), "[a-zA-Z]+") && !regionParada.getText().isEmpty()) {
-
-			if (userId.getText() == null || userId.getText() == "") {
-				if (valida("Email", getEmail(), "[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+")
-						&& validacionVacia("Password", getPassword().isEmpty())
-						&& validacionVacia("PasswordConf", getPasswordConf().isEmpty())
-						&& validacionVacia("Usuario Responsable", getUsuarioResponsable().isEmpty())
-						&& validacionVacia("Nombre Responsable", getNombreResponsable().isEmpty())) {
-
-					Usuario user = new Usuario();
-					user.setNombre(getUsuarioResponsable());
-					user.setEmail(getEmail());
-					user.setPassword(getPassword());
-					user.setPerfil(Perfil.PARADA);
-
-					Parada parada = new Parada();
-					parada.setNombre(getNombreParada());
-					parada.setRegion(getRegionParada());
-					parada.setResponsable(getNombreResponsable());
-
-					if (paradaService.existsByNombre(parada.getNombre())
-							&& paradaService.existsByRegion(parada.getRegion())) {
-						Alert alert = new Alert(AlertType.WARNING);
-						alert.setTitle("Parada ya existe.");
-						alert.setContentText("La parada que intentas introducir ya existe");
-						alert.showAndWait();
-						return;
-					}
-
-					Usuario newUser = userService.save(user);
-					parada.setUsuario(user);
-
-					@SuppressWarnings("unused")
-					Parada nuevaParada = paradaService.save(parada);
-
-					guardarAlerta(newUser);
-				}
-
-			} else {
-				Usuario user = userService.find(Long.parseLong(userId.getText()));
-				user.setNombre(getNombreParada());
-				Usuario updatedUser = userService.update(user);
-				actualizarAlerta(updatedUser);
-			}
-
-			limpiarCampos();
-			loadUserDetails();
-		}
-
-	}
-
-	private void limpiarCampos() {
-		userId.setText(null);
-		regionParada.clear();
-		usuarioResponsable.clear();
-		nombreResponsable.clear();
-		nombreParada.clear();
-		email.clear();
-		password.clear();
-		passwordConf.clear();
-	}
-
-	private void guardarAlerta(Usuario user) {
-
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Usuario introducido correctamente.");
-		alert.setHeaderText(null);
-		alert.setContentText("Usuario: " + user.getNombre() + " " + " creado correctamente ");
-		alert.showAndWait();
-	}
-
-	private void actualizarAlerta(Usuario user) {
-
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("User updated successfully.");
-		alert.setHeaderText(null);
-		alert.setContentText("Usuario " + user.getNombre() + " " + " actualizado correctamente.");
-		alert.showAndWait();
-	}
-
-	public String getNombreParada() {
-		return nombreParada.getText();
-	}
-
-	public char getRegionParada() {
-		return regionParada.getText().charAt(0);
-	}
-
-	public void setRegionParada(TextField regionParada) {
-		this.regionParada = regionParada;
-	}
-
-	public String getUsuarioResponsable() {
-		return usuarioResponsable.getText();
-	}
-
-	public void setUsuarioResponsable(TextField usuarioResponsable) {
-		this.usuarioResponsable = usuarioResponsable;
-	}
-
-	public String getNombreResponsable() {
-		return nombreResponsable.getText();
-	}
-
-	public void setNombreResponsable(TextField nombreResponsable) {
-		this.nombreResponsable = nombreResponsable;
-	}
-
-	public String getPasswordConf() {
-		return passwordConf.getText();
-	}
-
-	public void setPasswordConf(PasswordField passwordConf) {
-		this.passwordConf = passwordConf;
-	}
-
-	public void setNombreParada(TextField nombreParada) {
-		this.nombreParada = nombreParada;
-	}
-
-	public void setEmail(TextField email) {
-		this.email = email;
-	}
-
-	public void setPassword(PasswordField password) {
-		this.password = password;
-	}
-
-	public String getEmail() {
-		return email.getText();
-	}
-
-	public String getPassword() {
-		return password.getText();
-	}
+	private ObservableList<Parada> paradasSelect = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		userTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		serviciosTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
+		serviciosTable.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+			if (newValue != null) {
+				txtServicio.setText(newValue.getNombre());
+				txtPrecio.setText(String.valueOf(newValue.getPrecio()));
+				paradasSelect.clear();
+				List<Long> idParadas = newValue.getIdParadas();
+				for (Long id : idParadas) {
+					Parada parada = paradaService.find(id);
+					paradasSelect.add(parada);
+				}
+
+				paradaTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+			}
+		});
+		List<Servicio> prueba = db4oService.findAllServicio();
+
+		for (Servicio servicio : prueba) {
+			System.out.println(servicio.toString());
+		}
+
+		listParadas.setItems(paradasSelect);
+
+		paradaTable.setRowFactory(tv -> {
+			TableRow<Parada> fila = new TableRow();
+			fila.setOnMousePressed(event -> {
+
+				if (!fila.isEmpty() && event.getClickCount() == 1) {
+					Parada parada = fila.getItem();
+					if (paradasSelect.contains(parada)) {
+						paradasSelect.remove(parada);
+					} else {
+						paradasSelect.add(parada);
+					}
+				}
+			});
+			return fila;
+		});
 		setColumnProperties();
 
 		// Add all users into table
-		loadUserDetails();
+		loadParadaDetails();
+		loadServicioDetails();
 	}
 
 	/*
@@ -294,6 +216,25 @@ public class AdministradorController implements Initializable {
 		colNombreParada.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 		colRegion.setCellValueFactory(new PropertyValueFactory<>("region"));
 		colResponsable.setCellValueFactory(new PropertyValueFactory<>("responsable"));
+
+		colIdServicio.setCellValueFactory(new PropertyValueFactory<>("id"));
+		colNombreServicio.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+		colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
+		colIdParadas.setCellValueFactory(new PropertyValueFactory<>("idParadas"));
+	}
+
+	private void loadParadaDetails() {
+		paradaList.clear();
+		paradaList.addAll(paradaService.findAll());
+
+		paradaTable.setItems(paradaList);
+	}
+
+	private void loadServicioDetails() {
+		servicioList.clear();
+		servicioList.addAll(db4oService.findAllServicio());
+
+		serviciosTable.setItems(servicioList);
 	}
 
 	Callback<TableColumn<Parada, Boolean>, TableCell<Parada, Boolean>> cellFactory = new Callback<TableColumn<Parada, Boolean>, TableCell<Parada, Boolean>>() {
@@ -337,16 +278,6 @@ public class AdministradorController implements Initializable {
 			return cell;
 		}
 	};
-
-	/*
-	 * Add All users to observable list and update table
-	 */
-	private void loadUserDetails() {
-		paradaList.clear();
-		paradaList.addAll(paradaService.findAll());
-
-		userTable.setItems(paradaList);
-	}
 
 	/*
 	 * Validations
@@ -417,4 +348,274 @@ public class AdministradorController implements Initializable {
 
 		alert.showAndWait();
 	}
+
+	@FXML
+	private void volver() {
+		stageManager.switchScene(FxmlView.INICIO);
+	}
+
+	@FXML
+	private void registrarUsuario(ActionEvent event) {
+
+		if (valida("Nombre Parada", getNombreParada(), "[a-zA-Z]+") && !regionParada.getText().isEmpty()) {
+
+			if (userId.getText() == null || userId.getText() == "") {
+				if (valida("Email", getEmail(), "[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+")
+						&& validacionVacia("Password", getPassword().isEmpty())
+						&& validacionVacia("PasswordConf", getPasswordConf().isEmpty())
+						&& validacionVacia("Usuario Responsable", getUsuarioResponsable().isEmpty())
+						&& validacionVacia("Nombre Responsable", getNombreResponsable().isEmpty())) {
+
+					Usuario user = new Usuario();
+					user.setNombre(getUsuarioResponsable());
+					user.setEmail(getEmail());
+					user.setPassword(getPassword());
+					user.setPerfil(Perfil.PARADA);
+
+					Parada parada = new Parada();
+					parada.setNombre(getNombreParada());
+					parada.setRegion(getRegionParada());
+					parada.setResponsable(getNombreResponsable());
+
+					if (paradaService.existsByNombre(parada.getNombre())
+							&& paradaService.existsByRegion(parada.getRegion())) {
+						Alert alert = new Alert(AlertType.WARNING);
+						alert.setTitle("Parada ya existe.");
+						alert.setContentText("La parada que intentas introducir ya existe");
+						alert.showAndWait();
+						return;
+					}
+
+					Usuario newUser = userService.save(user);
+					parada.setUsuario(user);
+
+					@SuppressWarnings("unused")
+					Parada nuevaParada = paradaService.save(parada);
+
+					guardarAlerta(newUser);
+				}
+
+			} else {
+				Usuario user = userService.find(Long.parseLong(userId.getText()));
+				user.setNombre(getNombreParada());
+				Usuario updatedUser = userService.update(user);
+			}
+			limpiarCamposParada();
+		}
+
+	}
+
+	@FXML
+	private void iniciarRegistroServicio() {
+		txtPrecio.setDisable(false);
+		txtServicio.setDisable(false);
+		listParadas.setDisable(false);
+		reinicioServicios.setDisable(false);
+		confirmarServicios.setDisable(false);
+		terminaServicios.setVisible(true);
+
+	}
+
+	@FXML
+	private void terminarRegistroServicio() {
+		txtPrecio.setDisable(true);
+		txtServicio.setDisable(true);
+		listParadas.setDisable(true);
+		reinicioServicios.setDisable(true);
+		confirmarServicios.setDisable(true);
+		terminaServicios.setVisible(false);
+		db4oService.cerrarBase();
+
+	}
+
+	@FXML
+	private void registrarServicio() {
+		if (valida("Nombre Servicio", getTxtServicio(), "^[a-zA-Z\\s]+$") && txtServicio != null
+				&& valida("Precio servicio", getTxtPrecio(), "^(0|[1-9]\\d*)([.,]\\d{2})?$") && txtPrecio != null
+				&& listParadas != null) {
+
+			if (db4oService.findByServicioNombre(getTxtServicio().toUpperCase()) != null) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Error al guardar servicio.");
+				alert.setHeaderText(null);
+				alert.setContentText("Servicio ya existe");
+				alert.showAndWait();
+			} else {
+
+				Servicio servicio = new Servicio();
+
+				List<Parada> paradas = listParadas.getItems();
+
+				List<Long> ids = new ArrayList<Long>();
+				for (Parada parada : paradas) {
+					ids.add(parada.getId());
+				}
+
+				servicio.setId(db4oService.findServicioLastId());
+				servicio.setNombre(getTxtServicio().toUpperCase());
+				servicio.setPrecio(Double.parseDouble(getTxtPrecio()));
+				servicio.setIdParadas(ids);
+
+				db4oService.saveServicio(servicio);
+
+				guardarAlertaServicio(servicio);
+
+				limpiarCamposServicio();
+
+				loadServicioDetails();
+			}
+		}
+	}
+
+	@FXML
+	private void actualizarServicio() {
+		Servicio servicioActualizar = serviciosTable.getSelectionModel().getSelectedItem();
+
+		if (servicioActualizar == null) {
+			Alert alert = new Alert(Alert.AlertType.WARNING);
+			alert.setTitle("Atención");
+			alert.setHeaderText(null);
+			alert.setContentText("Por favor, seleccione un servicio para actualizar.");
+			alert.showAndWait();
+			return;
+		}
+		if (valida("Nombre Servicio", getTxtServicio(), "^[a-zA-Z\\s]+$") && txtServicio != null
+				&& valida("Precio servicio", getTxtPrecio(), "^(0|[1-9]\\d*)([.,]\\d{2})?$") && txtPrecio != null
+				&& listParadas != null) {
+
+			servicioActualizar.setNombre(getTxtServicio().toUpperCase());
+			servicioActualizar.setPrecio(Double.valueOf(getTxtPrecio()));
+
+			List<Parada> paradas = listParadas.getItems();
+			List<Long> ids = new ArrayList<>();
+			for (Parada parada : paradas) {
+				ids.add(parada.getId());
+			}
+			servicioActualizar.setIdParadas(ids);
+
+			db4oService.updateServicio(servicioActualizar);
+			actualizarAlerta(servicioActualizar);
+		}
+		loadServicioDetails();
+	}
+
+	@FXML
+	private void limpiarCamposParada() {
+		userId.setText(null);
+		regionParada.clear();
+		usuarioResponsable.clear();
+		nombreResponsable.clear();
+		nombreParada.clear();
+		email.clear();
+		password.clear();
+		passwordConf.clear();
+	}
+
+	@FXML
+	private void limpiarCamposServicio() {
+		txtServicio.clear();
+		txtPrecio.clear();
+		paradasSelect.clear();
+
+	}
+
+	private void guardarAlerta(Usuario user) {
+
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Usuario introducido correctamente.");
+		alert.setHeaderText(null);
+		alert.setContentText("Usuario: " + user.getNombre() + " " + " creado correctamente ");
+		alert.showAndWait();
+	}
+
+	private void guardarAlertaServicio(Servicio servicio) {
+
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Servicio introducido correctamente.");
+		alert.setHeaderText(null);
+		alert.setContentText("Servicio: " + servicio.getNombre() + " " + " creado correctamente ");
+		alert.showAndWait();
+	}
+
+	private void actualizarAlerta(Servicio servicio) {
+
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Servicio actualizado correctamente.");
+		alert.setHeaderText(null);
+		alert.setContentText("Servicio" + servicio.getNombre() + " " + " actualizado correctamente.");
+		alert.showAndWait();
+	}
+
+	public String getNombreParada() {
+		return nombreParada.getText();
+	}
+
+	public char getRegionParada() {
+		return regionParada.getText().charAt(0);
+	}
+
+	public void setRegionParada(TextField regionParada) {
+		this.regionParada = regionParada;
+	}
+
+	public String getUsuarioResponsable() {
+		return usuarioResponsable.getText();
+	}
+
+	public void setUsuarioResponsable(TextField usuarioResponsable) {
+		this.usuarioResponsable = usuarioResponsable;
+	}
+
+	public String getNombreResponsable() {
+		return nombreResponsable.getText();
+	}
+
+	public void setNombreResponsable(TextField nombreResponsable) {
+		this.nombreResponsable = nombreResponsable;
+	}
+
+	public String getPasswordConf() {
+		return passwordConf.getText();
+	}
+
+	public void setPasswordConf(PasswordField passwordConf) {
+		this.passwordConf = passwordConf;
+	}
+
+	public void setNombreParada(TextField nombreParada) {
+		this.nombreParada = nombreParada;
+	}
+
+	public void setEmail(TextField email) {
+		this.email = email;
+	}
+
+	public void setPassword(PasswordField password) {
+		this.password = password;
+	}
+
+	public String getEmail() {
+		return email.getText();
+	}
+
+	public String getPassword() {
+		return password.getText();
+	}
+
+	public String getTxtServicio() {
+		return txtServicio.getText();
+	}
+
+	public void setTxtServicio(TextField txtServicio) {
+		this.txtServicio = txtServicio;
+	}
+
+	public String getTxtPrecio() {
+		return txtPrecio.getText();
+	}
+
+	public void setTxtPrecio(TextField txtPrecio) {
+		this.txtPrecio = txtPrecio;
+	}
+
 }

@@ -1,95 +1,128 @@
 package com.ramon.tarea3AD2024base.repositorios;
 
 import java.util.List;
-
+import org.springframework.stereotype.Repository;
+import com.db4o.ObjectContainer;
 import com.db4o.query.Query;
 import com.ramon.tarea3AD2024base.data.Db4oConnection;
 import com.ramon.tarea3AD2024base.modelo.PaqueteContratado;
 import com.ramon.tarea3AD2024base.modelo.Servicio;
 
+@Repository
 public class Db4oRepository {
 
-	private Servicio findByServicioId(Long id) {
-
-		Servicio servicio;
-
-		Query query = Db4oConnection.getInstance().query();
+	public Servicio findByServicioId(Long id) {
+		ObjectContainer db = Db4oConnection.getInstance();
+		Query query = db.query();
 		query.constrain(Servicio.class);
 		query.descend("id").constrain(id);
-
 		List<Servicio> resultado = query.execute();
-
-		servicio = resultado.get(0);
-		Db4oConnection.getInstance().close();
-		return servicio;
-
+		return resultado.get(0);
 	}
 
-	private Servicio findByServicioNombre(String nombre) {
-
-		Servicio servicio;
-		Query query = Db4oConnection.getInstance().query();
+	public List<Servicio> findAllServicio() {
+		ObjectContainer db = Db4oConnection.getInstance();
+		Query query = db.query();
 		query.constrain(Servicio.class);
-		query.descend("nombre").constrain(nombre);
-
+		query.execute();
 		List<Servicio> resultado = query.execute();
-		servicio = resultado.get(0);
-		Db4oConnection.getInstance().close();
-		return servicio;
+		return resultado;
 	}
 
-	private Long findServicioLastId() {
-
-		Query query = Db4oConnection.getInstance().query();
-		query.constrain(Servicio.class);
-		query.descend("id").orderDescending();
-
-		List<Servicio> resultado = query.execute();
-		if (resultado.isEmpty()) {
-			Db4oConnection.getInstance().close();
-			return 0L;
+	public void saveServicio(Servicio servicio) {
+		ObjectContainer db = Db4oConnection.getInstance();
+		db.store(servicio);
+	}
+	
+	public void updateServicio(Servicio servicio) {
+		ObjectContainer db = Db4oConnection.getInstance();
+		try {
+			Query query = db.query();
+			query.constrain(Servicio.class);
+			query.descend("id").constrain(servicio.getId());
+			List<Servicio> resultado = query.execute();
+			
+			if(!resultado.isEmpty()) {
+				Servicio actualizar = resultado.get(0);
+				actualizar.setNombre(servicio.getNombre());
+				actualizar.setPrecio(servicio.getPrecio());
+				actualizar.setIdParadas(servicio.getIdParadas());
+				db.store(actualizar);
+			}
+		} catch (Exception e) {
+			db.rollback();
 		}
-		Db4oConnection.getInstance().close();
-		return resultado.get(0).getId() + 1;
-
 	}
 
-	private PaqueteContratado findByPcId(Long id) {
-		PaqueteContratado pc;
-		Query query = Db4oConnection.getInstance().query();
-		query.constrain(Servicio.class);
+	public Servicio findByServicioNombre(String nombre) {
+		ObjectContainer db = Db4oConnection.getInstance();
+		try {
+			Query query = db.query();
+			query.constrain(Servicio.class);
+			query.descend("nombre").constrain(nombre);
+			List<Servicio> resultado = query.execute();
+			return resultado.get(0);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public Long findServicioLastId() {
+		ObjectContainer db = Db4oConnection.getInstance();
+		try {
+			Query query = db.query();
+			query.constrain(Servicio.class);
+			query.descend("id").orderDescending();
+			List<Servicio> resultado = query.execute();
+			return resultado.get(0).getId() + 1;
+		} catch (Exception e) {
+			return 1L;
+		}
+	}
+
+	public PaqueteContratado findByPcId(Long id) {
+		ObjectContainer db = Db4oConnection.getInstance();
+		Query query = db.query();
+		query.constrain(PaqueteContratado.class);
 		query.descend("id").constrain(id);
 		List<PaqueteContratado> resultado = query.execute();
-		pc = resultado.get(0);
-		Db4oConnection.getInstance().close();
-		return pc;
+		return resultado.get(0);
 	}
 
-	private PaqueteContratado findByPcNombre(String nombre) {
-		PaqueteContratado pc;
-		Query query = Db4oConnection.getInstance().query();
-		query.constrain(Servicio.class);
-		query.descend("nombre").constrain(nombre);
-		List<PaqueteContratado> resultado = query.execute();
-		pc = resultado.get(0);
-		Db4oConnection.getInstance().close();
-		return pc;
-	}
-
-	private Long findPcLastId() {
-
-		Query query = Db4oConnection.getInstance().query();
-		query.constrain(Servicio.class);
-		query.descend("id");
-
-		List<PaqueteContratado> resultado = query.execute();
-		if (resultado.isEmpty()) {
-			Db4oConnection.getInstance().close();
-			return 0L;
+	public PaqueteContratado findByPcNombre(String nombre) {
+		ObjectContainer db = Db4oConnection.getInstance();
+		try {
+			Query query = db.query();
+			query.constrain(PaqueteContratado.class);
+			query.descend("nombre").constrain(nombre);
+			List<PaqueteContratado> resultado = query.execute();
+			return resultado.get(0);
+		} catch (Exception e) {
+			return null;
 		}
-		Db4oConnection.getInstance().close();
-		return resultado.get(0).getId() + 1;
-
 	}
 
+	public Long findPcLastId() {
+		ObjectContainer db = Db4oConnection.getInstance();
+		try {
+			Query query = db.query();
+			query.constrain(PaqueteContratado.class);
+			query.descend("id").orderDescending();
+			List<PaqueteContratado> resultado = query.execute();
+
+			return resultado.get(0).getId() + 1;
+		} catch (Exception e) {
+			return 1L;
+		}
+	}
+
+	public void savePc(PaqueteContratado paquete) {
+		ObjectContainer db = Db4oConnection.getInstance();
+		db.store(paquete);
+	}
+
+	public void cerrarBase() {
+		ObjectContainer db = Db4oConnection.getInstance();
+		db.close();
+	}
 }

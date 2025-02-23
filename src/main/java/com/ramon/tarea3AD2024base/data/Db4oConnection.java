@@ -9,7 +9,7 @@ import com.db4o.ObjectContainer;
 public class Db4oConnection {
 
        private static Db4oConnection INSTANCE = null;
-       private final String PATH = "/db/ServiciosContratados.db4o";
+       private final String PATH = "db/servicios.db4o";
        private static ObjectContainer db;
 
        // Private constructor suppresses
@@ -33,6 +33,7 @@ public class Db4oConnection {
 
        public void performConnection() {
 	   		//EmbeddedConfiguration config = Db4oEmbedded.newConfiguration();
+    	   if(db == null || db.ext().isClosed())
 	   		db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), PATH);
    	}
        
