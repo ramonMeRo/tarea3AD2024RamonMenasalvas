@@ -1,7 +1,8 @@
 package com.ramon.tarea3AD2024base.modelo;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -22,13 +23,13 @@ public class PaqueteContratado implements Serializable {
 
 	private Long idEstancia;
 
-	private Set<Long> servicios = new HashSet<Long>();
+	private List<Long> servicios = new ArrayList<Long>();
 
 	public PaqueteContratado() {
 	}
 
 	public PaqueteContratado(Long id, double precioTotal, char modoPago, String extra, Long idEstancia,
-			Set<Long> servicios) {
+			List<Long> servicios) {
 		this.id = id;
 		this.precioTotal = precioTotal;
 		this.modoPago = modoPago;
@@ -77,16 +78,12 @@ public class PaqueteContratado implements Serializable {
 		this.idEstancia = idEstancia;
 	}
 
-	public Set<Long> getServicios() {
+	public List<Long> getServicios() {
 		return servicios;
 	}
 
-	public void setServicios(Set<Long> servicios) {
+	public void setServicios(List<Long> servicios) {
 		this.servicios = servicios;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 
 	@Override

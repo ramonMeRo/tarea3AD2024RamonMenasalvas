@@ -178,11 +178,6 @@ public class AdministradorController implements Initializable {
 				paradaTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 			}
 		});
-		List<Servicio> prueba = db4oService.findAllServicio();
-
-		for (Servicio servicio : prueba) {
-			System.out.println(servicio.toString());
-		}
 
 		listParadas.setItems(paradasSelect);
 

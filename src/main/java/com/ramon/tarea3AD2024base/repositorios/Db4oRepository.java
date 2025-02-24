@@ -101,6 +101,15 @@ public class Db4oRepository {
 			return null;
 		}
 	}
+	
+	public List<PaqueteContratado> findAllPc() {
+		ObjectContainer db = Db4oConnection.getInstance();
+		Query query = db.query();
+		query.constrain(PaqueteContratado.class);
+		query.execute();
+		List<PaqueteContratado> resultado = query.execute();
+		return resultado;
+	}
 
 	public Long findPcLastId() {
 		ObjectContainer db = Db4oConnection.getInstance();

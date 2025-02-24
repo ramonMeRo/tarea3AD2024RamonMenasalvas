@@ -2,6 +2,8 @@ package com.ramon.tarea3AD2024base.controller;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -14,12 +16,15 @@ import com.ramon.tarea3AD2024base.config.StageManager;
 import com.ramon.tarea3AD2024base.modelo.Carnet;
 import com.ramon.tarea3AD2024base.modelo.Estancia;
 import com.ramon.tarea3AD2024base.modelo.EstanciaTabla;
+import com.ramon.tarea3AD2024base.modelo.PaqueteContratado;
 import com.ramon.tarea3AD2024base.modelo.Parada;
 import com.ramon.tarea3AD2024base.modelo.Peregrino;
+import com.ramon.tarea3AD2024base.modelo.Servicio;
 import com.ramon.tarea3AD2024base.modelo.Sesion;
 import com.ramon.tarea3AD2024base.modelo.Usuario;
 import com.ramon.tarea3AD2024base.modelo.Visita;
 import com.ramon.tarea3AD2024base.services.CarnetService;
+import com.ramon.tarea3AD2024base.services.Db4oService;
 import com.ramon.tarea3AD2024base.services.EstanciaService;
 import com.ramon.tarea3AD2024base.services.ParadaService;
 import com.ramon.tarea3AD2024base.services.PeregrinoService;
@@ -35,9 +40,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -57,19 +66,35 @@ public class ResponsableController implements Initializable {
 	@FXML
 	private TextField apellidosSellar;
 	@FXML
+	private TextArea txtExtra;
+	@FXML
 	private DatePicker fechaNacSellar;
 	@FXML
 	private RadioButton estanciaSi;
 	@FXML
 	private RadioButton estanciaNo;
 	@FXML
+	private RadioButton servicioSi;
+	@FXML
+	private RadioButton servicioNo;
+	@FXML
 	private RadioButton vipSi;
 	@FXML
 	private RadioButton vipNo;
 	@FXML
+	private RadioButton efectivo;
+	@FXML
+	private RadioButton tarjeta;
+	@FXML
+	private RadioButton bizum;
+	@FXML
 	private ToggleGroup afirmacionEstancia;
 	@FXML
 	private ToggleGroup afirmacionVip;
+	@FXML
+	private ToggleGroup afirmacionServicio;
+	@FXML
+	private ToggleGroup metodoPago;
 
 	@FXML
 	private TableView<EstanciaTabla> tablaEstancias;
@@ -83,6 +108,22 @@ public class ResponsableController implements Initializable {
 	private TableColumn<EstanciaTabla, Boolean> columnaVip;
 	@FXML
 	private TableColumn<EstanciaTabla, LocalDate> columnaFecha;
+
+	@FXML
+	private TableView<Servicio> serviciosTable;
+
+	@FXML
+	private TableColumn<Servicio, Long> colIdServicio;
+	@FXML
+	private TableColumn<Servicio, String> colNombreServicio;
+	@FXML
+	private TableColumn<Servicio, String> colPrecio;
+	@FXML
+	private TableColumn<Servicio, List<Long>> colIdParadas;
+
+	@FXML
+	private ListView<Servicio> listServicios;
+
 	@FXML
 	private DatePicker fechaInicio;
 	@FXML
@@ -90,6 +131,10 @@ public class ResponsableController implements Initializable {
 
 	@FXML
 	private ObservableList<EstanciaTabla> listaFxEstancia = FXCollections.observableArrayList();
+
+	private ObservableList<Servicio> servicioSelect = FXCollections.observableArrayList();
+
+	private ObservableList<Servicio> servicioList = FXCollections.observableArrayList();
 
 	@Lazy
 	@Autowired
@@ -109,10 +154,110 @@ public class ResponsableController implements Initializable {
 	private EstanciaService estanciaService;
 	@Autowired
 	private VisitaService visitaService;
+	@Autowired
+	private Db4oService db4oService;
 
 	@FXML
 	private void volver() {
 		stagemanager.switchScene(FxmlView.INICIO);
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		// TODO Auto-generated method stub
+		serviciosTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+
+			List<PaqueteContratado> pc = db4oService.findAllPc();
+			for (PaqueteContratado paqueteContratado : pc) {
+				System.err.print(paqueteContratado.toString());
+			}
+		
+
+		listServicios.setItems(servicioSelect);
+
+		serviciosTable.setRowFactory(tv -> {
+			TableRow<Servicio> fila = new TableRow();
+			fila.setOnMousePressed(event -> {
+
+				if (!fila.isEmpty() && event.getClickCount() == 1) {
+					Servicio servicio = fila.getItem();
+					if (servicioSelect.contains(servicio)) {
+						servicioSelect.remove(servicio);
+					} else {
+						servicioSelect.add(servicio);
+					}
+				}
+			});
+			return fila;
+		});
+
+		setColumnProperties();
+
+		loadServicioDetails();
+
+		sesion = InicioController.sesion;
+		usuario = sesion.getUsuario();
+
+		fechaFin.setValue(LocalDate.now());
+
+		estanciaSi.setOnAction(event -> gestionarEstancia());
+		estanciaNo.setOnAction(event -> gestionarEstancia());
+
+		choicePeregrinos.setConverter(new StringConverter<>() {
+
+			@Override
+			public String toString(Peregrino peregrino) {
+				if (peregrino != null) {
+					return peregrino.getNombre() + "-" + peregrino.getId();
+				}
+				return "Seleccione peregrino";
+			}
+
+			@Override
+			public Peregrino fromString(String string) {
+				return null;
+			}
+
+		});
+
+		llenarChoiceConPeregrinos();
+
+		choicePeregrinos.setOnAction(event -> llenarCamposPeregrino());
+
+		idEstancia.setCellValueFactory(new PropertyValueFactory<>("id"));
+		nombreParada.setCellValueFactory(new PropertyValueFactory<>("nombreParada"));
+		nombrePeregrino.setCellValueFactory(new PropertyValueFactory<>("nombrePeregrino"));
+		columnaVip.setCellValueFactory(new PropertyValueFactory<>("vip"));
+		columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+	}
+
+	private void setColumnProperties() {
+		colIdServicio.setCellValueFactory(new PropertyValueFactory<>("id"));
+		colNombreServicio.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+		colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
+		colIdParadas.setCellValueFactory(new PropertyValueFactory<>("idParadas"));
+	}
+
+	private void loadServicioDetails() {
+		servicioList.clear();
+		servicioList.addAll(db4oService.findAllServicio());
+
+		serviciosTable.setItems(servicioList);
+	}
+
+	private void llenarChoiceConPeregrinos() {
+		List<Peregrino> peregrinos = peregrinoService.findAll();
+		choicePeregrinos.getItems().clear();
+		choicePeregrinos.getItems().addAll(peregrinos);
+	}
+
+	@FXML
+	private void llenarCamposPeregrino() {
+		Peregrino p = choicePeregrinos.getValue();
+		nombreSellar.setText(p.getNombre());
+		apellidosSellar.setText(p.getApellidos());
+		fechaNacSellar.setValue(p.getFechaNac());
 	}
 
 	@FXML
@@ -147,37 +292,33 @@ public class ResponsableController implements Initializable {
 	}
 
 	@FXML
-	private void ayuda() {
-		try {
-			WebView webView = new WebView();
-
-			String url = getClass().getResource("/help/html/Responsable.html").toExternalForm();
-			webView.getEngine().load(url);
-
-			Stage helpStage = new Stage();
-			helpStage.setTitle("Ayuda");
-
-			Scene helpScene = new Scene(webView, 850, 520);
-
-			helpStage.setScene(helpScene);
-
-			helpStage.initModality(Modality.APPLICATION_MODAL);
-			helpStage.setResizable(true);
-			helpStage.show();
-
-		} catch (NullPointerException e) {
-			System.out.print("No se ha encontrado el HTML");
-		}
-	}
-
-	@FXML
 	private void gestionarEstancia() {
 		if (estanciaNo.isSelected()) {
+
 			vipSi.setDisable(true);
 			vipNo.setDisable(true);
+			servicioSi.setDisable(true);
+			servicioNo.setDisable(true);
+			efectivo.setDisable(true);
+			tarjeta.setDisable(true);
+			bizum.setDisable(true);
+			serviciosTable.setDisable(true);
+			listServicios.setDisable(true);
+			txtExtra.setDisable(true);
+
 		} else if (estanciaSi.isSelected()) {
+
 			vipSi.setDisable(false);
 			vipNo.setDisable(false);
+			servicioSi.setDisable(false);
+			servicioNo.setDisable(false);
+			efectivo.setDisable(false);
+			tarjeta.setDisable(false);
+			bizum.setDisable(false);
+			serviciosTable.setDisable(false);
+			listServicios.setDisable(false);
+			txtExtra.setDisable(false);
+
 		}
 	}
 
@@ -204,7 +345,122 @@ public class ResponsableController implements Initializable {
 			}
 		}
 
-		if (estanciaSi.isSelected() && vipSi.isSelected()) {
+		if (estanciaSi.isSelected() && vipSi.isSelected() && servicioSi.isSelected()) {
+			Estancia estancia = new Estancia();
+			estancia.setFecha(LocalDate.now());
+			Parada parada = paradaService.findByUsuario(usuario);
+			estancia.setParada(parada);
+			estancia.setPeregrino(choicePeregrinos.getValue());
+			estancia.setVip(true);
+
+			@SuppressWarnings("unused")
+			Estancia nuevaEstancia = estanciaService.save(estancia);
+			Carnet carnet = choicePeregrinos.getValue().getCarnet();
+
+			carnet.setDistancia(carnet.getDistancia() + 5.00);
+			carnet.setnVips(carnet.getnVips() + 1);
+
+			@SuppressWarnings("unused")
+			Carnet actualizaCarnet = carnetService.update(carnet);
+
+			Visita visita = new Visita();
+
+			visita.setFecha(LocalDate.now());
+			visita.setParada(parada);
+			visita.setPeregrino(choicePeregrinos.getValue());
+
+			parada.getVisitas().add(visita);
+
+			Set<Servicio> servicios = new HashSet<>(listServicios.getItems());
+			List<Long> ids = new ArrayList<>();
+
+			double suma = 0.0;
+			for (Servicio servicio : servicios) {
+				suma += servicio.getPrecio();
+				ids.add(servicio.getId());
+			}
+
+			PaqueteContratado pc = new PaqueteContratado();
+
+			pc.setId(db4oService.findPcLastId());
+			pc.setIdEstancia(estancia.getId());
+			pc.setPrecioTotal(suma);
+
+			if (efectivo.isSelected()) {
+				pc.setModoPago('E');
+			} else if (tarjeta.isSelected()) {
+				pc.setModoPago('T');
+			} else if (bizum.isSelected()) {
+				pc.setModoPago('B');
+			}
+
+			pc.setServicios(ids);
+			pc.setExtra(getTxtExtra());
+
+			db4oService.savePc(pc);
+
+			@SuppressWarnings("unused")
+			Visita nuevaVisita = visitaService.save(visita);
+
+		} else if (estanciaSi.isSelected() && vipNo.isSelected() && servicioSi.isSelected()) {
+			Estancia estancia = new Estancia();
+			estancia.setFecha(LocalDate.now());
+			Parada parada = paradaService.findByUsuario(usuario);
+			estancia.setParada(parada);
+			estancia.setPeregrino(choicePeregrinos.getValue());
+			estancia.setVip(false);
+
+			@SuppressWarnings("unused")
+			Estancia nuevaEstancia = estanciaService.save(estancia);
+
+			Carnet carnet = choicePeregrinos.getValue().getCarnet();
+
+			carnet.setDistancia(carnet.getDistancia() + 5.00);
+
+			@SuppressWarnings("unused")
+			Carnet actualizaCarnet = carnetService.update(carnet);
+
+			Visita visita = new Visita();
+
+			visita.setFecha(LocalDate.now());
+			visita.setParada(parada);
+			visita.setPeregrino(choicePeregrinos.getValue());
+
+			parada.getVisitas().add(visita);
+
+			Set<Servicio> servicios = new HashSet<>(listServicios.getItems());
+			List<Long> ids = new ArrayList<>();
+
+			double suma = 0.0;
+			for (Servicio servicio : servicios) {
+				suma += servicio.getPrecio();
+				ids.add(servicio.getId());
+			}
+
+			PaqueteContratado pc = new PaqueteContratado();
+
+			pc.setId(db4oService.findPcLastId());
+			pc.setIdEstancia(estancia.getId());
+			pc.setPrecioTotal(suma);
+
+			if (efectivo.isSelected()) {
+				pc.setModoPago('E');
+			} else if (tarjeta.isSelected()) {
+				pc.setModoPago('T');
+			} else if (bizum.isSelected()) {
+				pc.setModoPago('B');
+			}
+
+			pc.setServicios(ids);
+			pc.setExtra(getTxtExtra());
+
+			db4oService.savePc(pc);
+
+			@SuppressWarnings("unused")
+			Visita nuevaVisita = visitaService.save(visita);
+
+		} else if (estanciaSi.isSelected() && vipSi.isSelected() && servicioNo.isSelected()) {
+
 			Estancia estancia = new Estancia();
 			estancia.setFecha(LocalDate.now());
 			Parada parada = paradaService.findByUsuario(usuario);
@@ -233,7 +489,8 @@ public class ResponsableController implements Initializable {
 			@SuppressWarnings("unused")
 			Visita nuevaVisita = visitaService.save(visita);
 
-		} else if (estanciaSi.isSelected() && vipNo.isSelected()) {
+		} else if (estanciaSi.isSelected() && vipNo.isSelected() && servicioNo.isSelected()) {
+
 			Estancia estancia = new Estancia();
 			estancia.setFecha(LocalDate.now());
 			Parada parada = paradaService.findByUsuario(usuario);
@@ -261,6 +518,7 @@ public class ResponsableController implements Initializable {
 
 			@SuppressWarnings("unused")
 			Visita nuevaVisita = visitaService.save(visita);
+
 		} else if (estanciaNo.isSelected()) {
 
 			Parada parada = paradaService.findByUsuario(usuario);
@@ -285,56 +543,28 @@ public class ResponsableController implements Initializable {
 		}
 	}
 
-	private void llenarChoiceConPeregrinos() {
-		List<Peregrino> peregrinos = peregrinoService.findAll();
-		choicePeregrinos.getItems().clear();
-		choicePeregrinos.getItems().addAll(peregrinos);
-	}
-
 	@FXML
-	private void llenarCamposPeregrino() {
-		Peregrino p = choicePeregrinos.getValue();
-		nombreSellar.setText(p.getNombre());
-		apellidosSellar.setText(p.getApellidos());
-		fechaNacSellar.setValue(p.getFechaNac());
-	}
+	private void ayuda() {
+		try {
+			WebView webView = new WebView();
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-		sesion = InicioController.sesion;
-		usuario = sesion.getUsuario();
+			String url = getClass().getResource("/help/html/Responsable.html").toExternalForm();
+			webView.getEngine().load(url);
 
-		fechaFin.setValue(LocalDate.now());
+			Stage helpStage = new Stage();
+			helpStage.setTitle("Ayuda");
 
-		estanciaSi.setOnAction(event -> gestionarEstancia());
-		estanciaNo.setOnAction(event -> gestionarEstancia());
+			Scene helpScene = new Scene(webView, 850, 520);
 
-		choicePeregrinos.setConverter(new StringConverter<>() {
+			helpStage.setScene(helpScene);
 
-			@Override
-			public String toString(Peregrino peregrino) {
-				if (peregrino != null) {
-					return peregrino.getNombre() + "-" + peregrino.getId();
-				}
-				return "Seleccione parada inicial";
-			}
+			helpStage.initModality(Modality.APPLICATION_MODAL);
+			helpStage.setResizable(true);
+			helpStage.show();
 
-			@Override
-			public Peregrino fromString(String string) {
-				return null;
-			}
-
-		});
-		llenarChoiceConPeregrinos();
-
-		choicePeregrinos.setOnAction(event -> llenarCamposPeregrino());
-
-		idEstancia.setCellValueFactory(new PropertyValueFactory<>("id"));
-		nombreParada.setCellValueFactory(new PropertyValueFactory<>("nombreParada"));
-		nombrePeregrino.setCellValueFactory(new PropertyValueFactory<>("nombrePeregrino"));
-		columnaVip.setCellValueFactory(new PropertyValueFactory<>("vip"));
-		columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+		} catch (NullPointerException e) {
+			System.out.print("No se ha encontrado el HTML");
+		}
 	}
 
 	public ComboBox<Peregrino> getChoicePeregrinos() {
@@ -359,6 +589,14 @@ public class ResponsableController implements Initializable {
 
 	public void setApellidoSellar(TextField apellidoSellar) {
 		this.apellidosSellar = apellidoSellar;
+	}
+
+	public String getTxtExtra() {
+		return txtExtra.getText();
+	}
+
+	public void setTxtExtra(TextArea txtExtra) {
+		this.txtExtra = txtExtra;
 	}
 
 	public DatePicker getFechaNacSellar() {

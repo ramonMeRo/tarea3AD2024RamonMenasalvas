@@ -51,6 +51,10 @@ public class Db4oService {
 		return db4o.findByPcId(id);
 	}
 	
+	public List<PaqueteContratado> findAllPc(){
+		return db4o.findAllPc();
+	}
+	
 	public PaqueteContratado findByPcNombre(String nombre) {
 		return db4o.findByPcNombre(nombre);
 	}
