@@ -18,7 +18,7 @@ public class ObjectdbRepository {
 
 		EntityManager em = ObjectdbConnection.getEntityManager();
 
-		TypedQuery<EnvioACasa> query = em.createQuery("Select e from Envio e where e.idParada = :id", EnvioACasa.class);
+		TypedQuery<EnvioACasa> query = em.createQuery("Select e from EnvioACasa e where e.idParada = :id", EnvioACasa.class);
 		query.setParameter("id", id);
 
 		Set<EnvioACasa> envios = new TreeSet<>(query.getResultList());
