@@ -74,6 +74,10 @@ public class InicioController implements Initializable {
 	@Lazy
 	@Autowired
 	private StageManager stageManager;
+	@Autowired
+	private Db4oService db4oService;
+	@Autowired
+	private ObjectdbService objectdbService;
 
 
 	public static Sesion sesion = new Sesion();
@@ -153,6 +157,8 @@ public class InicioController implements Initializable {
 
 	@FXML
 	private void salir() {
+		objectdbService.close();
+		db4oService.cerrarBase();
 		VistaUtils.Salir();
 	}
 

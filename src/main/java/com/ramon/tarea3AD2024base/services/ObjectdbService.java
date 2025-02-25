@@ -23,6 +23,10 @@ public class ObjectdbService {
 		objectdb.save(envio);
 	}
 	
+	public void close() {
+		objectdb.close();
+	}
+	
 	public Set<EnvioACasa> findAllByParada(Long id){
 		return objectdb.findAllByParada(id);
 	}

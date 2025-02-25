@@ -419,7 +419,6 @@ public class AdministradorController implements Initializable {
 		reinicioServicios.setDisable(true);
 		confirmarServicios.setDisable(true);
 		terminaServicios.setVisible(false);
-		db4oService.cerrarBase();
 
 	}
 

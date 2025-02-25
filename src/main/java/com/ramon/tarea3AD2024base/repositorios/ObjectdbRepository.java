@@ -36,4 +36,9 @@ public class ObjectdbRepository {
 		em.getTransaction().commit();
 
 	}
+	
+	public void close() {
+		EntityManager em = ObjectdbConnection.getEntityManager();
+		em.close();
+	}
 }

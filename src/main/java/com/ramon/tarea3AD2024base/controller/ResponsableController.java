@@ -141,7 +141,7 @@ public class ResponsableController implements Initializable {
 	@FXML
 	private TableColumn<EnvioACasa, String> colUrgente;
 	@FXML
-	private TableColumn<EnvioACasa, String> colDireccion;
+	private TableColumn<EnvioACasa, Direccion> colDireccion;
 	@FXML
 	private TableColumn<EnvioACasa, int[]> colVolumen;
 
@@ -513,7 +513,7 @@ public class ResponsableController implements Initializable {
 
 					envio.setDireccion(direccion);
 					
-					System.err.println(envio.getDireccion().toString());
+				
 					objectdbService.save(envio);
 
 				} else {
