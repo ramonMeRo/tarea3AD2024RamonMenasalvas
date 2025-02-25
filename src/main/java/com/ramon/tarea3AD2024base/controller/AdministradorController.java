@@ -293,6 +293,27 @@ public class AdministradorController implements Initializable {
 		}
 	}
 
+	private boolean validacionVacia(String campo, boolean vacio) {
+		if (!vacio) {
+			return true;
+		} else {
+			validacionAlerta(campo, true);
+			return false;
+		}
+	}
+
+	private void validacionAlerta(String campo, boolean vacio) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Error de Validación");
+		alert.setHeaderText(null);
+		if (vacio)
+			alert.setContentText("Porfavor rellena el campo: " + campo);
+		else
+			alert.setContentText("Porfavor introduzca un valor valido en: " + campo);
+
+		alert.showAndWait();
+	}
+
 	public void ayudaF1(KeyEvent event) {
 		if (event.getCode().toString().equals("F1")) {
 			ayuda();
@@ -321,27 +342,6 @@ public class AdministradorController implements Initializable {
 		} catch (NullPointerException e) {
 			System.out.print("No se ha encontrado el HTML");
 		}
-	}
-
-	private boolean validacionVacia(String campo, boolean vacio) {
-		if (!vacio) {
-			return true;
-		} else {
-			validacionAlerta(campo, true);
-			return false;
-		}
-	}
-
-	private void validacionAlerta(String campo, boolean vacio) {
-		Alert alert = new Alert(AlertType.WARNING);
-		alert.setTitle("Error de Validación");
-		alert.setHeaderText(null);
-		if (vacio)
-			alert.setContentText("Porfavor rellena el campo: " + campo);
-		else
-			alert.setContentText("Porfavor introduzca un valor valido en: " + campo);
-
-		alert.showAndWait();
 	}
 
 	@FXML

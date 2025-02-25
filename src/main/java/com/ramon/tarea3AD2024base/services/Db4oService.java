@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ramon.tarea3AD2024base.modelo.PaqueteContratado;
+import com.ramon.tarea3AD2024base.modelo.ConjuntoContratado;
 import com.ramon.tarea3AD2024base.modelo.Servicio;
 import com.ramon.tarea3AD2024base.repositorios.Db4oRepository;
 
@@ -43,20 +43,16 @@ public class Db4oService {
 		return db4o.findServicioLastId();
 	}
 	
-	public void savePc(PaqueteContratado pc) {
+	public void savePc(ConjuntoContratado pc) {
 		db4o.savePc(pc);
 	}
 	
-	public PaqueteContratado findByPcId(Long id) {
+	public ConjuntoContratado findByPcId(Long id) {
 		return db4o.findByPcId(id);
 	}
 	
-	public List<PaqueteContratado> findAllPc(){
+	public List<ConjuntoContratado> findAllPc(){
 		return db4o.findAllPc();
-	}
-	
-	public PaqueteContratado findByPcNombre(String nombre) {
-		return db4o.findByPcNombre(nombre);
 	}
 	
 	public Long findPcLastId() {

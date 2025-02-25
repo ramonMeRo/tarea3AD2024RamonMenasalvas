@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 
 import com.ramon.tarea3AD2024base.Utils.VistaUtils;
 import com.ramon.tarea3AD2024base.config.StageManager;
-import com.ramon.tarea3AD2024base.modelo.Envio;
+import com.ramon.tarea3AD2024base.modelo.EnvioACasa;
 import com.ramon.tarea3AD2024base.modelo.Perfil;
 import com.ramon.tarea3AD2024base.modelo.Sesion;
 import com.ramon.tarea3AD2024base.modelo.Usuario;

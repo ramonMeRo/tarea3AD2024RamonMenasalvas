@@ -21,7 +21,7 @@ public class ObjectdbConnection {
 		} catch (IOException e) {
 			throw new RuntimeException("No se pudo cargar el archivo", e);
 		}
-		properties.put("objectdb.embedded.classes", "com.ramon.tarea3AD2024base.modelo.Envio");
+		properties.put("objectdb.embedded.classes", "com.ramon.tarea3AD2024base.modelo.Direccion");
 		String dbPath = properties.getProperty("objectdb.datasource.url");
 		emf = Persistence.createEntityManagerFactory(dbPath);
 	}

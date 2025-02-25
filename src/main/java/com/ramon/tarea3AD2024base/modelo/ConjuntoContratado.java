@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public class PaqueteContratado implements Serializable {
+public class ConjuntoContratado implements Serializable {
 
 	/**
 	 * 
@@ -25,10 +25,10 @@ public class PaqueteContratado implements Serializable {
 
 	private List<Long> servicios = new ArrayList<Long>();
 
-	public PaqueteContratado() {
+	public ConjuntoContratado() {
 	}
 
-	public PaqueteContratado(Long id, double precioTotal, char modoPago, String extra, Long idEstancia,
+	public ConjuntoContratado(Long id, double precioTotal, char modoPago, String extra, Long idEstancia,
 			List<Long> servicios) {
 		this.id = id;
 		this.precioTotal = precioTotal;
@@ -99,7 +99,7 @@ public class PaqueteContratado implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PaqueteContratado other = (PaqueteContratado) obj;
+		ConjuntoContratado other = (ConjuntoContratado) obj;
 		return Objects.equals(extra, other.extra) && Objects.equals(id, other.id)
 				&& Objects.equals(idEstancia, other.idEstancia) && modoPago == other.modoPago
 				&& Double.doubleToLongBits(precioTotal) == Double.doubleToLongBits(other.precioTotal)

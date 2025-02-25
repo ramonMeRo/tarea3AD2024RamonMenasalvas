@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import com.db4o.ObjectContainer;
 import com.db4o.query.Query;
 import com.ramon.tarea3AD2024base.data.Db4oConnection;
-import com.ramon.tarea3AD2024base.modelo.PaqueteContratado;
+import com.ramon.tarea3AD2024base.modelo.ConjuntoContratado;
 import com.ramon.tarea3AD2024base.modelo.Servicio;
 
 @Repository
@@ -80,34 +80,21 @@ public class Db4oRepository {
 		}
 	}
 
-	public PaqueteContratado findByPcId(Long id) {
+	public ConjuntoContratado findByPcId(Long id) {
 		ObjectContainer db = Db4oConnection.getInstance();
 		Query query = db.query();
-		query.constrain(PaqueteContratado.class);
+		query.constrain(ConjuntoContratado.class);
 		query.descend("id").constrain(id);
-		List<PaqueteContratado> resultado = query.execute();
+		List<ConjuntoContratado> resultado = query.execute();
 		return resultado.get(0);
 	}
-
-	public PaqueteContratado findByPcNombre(String nombre) {
-		ObjectContainer db = Db4oConnection.getInstance();
-		try {
-			Query query = db.query();
-			query.constrain(PaqueteContratado.class);
-			query.descend("nombre").constrain(nombre);
-			List<PaqueteContratado> resultado = query.execute();
-			return resultado.get(0);
-		} catch (Exception e) {
-			return null;
-		}
-	}
 	
-	public List<PaqueteContratado> findAllPc() {
+	public List<ConjuntoContratado> findAllPc() {
 		ObjectContainer db = Db4oConnection.getInstance();
 		Query query = db.query();
-		query.constrain(PaqueteContratado.class);
+		query.constrain(ConjuntoContratado.class);
 		query.execute();
-		List<PaqueteContratado> resultado = query.execute();
+		List<ConjuntoContratado> resultado = query.execute();
 		return resultado;
 	}
 
@@ -115,9 +102,9 @@ public class Db4oRepository {
 		ObjectContainer db = Db4oConnection.getInstance();
 		try {
 			Query query = db.query();
-			query.constrain(PaqueteContratado.class);
+			query.constrain(ConjuntoContratado.class);
 			query.descend("id").orderDescending();
-			List<PaqueteContratado> resultado = query.execute();
+			List<ConjuntoContratado> resultado = query.execute();
 
 			return resultado.get(0).getId() + 1;
 		} catch (Exception e) {
@@ -125,7 +112,7 @@ public class Db4oRepository {
 		}
 	}
 
-	public void savePc(PaqueteContratado paquete) {
+	public void savePc(ConjuntoContratado paquete) {
 		ObjectContainer db = Db4oConnection.getInstance();
 		db.store(paquete);
 	}

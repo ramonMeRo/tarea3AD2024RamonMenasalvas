@@ -7,8 +7,6 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
@@ -24,20 +22,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane onKeyPressed="#ayudaF1" prefHeight="600.0" prefWidth="1000.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.ResponsableController">
-   <top>
-      <MenuBar BorderPane.alignment="TOP_LEFT">
-        <menus>
-          <Menu text="_Help">
-            <items>
-              <MenuItem text="_About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </top>
+<BorderPane onKeyPressed="#ayudaF1" prefHeight="644.0" prefWidth="958.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.ResponsableController">
    <left>
-      <VBox prefHeight="571.0" prefWidth="306.0" spacing="10.0" styleClass="background" stylesheets="@../styles/Styles.css" BorderPane.alignment="CENTER">
+      <VBox prefHeight="575.0" prefWidth="292.0" spacing="10.0" styleClass="background" stylesheets="@../styles/Styles.css" BorderPane.alignment="CENTER">
          <children>
             <HBox prefHeight="30.0" prefWidth="265.0">
                <children>
@@ -144,7 +131,7 @@
             </Label>
             <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="246.0" spacing="15.0">
                <children>
-                  <RadioButton fx:id="servicioSi" mnemonicParsing="false" selected="true" text="Si" textFill="WHITE">
+                  <RadioButton fx:id="servicioSi" mnemonicParsing="false" text="Si" textFill="WHITE">
                      <HBox.margin>
                         <Insets left="65.0" />
                      </HBox.margin>
@@ -152,7 +139,7 @@
                         <ToggleGroup fx:id="afirmacionServicio" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton fx:id="servicioNo" mnemonicParsing="false" text="No" textFill="WHITE" toggleGroup="$afirmacionServicio">
+                  <RadioButton fx:id="servicioNo" mnemonicParsing="false" selected="true" text="No" textFill="WHITE" toggleGroup="$afirmacionServicio">
                      <HBox.margin>
                         <Insets left="10.0" right="25.0" />
                      </HBox.margin>
@@ -252,7 +239,7 @@
                   </ImageView>
                </children>
             </HBox>
-            <TableView fx:id="tablaEstancias" prefHeight="300.0" prefWidth="679.0" tableMenuButtonVisible="true">
+            <TableView fx:id="tablaEstancias" prefHeight="162.0" prefWidth="331.0" tableMenuButtonVisible="true">
               <columns>
                 <TableColumn fx:id="idEstancia" maxWidth="700.0" prefWidth="20.0" text="ID" />
                 <TableColumn fx:id="nombreParada" maxWidth="4000.0" prefWidth="75.0" text="Nombre parada" />
@@ -293,17 +280,39 @@
             </HBox>
             <Button onAction="#exportarParada" prefHeight="42.0" prefWidth="95.0" styleClass="btnGreen" text="_Exportar" textFill="#2d4491">
                <VBox.margin>
-                  <Insets right="150.0" />
+                  <Insets right="120.0" />
                </VBox.margin>
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
+            <TableView fx:id="tablaEnvios" prefHeight="162.0" prefWidth="331.0" tableMenuButtonVisible="true">
+               <columns>
+                  <TableColumn fx:id="colId" maxWidth="700.0" prefWidth="35.0" text="ID" />
+                  <TableColumn fx:id="colPeso" maxWidth="4000.0" prefWidth="47.0" text="Peso" />
+                  <TableColumn fx:id="colUrgente" maxWidth="4000.0" prefWidth="59.0" text="Urgente" />
+                  <TableColumn fx:id="colDireccion" maxWidth="4000.0" prefWidth="109.0" text="Direccion" />
+                  <TableColumn fx:id="colVolumen" maxWidth="4000.0" prefWidth="92.0" text="Volumen" />
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+               <contextMenu>
+                  <ContextMenu>
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Delete" />
+                     </items>
+                  </ContextMenu>
+               </contextMenu>
+               <VBox.margin>
+                  <Insets left="5.0" right="5.0" />
+               </VBox.margin>
+            </TableView>
          </children>
       </VBox>
    </center>
    <right>
-      <VBox prefHeight="571.0" prefWidth="306.0" styleClass="background" BorderPane.alignment="CENTER">
+      <VBox prefHeight="575.0" prefWidth="280.0" styleClass="background" BorderPane.alignment="CENTER">
          <children>
             <Label text="Servicios" textFill="WHITE">
                <font>
@@ -353,4 +362,69 @@
          </children>
       </VBox>
    </right>
+   <bottom>
+      <HBox prefHeight="100.0" prefWidth="200.0" styleClass="background" BorderPane.alignment="CENTER">
+         <children>
+            <Label prefHeight="30.0" prefWidth="118.0" text="Datos envio:" textFill="#f8f7f7">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtPeso" promptText="Peso">
+               <HBox.margin>
+                  <Insets left="10.0" top="30.0" />
+               </HBox.margin>
+            </TextField>
+            <TextField fx:id="txtAncho" promptText="Ancho">
+               <HBox.margin>
+                  <Insets left="20.0" top="30.0" />
+               </HBox.margin>
+            </TextField>
+            <TextField fx:id="txtAlto" promptText="Alto">
+               <HBox.margin>
+                  <Insets left="20.0" top="30.0" />
+               </HBox.margin>
+            </TextField>
+            <TextField fx:id="txtLargo" promptText="Largo">
+               <HBox.margin>
+                  <Insets left="20.0" top="30.0" />
+               </HBox.margin>
+            </TextField>
+            <VBox prefHeight="50.0" prefWidth="76.0">
+               <children>
+                  <RadioButton fx:id="urgenteSi" mnemonicParsing="false" text="Urgente" textFill="WHITE">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="afirmacionUrgente" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="urgenteNo" mnemonicParsing="false" selected="true" text="No" textFill="WHITE" toggleGroup="$afirmacionUrgente">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </RadioButton>
+               </children>
+               <HBox.margin>
+                  <Insets bottom="25.0" left="10.0" top="25.0" />
+               </HBox.margin>
+            </VBox>
+            <VBox prefHeight="100.0" prefWidth="169.0">
+               <children>
+                  <TextField fx:id="txtCalle" promptText="Calle">
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <TextField fx:id="txtLocalidad" prefHeight="25.0" prefWidth="149.0" promptText="Localidad">
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
+                  </TextField>
+               </children>
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </VBox>
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>

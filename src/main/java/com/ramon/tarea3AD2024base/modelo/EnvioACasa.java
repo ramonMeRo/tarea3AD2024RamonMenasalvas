@@ -11,7 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Envio implements Serializable {
+public class EnvioACasa implements Serializable {
 
 	/**
 	 * 
@@ -33,10 +33,10 @@ public class Envio implements Serializable {
 
 	private Long idParada;
 
-	public Envio() {
+	public EnvioACasa() {
 	}
 
-	public Envio(double peso, int[] volumen, boolean urgente, Direccion direccion, Long idParada) {
+	public EnvioACasa(double peso, int[] volumen, boolean urgente, Direccion direccion, Long idParada) {
 		this.peso = peso;
 		this.volumen = volumen;
 		this.urgente = urgente;
@@ -113,7 +113,7 @@ public class Envio implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Envio other = (Envio) obj;
+		EnvioACasa other = (EnvioACasa) obj;
 		return Objects.equals(direccion, other.direccion) && Objects.equals(id, other.id)
 				&& Objects.equals(idParada, other.idParada)
 				&& Double.doubleToLongBits(peso) == Double.doubleToLongBits(other.peso) && urgente == other.urgente

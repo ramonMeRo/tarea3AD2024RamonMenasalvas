@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -14,9 +16,11 @@ import org.springframework.stereotype.Controller;
 
 import com.ramon.tarea3AD2024base.config.StageManager;
 import com.ramon.tarea3AD2024base.modelo.Carnet;
+import com.ramon.tarea3AD2024base.modelo.ConjuntoContratado;
+import com.ramon.tarea3AD2024base.modelo.Direccion;
+import com.ramon.tarea3AD2024base.modelo.EnvioACasa;
 import com.ramon.tarea3AD2024base.modelo.Estancia;
 import com.ramon.tarea3AD2024base.modelo.EstanciaTabla;
-import com.ramon.tarea3AD2024base.modelo.PaqueteContratado;
 import com.ramon.tarea3AD2024base.modelo.Parada;
 import com.ramon.tarea3AD2024base.modelo.Peregrino;
 import com.ramon.tarea3AD2024base.modelo.Servicio;
@@ -26,6 +30,7 @@ import com.ramon.tarea3AD2024base.modelo.Visita;
 import com.ramon.tarea3AD2024base.services.CarnetService;
 import com.ramon.tarea3AD2024base.services.Db4oService;
 import com.ramon.tarea3AD2024base.services.EstanciaService;
+import com.ramon.tarea3AD2024base.services.ObjectdbService;
 import com.ramon.tarea3AD2024base.services.ParadaService;
 import com.ramon.tarea3AD2024base.services.PeregrinoService;
 import com.ramon.tarea3AD2024base.services.VisitaService;
@@ -66,6 +71,18 @@ public class ResponsableController implements Initializable {
 	@FXML
 	private TextField apellidosSellar;
 	@FXML
+	private TextField txtPeso;
+	@FXML
+	private TextField txtAncho;
+	@FXML
+	private TextField txtAlto;
+	@FXML
+	private TextField txtLargo;
+	@FXML
+	private TextField txtCalle;
+	@FXML
+	private TextField txtLocalidad;
+	@FXML
 	private TextArea txtExtra;
 	@FXML
 	private DatePicker fechaNacSellar;
@@ -88,11 +105,17 @@ public class ResponsableController implements Initializable {
 	@FXML
 	private RadioButton bizum;
 	@FXML
+	private RadioButton urgenteSi;
+	@FXML
+	private RadioButton urgenteNo;
+	@FXML
 	private ToggleGroup afirmacionEstancia;
 	@FXML
 	private ToggleGroup afirmacionVip;
 	@FXML
 	private ToggleGroup afirmacionServicio;
+	@FXML
+	private ToggleGroup afirmacionUrgente;
 	@FXML
 	private ToggleGroup metodoPago;
 
@@ -108,6 +131,19 @@ public class ResponsableController implements Initializable {
 	private TableColumn<EstanciaTabla, Boolean> columnaVip;
 	@FXML
 	private TableColumn<EstanciaTabla, LocalDate> columnaFecha;
+	
+	@FXML
+	private TableView<EnvioACasa> tablaEnvios;
+	@FXML
+	private TableColumn<EnvioACasa, Long> colId;
+	@FXML
+	private TableColumn<EnvioACasa, Double> colPeso;
+	@FXML
+	private TableColumn<EnvioACasa, String> colUrgente;
+	@FXML
+	private TableColumn<EnvioACasa, String> colDireccion;
+	@FXML
+	private TableColumn<EnvioACasa, int[]> colVolumen;
 
 	@FXML
 	private TableView<Servicio> serviciosTable;
@@ -135,6 +171,8 @@ public class ResponsableController implements Initializable {
 	private ObservableList<Servicio> servicioSelect = FXCollections.observableArrayList();
 
 	private ObservableList<Servicio> servicioList = FXCollections.observableArrayList();
+	
+	private ObservableList<EnvioACasa> envioList = FXCollections.observableArrayList();
 
 	@Lazy
 	@Autowired
@@ -156,6 +194,8 @@ public class ResponsableController implements Initializable {
 	private VisitaService visitaService;
 	@Autowired
 	private Db4oService db4oService;
+	@Autowired
+	private ObjectdbService objectdbService;
 
 	@FXML
 	private void volver() {
@@ -167,13 +207,6 @@ public class ResponsableController implements Initializable {
 		// TODO Auto-generated method stub
 		serviciosTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-
-			List<PaqueteContratado> pc = db4oService.findAllPc();
-			for (PaqueteContratado paqueteContratado : pc) {
-				System.err.print(paqueteContratado.toString());
-			}
-		
-
 		listServicios.setItems(servicioSelect);
 
 		serviciosTable.setRowFactory(tv -> {
@@ -182,6 +215,7 @@ public class ResponsableController implements Initializable {
 
 				if (!fila.isEmpty() && event.getClickCount() == 1) {
 					Servicio servicio = fila.getItem();
+					List<Long> idParada = servicio.getIdParadas();
 					if (servicioSelect.contains(servicio)) {
 						servicioSelect.remove(servicio);
 					} else {
@@ -194,10 +228,12 @@ public class ResponsableController implements Initializable {
 
 		setColumnProperties();
 
-		loadServicioDetails();
-
 		sesion = InicioController.sesion;
 		usuario = sesion.getUsuario();
+
+		loadServicioDetails();
+		
+		loadEnvioDetails();
 
 		fechaFin.setValue(LocalDate.now());
 
@@ -237,13 +273,37 @@ public class ResponsableController implements Initializable {
 		colNombreServicio.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 		colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
 		colIdParadas.setCellValueFactory(new PropertyValueFactory<>("idParadas"));
+		
+		colId.setCellValueFactory(new PropertyValueFactory<>("id"));		
+		colPeso.setCellValueFactory(new PropertyValueFactory<>("peso"));	
+		colUrgente.setCellValueFactory(new PropertyValueFactory<>("urgente"));		
+		colDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));		
+		colVolumen.setCellValueFactory(new PropertyValueFactory<>("volumen"));
+		
+		
 	}
 
 	private void loadServicioDetails() {
 		servicioList.clear();
-		servicioList.addAll(db4oService.findAllServicio());
 
+		List<Servicio> servicios = db4oService.findAllServicio();
+		Parada parada = paradaService.findByUsuario(usuario);
+		if (parada != null) {
+			for (Servicio servicio : servicios) {
+				List<Long> idsParadas = servicio.getIdParadas();
+				if (idsParadas != null && idsParadas.contains(parada.getId())) {
+					servicioList.add(servicio);
+				}
+			}
+		}
 		serviciosTable.setItems(servicioList);
+	}
+	
+	private void loadEnvioDetails() {
+		envioList.clear();
+		envioList.addAll(objectdbService.findAllByParada(paradaService.findByUsuario(usuario).getId()));
+
+		tablaEnvios.setItems(envioList);
 	}
 
 	private void llenarChoiceConPeregrinos() {
@@ -305,6 +365,14 @@ public class ResponsableController implements Initializable {
 			serviciosTable.setDisable(true);
 			listServicios.setDisable(true);
 			txtExtra.setDisable(true);
+			txtAlto.setDisable(true);
+			txtAncho.setDisable(true);
+			txtLargo.setDisable(true);
+			txtCalle.setDisable(true);
+			txtPeso.setDisable(true);
+			txtLocalidad.setDisable(true);
+			urgenteSi.setDisable(true);
+			urgenteNo.setDisable(true);
 
 		} else if (estanciaSi.isSelected()) {
 
@@ -318,6 +386,14 @@ public class ResponsableController implements Initializable {
 			serviciosTable.setDisable(false);
 			listServicios.setDisable(false);
 			txtExtra.setDisable(false);
+			txtAlto.setDisable(false);
+			txtAncho.setDisable(false);
+			txtLargo.setDisable(false);
+			txtCalle.setDisable(false);
+			txtPeso.setDisable(false);
+			txtLocalidad.setDisable(false);
+			urgenteSi.setDisable(false);
+			urgenteNo.setDisable(false);
 
 		}
 	}
@@ -330,22 +406,26 @@ public class ResponsableController implements Initializable {
 			alert.setTitle("Error durante Sellado");
 			alert.setHeaderText("Debe seleccionar un peregrino primero");
 			alert.show();
+			return;
 		}
 
 		List<Visita> visitasPeregrino = visitaService.findByPeregrino(choicePeregrinos.getValue());
 
 		for (Visita visita : visitasPeregrino) {
 
-			if (visita.getFecha().equals(LocalDate.now())) {
+			if (visita.getFecha().equals(LocalDate.now())
+					&& visita.getParada().equals(paradaService.findByUsuario(usuario))) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Error durante Sellado");
 				alert.setHeaderText("El peregrino ya sello hoy");
 				alert.show();
+
 				return;
 			}
 		}
 
 		if (estanciaSi.isSelected() && vipSi.isSelected() && servicioSi.isSelected()) {
+
 			Estancia estancia = new Estancia();
 			estancia.setFecha(LocalDate.now());
 			Parada parada = paradaService.findByUsuario(usuario);
@@ -355,6 +435,7 @@ public class ResponsableController implements Initializable {
 
 			@SuppressWarnings("unused")
 			Estancia nuevaEstancia = estanciaService.save(estancia);
+
 			Carnet carnet = choicePeregrinos.getValue().getCarnet();
 
 			carnet.setDistancia(carnet.getDistancia() + 5.00);
@@ -380,7 +461,7 @@ public class ResponsableController implements Initializable {
 				ids.add(servicio.getId());
 			}
 
-			PaqueteContratado pc = new PaqueteContratado();
+			ConjuntoContratado pc = new ConjuntoContratado();
 
 			pc.setId(db4oService.findPcLastId());
 			pc.setIdEstancia(estancia.getId());
@@ -397,8 +478,50 @@ public class ResponsableController implements Initializable {
 			pc.setServicios(ids);
 			pc.setExtra(getTxtExtra());
 
-			db4oService.savePc(pc);
+			if (pc.getServicios().contains(db4oService.findByServicioNombre("ENVIO A CASA").getId())) {
+				EnvioACasa envio = new EnvioACasa();
 
+				if (valida("Peso", getTxtPeso(), "^(0|[1-9]\\d*)([.,]\\d{2})?$")
+						&& valida("Alto", getTxtAlto(), "^[0-9]+$") && valida("Ancho", getTxtAncho(), "^[0-9]+$")
+						&& valida("Largo", getTxtLargo(), "^[0-9]+$")
+						&& valida("Calle", getTxtCalle(), "^[a-zA-Z0-9\\s]+$")
+						&& valida("Localidad", getTxtLocalidad(), "^[a-zA-Z\\s]+$")) {
+
+					envio.setIdParada(parada.getId());
+					envio.setPeso(Double.valueOf(getTxtPeso()));
+					int[] volumen = new int[3];
+
+					volumen[0] = Integer.valueOf(getTxtAncho());
+					volumen[1] = Integer.valueOf(getTxtAlto());
+					volumen[2] = Integer.valueOf(getTxtLargo());
+
+					envio.setVolumen(volumen);
+
+					if (urgenteSi.isSelected()) {
+
+						envio.setUrgente(true);
+
+					} else if (urgenteNo.isSelected()) {
+
+						envio.setUrgente(false);
+					}
+
+					Direccion direccion = new Direccion();
+
+					direccion.setDireccion(getTxtCalle());
+					direccion.setLocalidad(getTxtLocalidad());
+
+					envio.setDireccion(direccion);
+					
+					System.err.println(envio.getDireccion().toString());
+					objectdbService.save(envio);
+
+				} else {
+					return;
+				}
+
+				db4oService.savePc(pc);
+			}
 			@SuppressWarnings("unused")
 			Visita nuevaVisita = visitaService.save(visita);
 
@@ -437,7 +560,7 @@ public class ResponsableController implements Initializable {
 				ids.add(servicio.getId());
 			}
 
-			PaqueteContratado pc = new PaqueteContratado();
+			ConjuntoContratado pc = new ConjuntoContratado();
 
 			pc.setId(db4oService.findPcLastId());
 			pc.setIdEstancia(estancia.getId());
@@ -454,8 +577,49 @@ public class ResponsableController implements Initializable {
 			pc.setServicios(ids);
 			pc.setExtra(getTxtExtra());
 
-			db4oService.savePc(pc);
+			if (pc.getServicios().contains(db4oService.findByServicioNombre("ENVIO A CASA").getId())) {
+				EnvioACasa envio = new EnvioACasa();
 
+				if (valida("Peso", getTxtPeso(), "^(0|[1-9]\\d*)([.,]\\d{2})?$")
+						&& valida("Alto", getTxtAlto(), "^[0-9]+$") && valida("Ancho", getTxtAncho(), "^[0-9]+$")
+						&& valida("Largo", getTxtLargo(), "^[0-9]+$")
+						&& valida("Calle", getTxtCalle(), "^[a-zA-Z0-9\\s]+$")
+						&& valida("Localidad", getTxtLocalidad(), "^[a-zA-Z\\s]+$")) {
+
+					envio.setIdParada(parada.getId());
+					envio.setPeso(Double.valueOf(getTxtPeso()));
+					int[] volumen = new int[3];
+
+					volumen[0] = Integer.valueOf(getTxtAncho());
+					volumen[1] = Integer.valueOf(getTxtAlto());
+					volumen[2] = Integer.valueOf(getTxtLargo());
+
+					envio.setVolumen(volumen);
+
+					if (urgenteSi.isSelected()) {
+
+						envio.setUrgente(true);
+
+					} else if (urgenteNo.isSelected()) {
+
+						envio.setUrgente(false);
+					}
+
+					Direccion direccion = new Direccion();
+
+					direccion.setDireccion(getTxtCalle());
+					direccion.setLocalidad(getTxtLocalidad());
+
+					envio.setDireccion(direccion);
+
+					objectdbService.save(envio);
+
+				} else {
+					return;
+				}
+
+				db4oService.savePc(pc);
+			}
 			@SuppressWarnings("unused")
 			Visita nuevaVisita = visitaService.save(visita);
 
@@ -543,6 +707,43 @@ public class ResponsableController implements Initializable {
 		}
 	}
 
+	private boolean valida(String campo, String valor, String patron) {
+		if (!valor.isEmpty()) {
+			Pattern p = Pattern.compile(patron);
+			Matcher m = p.matcher(valor);
+			if (m.find() && m.group().equals(valor)) {
+				return true;
+			} else {
+				validacionAlerta(campo, false);
+				return false;
+			}
+		} else {
+			validacionAlerta(campo, true);
+			return false;
+		}
+	}
+
+	private boolean validacionVacia(String campo, boolean vacio) {
+		if (!vacio) {
+			return true;
+		} else {
+			validacionAlerta(campo, true);
+			return false;
+		}
+	}
+
+	private void validacionAlerta(String campo, boolean vacio) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Error de Validación");
+		alert.setHeaderText(null);
+		if (vacio)
+			alert.setContentText("Porfavor rellena el campo: " + campo);
+		else
+			alert.setContentText("Porfavor introduzca un valor valido en: " + campo);
+
+		alert.showAndWait();
+	}
+
 	@FXML
 	private void ayuda() {
 		try {
@@ -589,6 +790,54 @@ public class ResponsableController implements Initializable {
 
 	public void setApellidoSellar(TextField apellidoSellar) {
 		this.apellidosSellar = apellidoSellar;
+	}
+
+	public String getTxtPeso() {
+		return txtPeso.getText();
+	}
+
+	public void setTxtPeso(TextField txtPeso) {
+		this.txtPeso = txtPeso;
+	}
+
+	public String getTxtAncho() {
+		return txtAncho.getText();
+	}
+
+	public void setTxtAncho(TextField txtAncho) {
+		this.txtAncho = txtAncho;
+	}
+
+	public String getTxtAlto() {
+		return txtAlto.getText();
+	}
+
+	public void setTxtAlto(TextField txtAlto) {
+		this.txtAlto = txtAlto;
+	}
+
+	public String getTxtLargo() {
+		return txtLargo.getText();
+	}
+
+	public void setTxtLargo(TextField txtLargo) {
+		this.txtLargo = txtLargo;
+	}
+
+	public String getTxtCalle() {
+		return txtCalle.getText();
+	}
+
+	public void setTxtCalle(TextField txtCalle) {
+		this.txtCalle = txtCalle;
+	}
+
+	public String getTxtLocalidad() {
+		return txtLocalidad.getText();
+	}
+
+	public void setTxtLocalidad(TextField txtLocalidad) {
+		this.txtLocalidad = txtLocalidad;
 	}
 
 	public String getTxtExtra() {
