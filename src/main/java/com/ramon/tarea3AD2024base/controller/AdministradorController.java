@@ -427,7 +427,7 @@ public class AdministradorController implements Initializable {
 	private void registrarServicio() {
 		if (valida("Nombre Servicio", getTxtServicio(), "^[a-zA-Z\\s]+$") && txtServicio != null
 				&& valida("Precio servicio", getTxtPrecio(), "^(0|[1-9]\\d*)([.,]\\d{2})?$") && txtPrecio != null
-				&& listParadas != null) {
+				) {
 
 			if (db4oService.findByServicioNombre(getTxtServicio().toUpperCase()) != null) {
 				Alert alert = new Alert(AlertType.ERROR);
