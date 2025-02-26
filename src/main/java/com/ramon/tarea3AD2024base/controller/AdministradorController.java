@@ -352,10 +352,11 @@ public class AdministradorController implements Initializable {
 	@FXML
 	private void registrarUsuario(ActionEvent event) {
 
-		if (valida("Nombre Parada", getNombreParada(), "[a-zA-Z]+") && !regionParada.getText().isEmpty()) {
+		if (validacionVacia("Nombre Parada", getNombreParada().isEmpty()) && !regionParada.getText().isEmpty()) {
 
 			if (userId.getText() == null || userId.getText() == "") {
 				if (valida("Email", getEmail(), "[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+")
+						&& valida("Nombre de Usuario", getUsuarioResponsable(), "^[a-zA-Z0-9]+$")
 						&& validacionVacia("Password", getPassword().isEmpty())
 						&& validacionVacia("PasswordConf", getPasswordConf().isEmpty())
 						&& validacionVacia("Usuario Responsable", getUsuarioResponsable().isEmpty())

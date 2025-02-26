@@ -131,7 +131,7 @@ public class ResponsableController implements Initializable {
 	private TableColumn<EstanciaTabla, Boolean> columnaVip;
 	@FXML
 	private TableColumn<EstanciaTabla, LocalDate> columnaFecha;
-	
+
 	@FXML
 	private TableView<EnvioACasa> tablaEnvios;
 	@FXML
@@ -171,7 +171,7 @@ public class ResponsableController implements Initializable {
 	private ObservableList<Servicio> servicioSelect = FXCollections.observableArrayList();
 
 	private ObservableList<Servicio> servicioList = FXCollections.observableArrayList();
-	
+
 	private ObservableList<EnvioACasa> envioList = FXCollections.observableArrayList();
 
 	@Lazy
@@ -232,7 +232,7 @@ public class ResponsableController implements Initializable {
 		usuario = sesion.getUsuario();
 
 		loadServicioDetails();
-		
+
 		loadEnvioDetails();
 
 		fechaFin.setValue(LocalDate.now());
@@ -254,7 +254,6 @@ public class ResponsableController implements Initializable {
 			public Peregrino fromString(String string) {
 				return null;
 			}
-
 		});
 
 		llenarChoiceConPeregrinos();
@@ -273,14 +272,12 @@ public class ResponsableController implements Initializable {
 		colNombreServicio.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 		colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
 		colIdParadas.setCellValueFactory(new PropertyValueFactory<>("idParadas"));
-		
-		colId.setCellValueFactory(new PropertyValueFactory<>("id"));		
-		colPeso.setCellValueFactory(new PropertyValueFactory<>("peso"));	
-		colUrgente.setCellValueFactory(new PropertyValueFactory<>("urgente"));		
-		colDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));		
+
+		colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+		colPeso.setCellValueFactory(new PropertyValueFactory<>("peso"));
+		colUrgente.setCellValueFactory(new PropertyValueFactory<>("urgente"));
+		colDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
 		colVolumen.setCellValueFactory(new PropertyValueFactory<>("volumen"));
-		
-		
 	}
 
 	private void loadServicioDetails() {
@@ -298,10 +295,11 @@ public class ResponsableController implements Initializable {
 		}
 		serviciosTable.setItems(servicioList);
 	}
-	
+
 	private void loadEnvioDetails() {
+		Parada parada = paradaService.findByUsuario(usuario);
 		envioList.clear();
-		envioList.addAll(objectdbService.findAllByParada(paradaService.findByUsuario(usuario).getId()));
+		envioList.addAll(objectdbService.findAllByParada(parada.getId()));
 
 		tablaEnvios.setItems(envioList);
 	}
@@ -383,18 +381,35 @@ public class ResponsableController implements Initializable {
 			efectivo.setDisable(false);
 			tarjeta.setDisable(false);
 			bizum.setDisable(false);
-			serviciosTable.setDisable(false);
-			listServicios.setDisable(false);
-			txtExtra.setDisable(false);
-			txtAlto.setDisable(false);
-			txtAncho.setDisable(false);
-			txtLargo.setDisable(false);
-			txtCalle.setDisable(false);
-			txtPeso.setDisable(false);
-			txtLocalidad.setDisable(false);
-			urgenteSi.setDisable(false);
-			urgenteNo.setDisable(false);
 
+			if (servicioSi.isSelected()) {
+
+				serviciosTable.setDisable(false);
+				listServicios.setDisable(false);
+				txtExtra.setDisable(false);
+				txtAlto.setDisable(false);
+				txtAncho.setDisable(false);
+				txtLargo.setDisable(false);
+				txtCalle.setDisable(false);
+				txtPeso.setDisable(false);
+				txtLocalidad.setDisable(false);
+				urgenteSi.setDisable(false);
+				urgenteNo.setDisable(false);
+
+			} else if (estanciaNo.isSelected()) {
+
+				serviciosTable.setDisable(true);
+				listServicios.setDisable(true);
+				txtExtra.setDisable(true);
+				txtAlto.setDisable(true);
+				txtAncho.setDisable(true);
+				txtLargo.setDisable(true);
+				txtCalle.setDisable(true);
+				txtPeso.setDisable(true);
+				txtLocalidad.setDisable(true);
+				urgenteSi.setDisable(true);
+				urgenteNo.setDisable(true);
+			}
 		}
 	}
 
@@ -512,8 +527,7 @@ public class ResponsableController implements Initializable {
 					direccion.setLocalidad(getTxtLocalidad());
 
 					envio.setDireccion(direccion);
-					
-				
+
 					objectdbService.save(envio);
 
 				} else {

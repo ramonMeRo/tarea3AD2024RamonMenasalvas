@@ -1,1 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><?xml-stylesheet type="text/xml" href="test.xsl"?><Carnet><id>10</id><fechaExp>2025-02-25</fechaExp><expedidoEn>aviles</expedidoEn><peregrino><nombre>pepa</nombre><nacionalidad>Australia</nacionalidad></peregrino><hoy>2025-02-25</hoy><distanciaTotal>0.0</distanciaTotal><paradas><parada><orden>1</orden><nombreP>aviles</nombreP><region>a</region></parada></paradas><estancias/></Carnet>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?xml-stylesheet type="text/xml" href="test.xsl"?>
+<Carnet>
+	<id>10</id>
+	<fechaExp>2025-02-25</fechaExp>
+	<expedidoEn>aviles</expedidoEn>
+	<peregrino>
+		<nombre>pepa</nombre>
+		<nacionalidad>Australia</nacionalidad>
+	</peregrino>
+	<hoy>2025-02-25</hoy>
+	<distanciaTotal>0.0</distanciaTotal>
+	<paradas>
+		<parada>
+			<orden>1</orden>
+			<nombreP>aviles</nombreP>
+			<region>a</region>
+		</parada>
+	</paradas>
+	<estancias />
+</Carnet>

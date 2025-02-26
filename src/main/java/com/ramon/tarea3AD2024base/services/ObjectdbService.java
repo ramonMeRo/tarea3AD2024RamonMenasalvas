@@ -1,6 +1,6 @@
 package com.ramon.tarea3AD2024base.services;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class ObjectdbService {
 		objectdb.close();
 	}
 	
-	public Set<EnvioACasa> findAllByParada(Long id){
+	public List<EnvioACasa> findAllByParada(Long id){
 		return objectdb.findAllByParada(id);
 	}
 }
