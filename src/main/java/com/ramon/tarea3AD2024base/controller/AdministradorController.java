@@ -356,7 +356,7 @@ public class AdministradorController implements Initializable {
 
 			if (userId.getText() == null || userId.getText() == "") {
 				if (valida("Email", getEmail(), "[a-zA-Z0-9][a-zA-Z0-9._]*@[a-zA-Z0-9]+([.][a-zA-Z]+)+")
-						&& valida("Nombre de Usuario", getUsuarioResponsable(), "^[a-zA-Z0-9]+$")
+						&& valida("Usuario responsable", getUsuarioResponsable(), "[a-zA-Z]+")
 						&& validacionVacia("Password", getPassword().isEmpty())
 						&& validacionVacia("PasswordConf", getPasswordConf().isEmpty())
 						&& validacionVacia("Usuario Responsable", getUsuarioResponsable().isEmpty())
@@ -426,8 +426,7 @@ public class AdministradorController implements Initializable {
 	@FXML
 	private void registrarServicio() {
 		if (valida("Nombre Servicio", getTxtServicio(), "^[a-zA-Z\\s]+$") && txtServicio != null
-				&& valida("Precio servicio", getTxtPrecio(), "^(0|[1-9]\\d*)([.,]\\d{2})?$") && txtPrecio != null
-				) {
+				&& valida("Precio servicio", getTxtPrecio(), "^(0|[1-9]\\d*)([.]\\d{2})?$") && txtPrecio != null) {
 
 			if (db4oService.findByServicioNombre(getTxtServicio().toUpperCase()) != null) {
 				Alert alert = new Alert(AlertType.ERROR);
@@ -475,8 +474,7 @@ public class AdministradorController implements Initializable {
 			return;
 		}
 		if (valida("Nombre Servicio", getTxtServicio(), "^[a-zA-Z\\s]+$") && txtServicio != null
-				&& valida("Precio servicio", getTxtPrecio(), "^(0|[1-9]\\d*)([.,]\\d{2})?$") && txtPrecio != null
-				&& listParadas != null) {
+				&& valida("Precio servicio", getTxtPrecio(), "^(0|[1-9]\\d*)([.]\\d{2})?$") && txtPrecio != null) {
 
 			servicioActualizar.setNombre(getTxtServicio().toUpperCase());
 			servicioActualizar.setPrecio(Double.valueOf(getTxtPrecio()));

@@ -24,7 +24,7 @@
 
 <BorderPane onKeyPressed="#ayudaF1" prefHeight="644.0" prefWidth="958.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.ResponsableController">
    <left>
-      <VBox prefHeight="575.0" prefWidth="291.0" spacing="10.0" styleClass="background" stylesheets="@../styles/Styles.css" BorderPane.alignment="CENTER">
+      <VBox prefHeight="575.0" prefWidth="292.0" spacing="10.0" styleClass="background" stylesheets="@../styles/Styles.css" BorderPane.alignment="CENTER">
          <children>
             <HBox prefHeight="30.0" prefWidth="265.0">
                <children>
@@ -103,7 +103,7 @@
                   <Insets left="25.0" right="25.0" />
                </VBox.margin>
                <children>
-                  <RadioButton fx:id="vipSi" mnemonicParsing="false" selected="true" text="Si" textFill="WHITE">
+                  <RadioButton fx:id="vipSi" disable="true" mnemonicParsing="false" selected="true" text="Si" textFill="WHITE">
                      <HBox.margin>
                         <Insets left="65.0" />
                      </HBox.margin>
@@ -111,7 +111,7 @@
                         <ToggleGroup fx:id="afirmacionVip" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton fx:id="vipNo" mnemonicParsing="false" text="No" textFill="WHITE" toggleGroup="$afirmacionVip">
+                  <RadioButton fx:id="vipNo" disable="true" mnemonicParsing="false" selected="true" text="No" textFill="WHITE" toggleGroup="$afirmacionVip">
                      <HBox.margin>
                         <Insets left="10.0" right="25.0" />
                      </HBox.margin>
@@ -131,7 +131,7 @@
             </Label>
             <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="246.0" spacing="15.0">
                <children>
-                  <RadioButton fx:id="servicioSi" mnemonicParsing="false" text="Si" textFill="WHITE">
+                  <RadioButton fx:id="servicioSi" disable="true" mnemonicParsing="false" text="Si" textFill="WHITE">
                      <HBox.margin>
                         <Insets left="65.0" />
                      </HBox.margin>
@@ -139,7 +139,7 @@
                         <ToggleGroup fx:id="afirmacionServicio" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton fx:id="servicioNo" mnemonicParsing="false" selected="true" text="No" textFill="WHITE" toggleGroup="$afirmacionServicio">
+                  <RadioButton fx:id="servicioNo" disable="true" mnemonicParsing="false" selected="true" text="No" textFill="WHITE" toggleGroup="$afirmacionServicio">
                      <HBox.margin>
                         <Insets left="10.0" right="25.0" />
                      </HBox.margin>
@@ -162,7 +162,7 @@
             </Label>
             <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="246.0" spacing="15.0">
                <children>
-                  <RadioButton fx:id="efectivo" mnemonicParsing="false" text="Efectivo" textFill="WHITE">
+                  <RadioButton fx:id="efectivo" disable="true" mnemonicParsing="false" text="Efectivo" textFill="WHITE">
                      <HBox.margin>
                         <Insets left="40.0" />
                      </HBox.margin>
@@ -170,12 +170,12 @@
                         <ToggleGroup fx:id="metodoPago" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton fx:id="tarjeta" mnemonicParsing="false" selected="true" text="Tarjeta" textFill="WHITE" toggleGroup="$metodoPago">
+                  <RadioButton fx:id="tarjeta" disable="true" mnemonicParsing="false" selected="true" text="Tarjeta" textFill="WHITE" toggleGroup="$metodoPago">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </RadioButton>
-                  <RadioButton fx:id="bizum" mnemonicParsing="false" text="Bizum" textFill="WHITE" toggleGroup="$metodoPago">
+                  <RadioButton fx:id="bizum" disable="true" mnemonicParsing="false" text="Bizum" textFill="WHITE" toggleGroup="$metodoPago">
                      <HBox.margin>
                         <Insets left="10.0" right="25.0" />
                      </HBox.margin>
@@ -288,11 +288,11 @@
             </Button>
             <TableView fx:id="tablaEnvios" prefHeight="162.0" prefWidth="331.0" tableMenuButtonVisible="true">
                <columns>
-                  <TableColumn fx:id="colId" maxWidth="700.0" prefWidth="26.0" text="ID" />
-                  <TableColumn fx:id="colPeso" maxWidth="4000.0" prefWidth="58.0" text="Peso" />
-                  <TableColumn fx:id="colUrgente" maxWidth="4000.0" prefWidth="56.0" text="Urgente" />
-                  <TableColumn fx:id="colDireccion" maxWidth="4000.0" prefWidth="150.0" text="Direccion" />
-                  <TableColumn fx:id="colVolumen" maxWidth="4000.0" prefWidth="109.0" text="Volumen" />
+                  <TableColumn fx:id="colId" maxWidth="700.0" prefWidth="35.0" text="ID" />
+                  <TableColumn fx:id="colPeso" maxWidth="4000.0" prefWidth="47.0" text="Peso" />
+                  <TableColumn fx:id="colUrgente" maxWidth="4000.0" prefWidth="59.0" text="Urgente" />
+                  <TableColumn fx:id="colDireccion" maxWidth="4000.0" prefWidth="109.0" text="Direccion" />
+                  <TableColumn fx:id="colVolumen" maxWidth="4000.0" prefWidth="92.0" text="Volumen" />
                </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -312,7 +312,7 @@
       </VBox>
    </center>
    <right>
-      <VBox prefHeight="575.0" prefWidth="250.0" styleClass="background" BorderPane.alignment="CENTER">
+      <VBox prefHeight="575.0" prefWidth="280.0" styleClass="background" BorderPane.alignment="CENTER">
          <children>
             <Label text="Servicios" textFill="WHITE">
                <font>
@@ -322,7 +322,7 @@
                   <Insets left="20.0" top="5.0" />
                </VBox.margin>
             </Label>
-            <TableView fx:id="serviciosTable" prefHeight="227.0" prefWidth="306.0" tableMenuButtonVisible="true">
+            <TableView fx:id="serviciosTable" disable="true" prefHeight="227.0" prefWidth="306.0" tableMenuButtonVisible="true">
                <columns>
                   <TableColumn fx:id="colIdServicio" maxWidth="700.0" prefWidth="42.0" text="ID" />
                   <TableColumn fx:id="colNombreServicio" maxWidth="4000.0" prefWidth="110.0" text="Nombre" />
@@ -354,7 +354,7 @@
                   <Insets left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </ListView>
-            <TextArea fx:id="txtExtra" prefHeight="116.0" prefWidth="306.0">
+            <TextArea fx:id="txtExtra" disable="true" prefHeight="116.0" prefWidth="306.0">
                <VBox.margin>
                   <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
                </VBox.margin>
@@ -370,34 +370,34 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="txtPeso" promptText="Peso">
+            <TextField fx:id="txtPeso" disable="true" promptText="Peso">
                <HBox.margin>
                   <Insets left="10.0" top="30.0" />
                </HBox.margin>
             </TextField>
-            <TextField fx:id="txtAncho" promptText="Ancho">
+            <TextField fx:id="txtAncho" disable="true" promptText="Ancho">
                <HBox.margin>
                   <Insets left="20.0" top="30.0" />
                </HBox.margin>
             </TextField>
-            <TextField fx:id="txtAlto" promptText="Alto">
+            <TextField fx:id="txtAlto" disable="true" promptText="Alto">
                <HBox.margin>
                   <Insets left="20.0" top="30.0" />
                </HBox.margin>
             </TextField>
-            <TextField fx:id="txtLargo" promptText="Largo">
+            <TextField fx:id="txtLargo" disable="true" promptText="Largo">
                <HBox.margin>
                   <Insets left="20.0" top="30.0" />
                </HBox.margin>
             </TextField>
             <VBox prefHeight="50.0" prefWidth="76.0">
                <children>
-                  <RadioButton fx:id="urgenteSi" mnemonicParsing="false" text="Urgente" textFill="WHITE">
+                  <RadioButton fx:id="urgenteSi" disable="true" mnemonicParsing="false" text="Urgente" textFill="WHITE">
                      <toggleGroup>
                         <ToggleGroup fx:id="afirmacionUrgente" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton fx:id="urgenteNo" mnemonicParsing="false" selected="true" text="No" textFill="WHITE" toggleGroup="$afirmacionUrgente">
+                  <RadioButton fx:id="urgenteNo" disable="true" mnemonicParsing="false" selected="true" text="No" textFill="WHITE" toggleGroup="$afirmacionUrgente">
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin>
@@ -409,12 +409,12 @@
             </VBox>
             <VBox prefHeight="100.0" prefWidth="169.0">
                <children>
-                  <TextField fx:id="txtCalle" promptText="Calle">
+                  <TextField fx:id="txtCalle" disable="true" promptText="Calle">
                      <VBox.margin>
                         <Insets top="15.0" />
                      </VBox.margin>
                   </TextField>
-                  <TextField fx:id="txtLocalidad" prefHeight="25.0" prefWidth="149.0" promptText="Localidad">
+                  <TextField fx:id="txtLocalidad" disable="true" prefHeight="25.0" prefWidth="149.0" promptText="Localidad">
                      <VBox.margin>
                         <Insets top="15.0" />
                      </VBox.margin>

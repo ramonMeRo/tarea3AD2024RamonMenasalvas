@@ -239,6 +239,8 @@ public class ResponsableController implements Initializable {
 
 		estanciaSi.setOnAction(event -> gestionarEstancia());
 		estanciaNo.setOnAction(event -> gestionarEstancia());
+		servicioSi.setOnAction(event -> gestionarEstancia());
+		servicioNo.setOnAction(event -> gestionarEstancia());
 
 		choicePeregrinos.setConverter(new StringConverter<>() {
 
@@ -254,6 +256,7 @@ public class ResponsableController implements Initializable {
 			public Peregrino fromString(String string) {
 				return null;
 			}
+
 		});
 
 		llenarChoiceConPeregrinos();
@@ -265,6 +268,7 @@ public class ResponsableController implements Initializable {
 		nombrePeregrino.setCellValueFactory(new PropertyValueFactory<>("nombrePeregrino"));
 		columnaVip.setCellValueFactory(new PropertyValueFactory<>("vip"));
 		columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+
 	}
 
 	private void setColumnProperties() {
@@ -278,6 +282,7 @@ public class ResponsableController implements Initializable {
 		colUrgente.setCellValueFactory(new PropertyValueFactory<>("urgente"));
 		colDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
 		colVolumen.setCellValueFactory(new PropertyValueFactory<>("volumen"));
+
 	}
 
 	private void loadServicioDetails() {
@@ -288,7 +293,7 @@ public class ResponsableController implements Initializable {
 		if (parada != null) {
 			for (Servicio servicio : servicios) {
 				List<Long> idsParadas = servicio.getIdParadas();
-				if (idsParadas != null && idsParadas.contains(parada.getId())) {
+				if (idsParadas.contains(parada.getId())) {
 					servicioList.add(servicio);
 				}
 			}
@@ -297,9 +302,8 @@ public class ResponsableController implements Initializable {
 	}
 
 	private void loadEnvioDetails() {
-		Parada parada = paradaService.findByUsuario(usuario);
 		envioList.clear();
-		envioList.addAll(objectdbService.findAllByParada(parada.getId()));
+		envioList.addAll(objectdbService.findAllByParada(paradaService.findByUsuario(usuario).getId()));
 
 		tablaEnvios.setItems(envioList);
 	}
@@ -349,7 +353,6 @@ public class ResponsableController implements Initializable {
 		}
 	}
 
-	@FXML
 	private void gestionarEstancia() {
 		if (estanciaNo.isSelected()) {
 
@@ -378,38 +381,39 @@ public class ResponsableController implements Initializable {
 			vipNo.setDisable(false);
 			servicioSi.setDisable(false);
 			servicioNo.setDisable(false);
+
+		} if (servicioSi.isSelected() && estanciaSi.isSelected()) {
 			efectivo.setDisable(false);
 			tarjeta.setDisable(false);
 			bizum.setDisable(false);
+			serviciosTable.setDisable(false);
+			listServicios.setDisable(false);
+			txtExtra.setDisable(false);
+			txtAlto.setDisable(false);
+			txtAncho.setDisable(false);
+			txtLargo.setDisable(false);
+			txtCalle.setDisable(false);
+			txtPeso.setDisable(false);
+			txtLocalidad.setDisable(false);
+			urgenteSi.setDisable(false);
+			urgenteNo.setDisable(false);
 
-			if (servicioSi.isSelected()) {
+		} else if (servicioNo.isSelected() && estanciaSi.isSelected()) {
 
-				serviciosTable.setDisable(false);
-				listServicios.setDisable(false);
-				txtExtra.setDisable(false);
-				txtAlto.setDisable(false);
-				txtAncho.setDisable(false);
-				txtLargo.setDisable(false);
-				txtCalle.setDisable(false);
-				txtPeso.setDisable(false);
-				txtLocalidad.setDisable(false);
-				urgenteSi.setDisable(false);
-				urgenteNo.setDisable(false);
-
-			} else if (estanciaNo.isSelected()) {
-
-				serviciosTable.setDisable(true);
-				listServicios.setDisable(true);
-				txtExtra.setDisable(true);
-				txtAlto.setDisable(true);
-				txtAncho.setDisable(true);
-				txtLargo.setDisable(true);
-				txtCalle.setDisable(true);
-				txtPeso.setDisable(true);
-				txtLocalidad.setDisable(true);
-				urgenteSi.setDisable(true);
-				urgenteNo.setDisable(true);
-			}
+			efectivo.setDisable(true);
+			tarjeta.setDisable(true);
+			bizum.setDisable(true);
+			serviciosTable.setDisable(true);
+			listServicios.setDisable(true);
+			txtExtra.setDisable(true);
+			txtAlto.setDisable(true);
+			txtAncho.setDisable(true);
+			txtLargo.setDisable(true);
+			txtCalle.setDisable(true);
+			txtPeso.setDisable(true);
+			txtLocalidad.setDisable(true);
+			urgenteSi.setDisable(true);
+			urgenteNo.setDisable(true);
 		}
 	}
 
@@ -456,9 +460,6 @@ public class ResponsableController implements Initializable {
 			carnet.setDistancia(carnet.getDistancia() + 5.00);
 			carnet.setnVips(carnet.getnVips() + 1);
 
-			@SuppressWarnings("unused")
-			Carnet actualizaCarnet = carnetService.update(carnet);
-
 			Visita visita = new Visita();
 
 			visita.setFecha(LocalDate.now());
@@ -496,7 +497,7 @@ public class ResponsableController implements Initializable {
 			if (pc.getServicios().contains(db4oService.findByServicioNombre("ENVIO A CASA").getId())) {
 				EnvioACasa envio = new EnvioACasa();
 
-				if (valida("Peso", getTxtPeso(), "^(0|[1-9]\\d*)([.,]\\d{2})?$")
+				if (valida("Peso", getTxtPeso(), "^(0|[1-9]\\d*)([.]\\d{2})?$")
 						&& valida("Alto", getTxtAlto(), "^[0-9]+$") && valida("Ancho", getTxtAncho(), "^[0-9]+$")
 						&& valida("Largo", getTxtLargo(), "^[0-9]+$")
 						&& valida("Calle", getTxtCalle(), "^[a-zA-Z0-9\\s]+$")
@@ -536,6 +537,10 @@ public class ResponsableController implements Initializable {
 
 				db4oService.savePc(pc);
 			}
+
+			@SuppressWarnings("unused")
+			Carnet actualizaCarnet = carnetService.update(carnet);
+
 			@SuppressWarnings("unused")
 			Visita nuevaVisita = visitaService.save(visita);
 
@@ -554,9 +559,6 @@ public class ResponsableController implements Initializable {
 
 			carnet.setDistancia(carnet.getDistancia() + 5.00);
 
-			@SuppressWarnings("unused")
-			Carnet actualizaCarnet = carnetService.update(carnet);
-
 			Visita visita = new Visita();
 
 			visita.setFecha(LocalDate.now());
@@ -594,7 +596,7 @@ public class ResponsableController implements Initializable {
 			if (pc.getServicios().contains(db4oService.findByServicioNombre("ENVIO A CASA").getId())) {
 				EnvioACasa envio = new EnvioACasa();
 
-				if (valida("Peso", getTxtPeso(), "^(0|[1-9]\\d*)([.,]\\d{2})?$")
+				if (valida("Peso", getTxtPeso(), "^(0|[1-9]\\d*)([.]\\d{2})?$")
 						&& valida("Alto", getTxtAlto(), "^[0-9]+$") && valida("Ancho", getTxtAncho(), "^[0-9]+$")
 						&& valida("Largo", getTxtLargo(), "^[0-9]+$")
 						&& valida("Calle", getTxtCalle(), "^[a-zA-Z0-9\\s]+$")
@@ -636,6 +638,8 @@ public class ResponsableController implements Initializable {
 			}
 			@SuppressWarnings("unused")
 			Visita nuevaVisita = visitaService.save(visita);
+			@SuppressWarnings("unused")
+			Carnet actualizaCarnet = carnetService.update(carnet);
 
 		} else if (estanciaSi.isSelected() && vipSi.isSelected() && servicioNo.isSelected()) {
 
@@ -652,9 +656,6 @@ public class ResponsableController implements Initializable {
 
 			carnet.setDistancia(carnet.getDistancia() + 5.00);
 			carnet.setnVips(carnet.getnVips() + 1);
-
-			@SuppressWarnings("unused")
-			Carnet actualizaCarnet = carnetService.update(carnet);
 
 			Visita visita = new Visita();
 
@@ -683,9 +684,6 @@ public class ResponsableController implements Initializable {
 
 			carnet.setDistancia(carnet.getDistancia() + 5.00);
 
-			@SuppressWarnings("unused")
-			Carnet actualizaCarnet = carnetService.update(carnet);
-
 			Visita visita = new Visita();
 
 			visita.setFecha(LocalDate.now());
@@ -696,6 +694,9 @@ public class ResponsableController implements Initializable {
 
 			@SuppressWarnings("unused")
 			Visita nuevaVisita = visitaService.save(visita);
+
+			@SuppressWarnings("unused")
+			Carnet actualizaCarnet = carnetService.update(carnet);
 
 		} else if (estanciaNo.isSelected()) {
 
@@ -705,9 +706,6 @@ public class ResponsableController implements Initializable {
 
 			carnet.setDistancia(carnet.getDistancia() + 5.00);
 
-			@SuppressWarnings("unused")
-			Carnet actualizaCarnet = carnetService.update(carnet);
-
 			Visita visita = new Visita();
 
 			visita.setFecha(LocalDate.now());
@@ -718,6 +716,9 @@ public class ResponsableController implements Initializable {
 
 			@SuppressWarnings("unused")
 			Visita nuevaVisita = visitaService.save(visita);
+
+			@SuppressWarnings("unused")
+			Carnet actualizaCarnet = carnetService.update(carnet);
 		}
 	}
 

@@ -40,4 +40,9 @@ public class ObjectdbRepository {
 		EntityManager em = ObjectdbConnection.getEntityManager();
 		em.close();
 	}
+	
+	public void rollback() {
+		EntityManager em = ObjectdbConnection.getEntityManager();
+		em.getTransaction().rollback();
+	}
 }

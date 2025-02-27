@@ -122,6 +122,7 @@ public class RegistroController implements Initializable {
 				passwordVisible1.setText(password.getText());
 				passwordVisible1.setVisible(true);
 				password.setVisible(false);
+			
 			} else {
 
 				btnVisible1.setImage(iconoCerrado);
@@ -140,6 +141,7 @@ public class RegistroController implements Initializable {
 				passwordVisible2.setText(cPassword.getText());
 				passwordVisible2.setVisible(true);
 				cPassword.setVisible(false);
+
 			} else {
 
 				btnVisible2.setImage(iconoCerrado);
