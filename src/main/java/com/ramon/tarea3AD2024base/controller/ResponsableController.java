@@ -497,7 +497,7 @@ public class ResponsableController implements Initializable {
 			if (pc.getServicios().contains(db4oService.findByServicioNombre("ENVIO A CASA").getId())) {
 				EnvioACasa envio = new EnvioACasa();
 
-				if (valida("Peso", getTxtPeso(), "^(0|[1-9]\\d*)([.]\\d{2})?$")
+				if (valida("Peso", getTxtPeso(), "^(0|[1-9]\\d*)([.]\\d)?$")
 						&& valida("Alto", getTxtAlto(), "^[0-9]+$") && valida("Ancho", getTxtAncho(), "^[0-9]+$")
 						&& valida("Largo", getTxtLargo(), "^[0-9]+$")
 						&& valida("Calle", getTxtCalle(), "^[a-zA-Z0-9\\s]+$")

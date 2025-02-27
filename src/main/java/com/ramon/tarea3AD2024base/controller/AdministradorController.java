@@ -426,7 +426,7 @@ public class AdministradorController implements Initializable {
 	@FXML
 	private void registrarServicio() {
 		if (valida("Nombre Servicio", getTxtServicio(), "^[a-zA-Z\\s]+$") && txtServicio != null
-				&& valida("Precio servicio", getTxtPrecio(), "^(0|[1-9]\\d*)([.]\\d{2})?$") && txtPrecio != null) {
+				&& valida("Precio servicio", getTxtPrecio(), "^(0|[1-9]\\d*)([.]\\d)?$") && txtPrecio != null) {
 
 			if (db4oService.findByServicioNombre(getTxtServicio().toUpperCase()) != null) {
 				Alert alert = new Alert(AlertType.ERROR);
