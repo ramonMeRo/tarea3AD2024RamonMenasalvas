@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TableColumn?>
@@ -72,22 +71,22 @@
 						<Insets left="25.0" right="25.0" />
 					</VBox.margin>
 				</TextField>
-				<PasswordField fx:id="password" prefHeight="30.0" prefWidth="246.0" promptText="Password">
+				<PasswordField fx:id="password" prefHeight="30.0" prefWidth="246.0" promptText="Contraseña">
 					<VBox.margin>
 						<Insets left="25.0" right="25.0" />
 					</VBox.margin>
 				</PasswordField>
-            <PasswordField fx:id="passwordConf" prefHeight="30.0" prefWidth="246.0" promptText="Confirmar Password">
+            <PasswordField fx:id="passwordConf" prefHeight="30.0" prefWidth="246.0" promptText="Confirmar contraseña">
                <VBox.margin>
                   <Insets left="25.0" right="25.0" />
                </VBox.margin>
             </PasswordField>
-						<Button fx:id="reinicio" mnemonicParsing="false" onAction="#reset" prefHeight="30.0" prefWidth="306.0" style="-fx-background-color: white;" text="Borrar campos">
+						<Button fx:id="reinicio" onAction="#reset" prefHeight="30.0" prefWidth="306.0" style="-fx-background-color: white;" text="_Borrar campos">
 							<effect>
 								<DropShadow blurType="ONE_PASS_BOX" color="#1965d0" />
 							</effect>
 						</Button>
-						<Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#registrarUsuario" prefHeight="30.0" prefWidth="306.0" styleClass="btnGreen" text="Confimar" textFill="#2d4491">
+						<Button alignment="CENTER" contentDisplay="CENTER" onAction="#registrarUsuario" prefHeight="30.0" prefWidth="306.0" styleClass="btnGreen" text="_Confimar" textFill="#2d4491">
 							<font>
 								<Font size="15.0" />
 							</font>
@@ -109,9 +108,17 @@
 			<children>
 				<HBox alignment="TOP_RIGHT" prefHeight="41.0" prefWidth="640.0">
 					<children>
+                  <ImageView fitHeight="41.0" fitWidth="67.0" onMouseClicked="#generarInforme" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                     <image>
+                        <Image url="@../img/carpeta.png" />
+                     </image>
+                  </ImageView>
                   <ImageView fitHeight="41.0" fitWidth="67.0" onKeyPressed="#ayudaF1" onMouseClicked="#ayuda" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
-                        <Insets right="299.0" />
+                        <Insets right="15.0" />
                      </HBox.margin>
                      <image>
                         <Image url="@../img/informacion.png" />
@@ -122,7 +129,7 @@
                         <Image url="@../img/salida.png" />
                      </image>
                      <HBox.margin>
-                        <Insets right="5.0" />
+                        <Insets right="15.0" />
                      </HBox.margin>
                   </ImageView>
 					</children>
@@ -154,64 +161,4 @@
 			</children>
 		</VBox>
 	</center>
-   <right>
-      <VBox prefHeight="571.0" prefWidth="306.0" styleClass="background" BorderPane.alignment="CENTER">
-         <children>
-            <Label text="Añadir Nuevo Servicio" textFill="WHITE">
-               <font>
-                  <Font size="20.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="10.0" left="80.0" top="30.0" />
-               </VBox.margin>
-            </Label>
-            <HBox prefHeight="30.0" prefWidth="265.0">
-               <children>
-                  <Label text="Datos de Servicio" textFill="#f8f7f7">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="150.0" />
-                     </HBox.margin>
-                  </Label>
-               </children>
-            </HBox>
-            <TextField fx:id="txtServicio" prefHeight="30.0" prefWidth="246.0" promptText="Nombre Servicio">
-               <VBox.margin>
-                  <Insets left="25.0" right="25.0" />
-               </VBox.margin>
-            </TextField>
-            <TextField fx:id="txtPrecio" prefHeight="30.0" prefWidth="246.0" promptText="Precio servicio">
-               <VBox.margin>
-                  <Insets left="25.0" right="25.0" top="10.0" />
-               </VBox.margin>
-            </TextField>
-            <ListView prefHeight="200.0" prefWidth="200.0">
-               <VBox.margin>
-                  <Insets left="25.0" right="25.0" top="25.0" />
-               </VBox.margin>
-            </ListView>
-            <Button fx:id="reinicioServicios" mnemonicParsing="false" onAction="#reset" prefHeight="30.0" prefWidth="306.0" style="-fx-background-color: white;" text="Borrar campos">
-               <effect>
-                  <DropShadow blurType="ONE_PASS_BOX" color="#1965d0" />
-               </effect>
-               <VBox.margin>
-                  <Insets left="5.0" right="5.0" top="10.0" />
-               </VBox.margin>
-            </Button>
-            <Button fx:id="confirmarServicios" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#registrarUsuario" prefHeight="30.0" prefWidth="306.0" styleClass="btnGreen" text="Confimar" textFill="#2d4491">
-               <font>
-                  <Font size="15.0" />
-               </font>
-               <effect>
-                  <DropShadow blurType="ONE_PASS_BOX" color="#6468b2" />
-               </effect>
-               <VBox.margin>
-                  <Insets left="5.0" right="5.0" top="10.0" />
-               </VBox.margin>
-            </Button>
-         </children>
-      </VBox>
-   </right>
 </BorderPane>

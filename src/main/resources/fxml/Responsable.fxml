@@ -6,8 +6,6 @@
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
@@ -22,18 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.ResponsableController" onKeyPressed="#ayudaF1">
-   <top>
-      <MenuBar BorderPane.alignment="TOP_LEFT">
-        <menus>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </top>
+<BorderPane onKeyPressed="#ayudaF1" prefHeight="600.0" prefWidth="1000.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.ResponsableController">
    <left>
       <VBox prefHeight="571.0" prefWidth="306.0" spacing="10.0" styleClass="background" stylesheets="@../styles/Styles.css" BorderPane.alignment="CENTER">
          <children>
@@ -134,7 +121,7 @@
                   </RadioButton>
                </children>
             </HBox>
-            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="299.0" style="-fx-background-color: white;" styleClass="btnGreen" text="Cancelar">
+            <Button prefHeight="30.0" prefWidth="299.0" style="-fx-background-color: white;" styleClass="btnGreen" text="_Cancelar">
                <effect>
                   <DropShadow blurType="ONE_PASS_BOX" color="#1965d0" />
                </effect>
@@ -142,7 +129,7 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </Button>
-            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#sellarCarnet" prefHeight="31.0" prefWidth="298.0" styleClass="btnGreen" text="Sellar" textFill="#2d4491">
+            <Button alignment="CENTER" contentDisplay="CENTER" onAction="#sellarCarnet" prefHeight="31.0" prefWidth="298.0" styleClass="btnGreen" text="_Sellar" textFill="#2d4491">
                <font>
                   <Font size="15.0" />
                </font>
@@ -167,7 +154,7 @@
          <children>
             <HBox alignment="TOP_RIGHT" prefHeight="41.0" prefWidth="640.0">
                <children>
-                  <ImageView fitHeight="35.0" fitWidth="41.0" onMouseClicked="#ayuda" pickOnBounds="true" preserveRatio="true" >
+                  <ImageView fitHeight="35.0" fitWidth="41.0" onMouseClicked="#ayuda" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../img/informacion.png" />
                      </image>
@@ -224,7 +211,7 @@
                   <Insets left="100.0" right="100.0" top="50.0" />
                </VBox.margin>
             </HBox>
-            <Button mnemonicParsing="false" onAction="#exportarParada" prefHeight="42.0" prefWidth="95.0" styleClass="btnGreen" text="Exportar" textFill="#2d4491">
+            <Button onAction="#exportarParada" prefHeight="42.0" prefWidth="95.0" styleClass="btnGreen" text="_Exportar" textFill="#2d4491">
                <VBox.margin>
                   <Insets right="317.0" />
                </VBox.margin>

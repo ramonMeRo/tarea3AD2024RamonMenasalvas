@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ramon.tarea3AD2024base.modelo.Estancia;
+import com.ramon.tarea3AD2024base.modelo.Peregrino;
 import com.ramon.tarea3AD2024base.repositorios.EstanciaRepository;
 
 @Service
@@ -36,5 +37,9 @@ public class EstanciaService {
 
 	public List<Estancia> findAll() {
 		return estanciaRepository.findAll();
+	}
+	
+	public List<Estancia> findByPeregrino(Peregrino peregrino){
+		return estanciaRepository.findByPeregrino(peregrino);
 	}
 }

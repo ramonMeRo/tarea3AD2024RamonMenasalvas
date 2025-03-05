@@ -104,11 +104,17 @@ public class RegistroController implements Initializable {
 	@Autowired
 	private VisitaService visitaService;
 
+	private String contra="";
+	
+	private String contra1="";
+	
 	public Sesion sesion;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
+		passwordVisible1.textProperty().bindBidirectional(password.textProperty());
+		passwordVisible2.textProperty().bindBidirectional(cPassword.textProperty());
 
 		Image iconoCerrado = new Image(getClass().getResourceAsStream("/img/ojoCerrado.png"));
 		Image iconoAbierto = new Image(getClass().getResourceAsStream("/img/ojoAbierto.png"));
@@ -122,6 +128,7 @@ public class RegistroController implements Initializable {
 				passwordVisible1.setText(password.getText());
 				passwordVisible1.setVisible(true);
 				password.setVisible(false);
+			
 			} else {
 
 				btnVisible1.setImage(iconoCerrado);
@@ -140,6 +147,7 @@ public class RegistroController implements Initializable {
 				passwordVisible2.setText(cPassword.getText());
 				passwordVisible2.setVisible(true);
 				cPassword.setVisible(false);
+
 			} else {
 
 				btnVisible2.setImage(iconoCerrado);
@@ -308,7 +316,7 @@ public class RegistroController implements Initializable {
 						&& validacionVacia("choiceNacionalidad", getChoiceNacionalidad().getValue() == null)
 						&& validacionVacia("choiceParadas", getChoiceParadas().getValue() == null)) {
 
-					if (!passwordsCoinciden(getPassword(), getCPassword())) {
+					if (!passwordsCoinciden(contra, contra1)) {
 						validacionAlerta("Contraseñas no coinciden", true);
 						return;
 					}

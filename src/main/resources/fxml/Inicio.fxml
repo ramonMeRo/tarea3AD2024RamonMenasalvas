@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.InicioController" onKeyPressed="#ayudaF1">
+<BorderPane onKeyPressed="#ayudaF1" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.InicioController">
    <center>
       <VBox prefHeight="610.0" prefWidth="465.0" BorderPane.alignment="CENTER">
          <children>
@@ -90,7 +90,7 @@
                <children>
                   <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="267.0">
                      <children>
-                  		<PasswordField fx:id="password" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#login" prefHeight="40.0" prefWidth="252.0" promptText="                             Password">
+                  		<PasswordField fx:id="password" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#login" prefHeight="40.0" prefWidth="252.0" promptText="                           Contraseña">
                            <StackPane.margin>
                               <Insets />
                            </StackPane.margin>
@@ -130,7 +130,7 @@
                   <Insets left="70.0" top="20.0" />
                </VBox.margin>
       		</Hyperlink>
-      		<Button fx:id="btnLogin" mnemonicParsing="false" onAction="#login" prefHeight="52.0" prefWidth="248.0" styleClass="btnGreen" text="Inicia sesion" textFill="#2d4491">
+      		<Button fx:id="btnLogin" onAction="#login" prefHeight="52.0" prefWidth="248.0" styleClass="btnGreen" text="_Inicia sesion" textFill="#2d4491">
       			<font>
       				<Font size="15.0" />
       			</font>

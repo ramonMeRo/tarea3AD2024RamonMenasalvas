@@ -71,6 +71,7 @@ public class InicioController implements Initializable {
 	@Lazy
 	@Autowired
 	private StageManager stageManager;
+	
 
 	public static Sesion sesion = new Sesion();
 
@@ -160,24 +161,27 @@ public class InicioController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
+		passwordVisible.textProperty().bindBidirectional(password.textProperty());
+		
 		Image iconoCerrado = new Image(getClass().getResourceAsStream("/img/ojoCerrado.png"));
 		Image iconoAbierto = new Image(getClass().getResourceAsStream("/img/ojoAbierto.png"));
 
 		btnVisible.setOnMouseClicked(event -> {
-			mostrarContraseña = !mostrarContraseña;
-
-			if (mostrarContraseña) {
-
-				btnVisible.setImage(iconoAbierto);
-				passwordVisible.setText(password.getText());
-				passwordVisible.setVisible(true);
-
-			} else {
-
-				btnVisible.setImage(iconoCerrado);
-				passwordVisible.setVisible(false);
-				password.setVisible(true);
-			}
+		    mostrarContraseña = !mostrarContraseña;
+		    
+		    if (mostrarContraseña) {
+		        btnVisible.setImage(iconoAbierto);
+		        passwordVisible.setVisible(true);
+		        passwordVisible.setManaged(true);
+		        password.setVisible(false);
+		        password.setManaged(false);
+		    } else {
+		        btnVisible.setImage(iconoCerrado);
+		        password.setVisible(true);
+		        password.setManaged(true);
+		        passwordVisible.setVisible(false);
+		        passwordVisible.setManaged(false);
+		    }
 		});
 
 	}

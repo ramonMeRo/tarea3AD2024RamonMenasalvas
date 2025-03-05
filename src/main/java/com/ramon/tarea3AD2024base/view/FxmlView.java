@@ -18,7 +18,7 @@ public enum FxmlView {
 	RESPONSABLE{
 		@Override
 		public String getTitle() {
-			return getStringFromResourceBundle("usuario.title");
+			return getStringFromResourceBundle("respon.title");
 		}
 
 		@Override
@@ -29,7 +29,7 @@ public enum FxmlView {
 	PEREGRINO{
 		@Override
 		public String getTitle() {
-			return getStringFromResourceBundle("usuario.title");
+			return getStringFromResourceBundle("pere.title");
 		}
 
 		@Override
@@ -40,7 +40,7 @@ public enum FxmlView {
 	ADMINISTRADOR {
 		@Override
 		public String getTitle() {
-			return getStringFromResourceBundle("usuario.title");
+			return getStringFromResourceBundle("admin.title");
 		}
 
 		@Override

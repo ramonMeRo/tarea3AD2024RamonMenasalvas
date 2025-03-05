@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.RegistroController" onKeyPressed="#ayudaF1">
+<AnchorPane onKeyPressed="#ayudaF1" prefHeight="600.0" prefWidth="1000.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.RegistroController">
    <children>
       <Rectangle fill="#2d4491" height="602.0" layoutX="703.0" stroke="#ffffff8b" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="313.0" />
       <Label layoutX="798.0" layoutY="13.0" prefHeight="60.0" prefWidth="126.0" style="-fx-font-weight: BOLD;" text="REGISTRO" textFill="WHITE">
@@ -28,19 +28,19 @@
       <TextField fx:id="nombre" layoutX="765.0" layoutY="122.0" prefHeight="30.0" prefWidth="190.0" promptText="Nombre" />
       <TextField fx:id="apellidos" layoutX="765.0" layoutY="167.0" prefHeight="30.0" prefWidth="190.0" promptText="Apellidos" />
       <DatePicker fx:id="fechaNac" editable="false" layoutX="765.0" layoutY="211.0" prefHeight="30.0" prefWidth="190.0" promptText="Fecha de nacimiento" />
-      <ComboBox fx:id="choiceNacionalidad" layoutX="764.0" layoutY="255.0" prefHeight="30.0" prefWidth="190.0" />
+      <ComboBox fx:id="choiceNacionalidad" layoutX="764.0" layoutY="255.0" prefHeight="30.0" prefWidth="190.0" promptText="Nacionalidad" />
       <TextField fx:id="email" layoutX="765.0" layoutY="300.0" prefHeight="30.0" prefWidth="190.0" promptText="Correo Electronicco" />
       <PasswordField fx:id="password" layoutX="765.0" layoutY="349.0" prefHeight="30.0" prefWidth="190.0" promptText="Password" />
       <PasswordField fx:id="cPassword" layoutX="765.0" layoutY="397.0" prefHeight="30.0" prefWidth="190.0" promptText="Confirma la password" />
       <ComboBox fx:id="choiceParadas" layoutX="765.0" layoutY="442.0" prefHeight="30.0" prefWidth="190.0" />
-      <Button fx:id="btnConfirmar" layoutX="711.0" layoutY="503.0" mnemonicParsing="false" onAction="#confirmar" prefHeight="31.0" prefWidth="299.0" styleClass="btnGreen" text="Confirmar" textFill="#2d4491">
+      <Button fx:id="btnConfirmar" layoutX="711.0" layoutY="503.0" onAction="#confirmar" prefHeight="31.0" prefWidth="299.0" styleClass="btnGreen" text="_Confirmar" textFill="#2d4491">
          <font>
             <Font size="15.0" />
          </font>
          <effect>
             <DropShadow blurType="ONE_PASS_BOX" />
          </effect></Button>
-      <Button fx:id="btnCancelar" layoutX="712.0" layoutY="546.0" mnemonicParsing="false" onAction="#limpiarCampos" prefHeight="31.0" prefWidth="299.0" styleClass="btnGreen" text="Cancelar" textFill="#2d4491">
+      <Button fx:id="btnCancelar" layoutX="712.0" layoutY="546.0" onAction="#limpiarCampos" prefHeight="31.0" prefWidth="299.0" styleClass="btnGreen" text="_Cancelar" textFill="#2d4491">
          <font>
             <Font size="15.0" />
          </font>

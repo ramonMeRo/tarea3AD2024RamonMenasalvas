@@ -24,30 +24,11 @@
 		<java.version>23</java.version>
 	</properties>
 
-	<repositories>
-		<repository>
-			<id>objectdb</id>
-			<name>ObjectDB Repository</name>
-			<url>https://m2.objectdb.com</url>
-		</repository>
-	</repositories>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.objectdb</groupId>
-			<artifactId>objectdb-jk</artifactId>
-			<version>2.9.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.github.nilshoffmann</groupId>
-			<artifactId>db4o-nbm</artifactId>
-			<version>2.0.0</version>
 		</dependency>
 
 		<dependency>
@@ -79,6 +60,16 @@
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
+			<version>7.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports-chart-themes</artifactId>
+			<version>7.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports-chart-customizers</artifactId>
 			<version>7.0.1</version>
 		</dependency>
 		<dependency>

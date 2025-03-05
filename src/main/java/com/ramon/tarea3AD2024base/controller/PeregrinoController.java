@@ -93,7 +93,7 @@ public class PeregrinoController implements Initializable {
 	private TableColumn<Estancia, LocalDate> fecha;
 	@FXML
 	private TableColumn<Estancia, Boolean> vip;
-	
+
 	private ObservableList<Estancia> estanciaList = FXCollections.observableArrayList();
 
 	@Lazy
@@ -166,7 +166,8 @@ public class PeregrinoController implements Initializable {
 	@FXML
 	private void actualizarPeregrino() {
 		if (valida("Nombre", nombre.getText(), "^[a-zA-Z\\s]+$")
-				&& valida("Apellidos", apellidos.getText(), "^[a-zA-Z\\s]+$")) {
+				&& valida("Apellidos", apellidos.getText(), "^[a-zA-Z\\s]+$")
+				&& getFechaNac().getValue().isBefore(LocalDate.now())) {
 			peregrino.setNombre(nombre.getText());
 			peregrino.setApellido(apellidos.getText());
 			peregrino.setFechaNac(fechaNac.getValue());
@@ -334,22 +335,22 @@ public class PeregrinoController implements Initializable {
 		nacionalidad.setValue(peregrino.getNacionalidad());
 
 		llenarNaciones();
-		
+
 		setColumnProperties();
-		
+
 		loadUserDetails();
 
 	}
-	
+
 	private void setColumnProperties() {
 		idEstancia.setCellValueFactory(new PropertyValueFactory<>("id"));
 		fecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
 		vip.setCellValueFactory(new PropertyValueFactory<>("vip"));
 	}
-	
-	private void loadUserDetails() {		
+
+	private void loadUserDetails() {
 		estanciaList.clear();
-		estanciaList.addAll(estanciaService.findAll());
+		estanciaList.addAll(estanciaService.findByPeregrino(peregrino));
 
 		estancias.setItems(estanciaList);
 	}
@@ -367,13 +368,11 @@ public class PeregrinoController implements Initializable {
 
 			URL url = getClass().getResource("/reportTemplate/Carnet.jasper");
 			if (url == null) {
-				System.err.println("No se encontró el archivo Carnet.jasper");
 				return;
 			}
 			JasperReport reporte = (JasperReport) JRLoader.loadObject(url);
 
 			Long idPeregrino = peregrino.getId();
-			System.out.println("Valor de PEREGRINO_ID: " + idPeregrino);
 
 			Map<String, Object> parametros = new HashMap<>();
 			parametros.put("id", idPeregrino);
@@ -389,18 +388,14 @@ public class PeregrinoController implements Initializable {
 
 			JasperExportManager.exportReportToPdfFile(print, rutaSalida);
 
-			System.out.println("Informe generado correctamente en: " + rutaSalida);
-
 			abrirPDF(rutaSalida);
 
 		} catch (JRException | SQLException e) {
-			System.out.println("Error");
 		} finally {
 			if (conexion != null) {
 				try {
 					conexion.close();
 				} catch (SQLException e) {
-					System.out.println("Error");
 				}
 			}
 		}
@@ -427,6 +422,14 @@ public class PeregrinoController implements Initializable {
 		ds.setPassword("");
 		ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
 		return ds;
+	}
+
+	public DatePicker getFechaNac() {
+		return fechaNac;
+	}
+
+	public void setFechaNac(DatePicker fechaNac) {
+		this.fechaNac = fechaNac;
 	}
 
 }
