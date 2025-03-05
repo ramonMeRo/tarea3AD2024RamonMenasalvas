@@ -270,7 +270,7 @@ public class PeregrinoController implements Initializable {
 			}
 		} else {
 			validacionAlerta(campo, true);
-			return false;
+			return false; 
 		}
 	}
 
