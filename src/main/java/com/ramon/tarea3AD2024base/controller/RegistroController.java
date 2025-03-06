@@ -63,13 +63,13 @@ public class RegistroController implements Initializable {
 	@FXML
 	private TextField usuario;
 	@FXML
-	private TextField nombre;
+	public TextField nombre;
 	@FXML
 	private TextField apellidos;
 	@FXML
-	private TextField email;
+	public TextField email;
 	@FXML
-	private TextField password;
+	public TextField password;
 	@FXML
 	private TextField cPassword;
 	@FXML

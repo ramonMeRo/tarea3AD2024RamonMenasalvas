@@ -72,28 +72,28 @@ public class AdministradorController implements Initializable {
 	private Button btnSalir;
 
 	@FXML
-	private Label userId;
+	public Label userId;
 
 	@FXML
-	private TextField nombreParada;
+	public TextField nombreParada;
 
 	@FXML
-	private TextField regionParada;
+	public TextField regionParada;
 
 	@FXML
-	private TextField usuarioResponsable;
+	public TextField usuarioResponsable;
 
 	@FXML
-	private TextField nombreResponsable;
+	public TextField nombreResponsable;
 
 	@FXML
-	private TextField email;
+	public TextField email;
 
 	@FXML
-	private PasswordField password;
+	public PasswordField password;
 
 	@FXML
-	private PasswordField passwordConf;
+	public PasswordField passwordConf;
 
 	@FXML
 	private Button reinicio;
@@ -130,9 +130,9 @@ public class AdministradorController implements Initializable {
 	private StageManager stageManager;
 
 	@Autowired
-	private UsuarioService userService;
+	public UsuarioService userService;
 	@Autowired
-	private ParadaService paradaService;
+	public ParadaService paradaService;
 
 	private ObservableList<Parada> paradaList = FXCollections.observableArrayList();
 
@@ -147,7 +147,7 @@ public class AdministradorController implements Initializable {
 	}
 
 	@FXML
-	private void registrarUsuario(ActionEvent event) {
+	public void registrarUsuario(ActionEvent event) {
 
 		if (valida("Nombre Parada", getNombreParada(), "[a-zA-Z]+") && !regionParada.getText().isEmpty()) {
 

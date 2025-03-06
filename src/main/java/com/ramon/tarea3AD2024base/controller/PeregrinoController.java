@@ -69,21 +69,21 @@ import net.sf.jasperreports.engine.util.JRLoader;
 public class PeregrinoController implements Initializable {
 
 	@FXML
-	private TextField nombre;
+	public TextField nombre;
 	@FXML
-	private TextField apellidos;
+	public TextField apellidos;
 	@FXML
-	private TextField usuario;
+	public TextField usuario;
 	@FXML
-	private TextField email;
+	public TextField email;
 	@FXML
-	private DatePicker fechaNac;
+	public DatePicker fechaNac;
 	@FXML
-	private ComboBox<String> nacionalidad;
+	public ComboBox<String> nacionalidad;
 	@FXML
-	private Button actualizar;
+	public Button actualizar;
 	@FXML
-	private Button reiniciar;
+	public Button reiniciar;
 
 	@FXML
 	private TableView<Estancia> estancias;
@@ -100,13 +100,13 @@ public class PeregrinoController implements Initializable {
 	@Autowired
 	private StageManager stagemanager;
 	@Autowired
-	private PeregrinoService peregrinoService;
+	public PeregrinoService peregrinoService;
 	@Autowired
 	private EstanciaService estanciaService;
 
-	private Usuario usuarioSesion;
+	public Usuario usuarioSesion;
 
-	private Peregrino peregrino;
+	public Peregrino peregrino;
 
 	@FXML
 	private void activarEdicion() {
@@ -164,7 +164,7 @@ public class PeregrinoController implements Initializable {
 	}
 
 	@FXML
-	private void actualizarPeregrino() {
+	public void actualizarPeregrino() {
 		if (valida("Nombre", nombre.getText(), "^[a-zA-Z\\s]+$")
 				&& valida("Apellidos", apellidos.getText(), "^[a-zA-Z\\s]+$")
 				&& getFechaNac().getValue().isBefore(LocalDate.now())) {

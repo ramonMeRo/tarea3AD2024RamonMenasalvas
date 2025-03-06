@@ -51,10 +51,10 @@ public class InicioController implements Initializable {
 	private ImageView btnVisible;
 
 	@FXML
-	private PasswordField password;
+	public PasswordField password;
 
 	@FXML
-	private TextField txtUsuario;
+	public TextField txtUsuario;
 
 	@FXML
 	private TextField passwordVisible;
