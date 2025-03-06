@@ -242,7 +242,7 @@ public class AdministradorController implements Initializable {
 	}
 
 	public String getUsuarioResponsable() {
-		return usuarioResponsable.getText();
+		return usuarioResponsable.getText(); 
 	}
 
 	public void setUsuarioResponsable(TextField usuarioResponsable) {
