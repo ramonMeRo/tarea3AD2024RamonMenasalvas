@@ -6,121 +6,120 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.internal.util.Platform;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.ramon.tarea3AD2024base.controller.RegistroController;
-import com.ramon.tarea3AD2024base.modelo.Usuario;
-import com.ramon.tarea3AD2024base.services.UsuarioService;
+import com.ramon.tarea3AD2024base.modelo.Carnet;
+import com.ramon.tarea3AD2024base.modelo.Parada;
+import com.ramon.tarea3AD2024base.modelo.Peregrino;
+import com.ramon.tarea3AD2024base.services.ParadaService;
+import com.ramon.tarea3AD2024base.services.PeregrinoService;
+import com.ramon.tarea3AD2024base.services.VisitaService;
 
-import javafx.scene.control.PasswordField;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
 @ExtendWith(MockitoExtension.class)
 class RegistroControllerTest {
 
+	RegistroController controller;
+
 	@Mock
-	UsuarioService usuarioService;
+	PeregrinoService peregrinoService;
+	@Mock
+	VisitaService visitaService;
+	@Mock
+	ParadaService paradaService;
 
-	@InjectMocks
-	RegistroController registroController;
-
-	TextField nombre;
-	TextField email;
-	PasswordField password;
+	Parada paradaInicial = new Parada(1L, null, "España", 'E', "Parada 1", new HashSet<>(), new HashSet<>());
 
 	@BeforeAll
-	static void setUpJavaFX() {
-			Platform.startup(() ->{});
-		
+	static void initJfx() {
+		new JFXPanel();
 	}
 
 	@BeforeEach
 	void setUp() {
-		nombre = new TextField();
-		email = new TextField();
-		password = new PasswordField();
+		controller = new RegistroController();
+		controller.peregrinoService = peregrinoService;
+		controller.visitaService = visitaService;
+		controller.paradaService = paradaService;
 
-		registroController.nombre = nombre;
-		registroController.email = email;
-		registroController.password = password;
+		controller.usuario = new TextField();
+		controller.nombre = new TextField();
+		controller.apellidos = new TextField();
+		controller.email = new TextField();
+		controller.password = new TextField();
+		controller.cPassword = new TextField();
+		controller.choiceNacionalidad = new ComboBox<>();
+		controller.choiceParadas = new ComboBox<>();
+		controller.fechaNac = new DatePicker();
+
+		controller.choiceNacionalidad.getItems().add("España");
+
+		controller.choiceParadas.getItems().add(paradaInicial);
 	}
 
 	@Test
-	void registroUsuarioOK() throws InterruptedException {
-		nombre.setText("Juan Perez");
-		email.setText("juan.perez@example.com");
-		password.setText("password123");
+	void registroOk() throws InterruptedException {
+		when(peregrinoService.save(any())).thenAnswer(invocation -> {
+			Peregrino p = invocation.getArgument(0);
+			p.setCarnet(new Carnet());
+			return p;
+		});
 
-		when(usuarioService.save(any(Usuario.class))).thenReturn(true);
+		controller.usuario.setText("peregrino");
+		controller.nombre.setText("Juan");
+		controller.apellidos.setText("Perez");
+		controller.email.setText("peregrino@mail.com");
+		controller.password.setText("password123");
+		controller.cPassword.setText("password123");
+		controller.choiceNacionalidad.setValue("España");
+		controller.choiceParadas.setValue(paradaInicial);
+		controller.fechaNac.setValue(LocalDate.of(1990, 1, 1));
 
 		CountDownLatch latch = new CountDownLatch(1);
 		Platform.runLater(() -> {
-			registroController.registrarUsuario();
+			controller.registrarPeregrino();
 			latch.countDown();
 		});
-		latch.await();
+		latch.await(2, TimeUnit.SECONDS);
 
-		verify(usuarioService, times(1)).save(any(Usuario.class));
+		verify(peregrinoService, times(1)).save(any());
 	}
 
 	@Test
-	void registroConDatosInvalidos() throws InterruptedException {
-		nombre.setText("1234");
-		email.setText("invalido");
-		password.setText("short");
+	void registroKo_EmailInvalido() throws InterruptedException {
+		controller.usuario.setText("peregrino");
+		controller.nombre.setText("Juan");
+		controller.apellidos.setText("Perez");
+		controller.email.setText("emailIncorrecto");
+		controller.password.setText("password123");
+		controller.cPassword.setText("password123");
+		controller.choiceNacionalidad.setValue("España");
+		controller.choiceParadas.setValue(controller.choiceParadas.getItems().get(0));
+		controller.fechaNac.setValue(LocalDate.of(1990, 1, 1));
 
 		CountDownLatch latch = new CountDownLatch(1);
 		Platform.runLater(() -> {
-			registroController.registrarUsuario();
+			controller.registrarPeregrino();
 			latch.countDown();
 		});
-		latch.await();
+		latch.await(2, TimeUnit.SECONDS);
 
-		verify(usuarioService, never()).save(any());
-	}
-
-	@Test
-	void registrarUsuarioConDatosValidos() throws InterruptedException {
-		nombre.setText("Maria Garcia");
-		email.setText("maria@gmail.com");
-		password.setText("claveSegura123");
-
-		when(usuarioService.save(any(Usuario.class))).thenReturn(true);
-
-		CountDownLatch latch = new CountDownLatch(1);
-		Platform.runLater(() -> {
-			registroController.registrarUsuario();
-			latch.countDown();
-		});
-		latch.await();
-
-		verify(usuarioService, times(1)).save(any(Usuario.class));
-	}
-
-	@Test
-	void registroUsuarioExistente() throws InterruptedException {
-		nombre.setText("Juan");
-		email.setText("juan@gmail.com");
-		password.setText("12345678");
-
-		when(usuarioService.save(any(Usuario.class))).thenReturn(false);
-
-		CountDownLatch latch = new CountDownLatch(1);
-		Platform.runLater(() -> {
-			registroController.registrarUsuario();
-			latch.countDown();
-		});
-		latch.await();
-
-		verify(usuarioService, times(1)).save(any(Usuario.class));
+		verify(peregrinoService, never()).save(any());
 	}
 }

@@ -61,21 +61,21 @@ public class RegistroController implements Initializable {
 	private boolean mostrarContraseña = true;
 
 	@FXML
-	private TextField usuario;
+	public TextField usuario;
 	@FXML
 	public TextField nombre;
 	@FXML
-	private TextField apellidos;
+	public TextField apellidos;
 	@FXML
 	public TextField email;
 	@FXML
 	public TextField password;
 	@FXML
-	private TextField cPassword;
+	public TextField cPassword;
 	@FXML
-	private ComboBox<String> choiceNacionalidad;
+	public ComboBox<String> choiceNacionalidad;
 	@FXML
-	private ComboBox<Parada> choiceParadas;
+	public ComboBox<Parada> choiceParadas;
 	@FXML
 	private Button btnConfirmar;
 	@FXML
@@ -89,20 +89,20 @@ public class RegistroController implements Initializable {
 	@FXML
 	private TextField passwordVisible2;
 	@FXML
-	private DatePicker fechaNac;
+	public DatePicker fechaNac;
 
 	@Lazy
 	@Autowired
 	private StageManager stageManager;
 
 	@Autowired
-	private ParadaService paradaService;
+	public ParadaService paradaService;
 
 	@Autowired
-	private PeregrinoService peregrinoService;
+	public PeregrinoService peregrinoService;
 
 	@Autowired
-	private VisitaService visitaService;
+	public VisitaService visitaService;
 
 	private String contra="";
 	

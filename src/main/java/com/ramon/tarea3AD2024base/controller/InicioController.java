@@ -66,11 +66,11 @@ public class InicioController implements Initializable {
 	private Hyperlink hlRegistro;
 
 	@Autowired
-	private UsuarioService userService;
+	public UsuarioService userService;
 
 	@Lazy
 	@Autowired
-	private StageManager stageManager;
+	public StageManager stageManager;
 	
 
 	public static Sesion sesion = new Sesion();
@@ -81,7 +81,7 @@ public class InicioController implements Initializable {
 	}
 
 	@FXML
-	private void login(ActionEvent event) throws IOException {
+	public void login(ActionEvent event) throws IOException {
 		if (userService.authenticate(getUsername(), getPassword())) {
 			Usuario usuario = userService.findByNombreOrEmail(getUsername());
 
@@ -110,6 +110,7 @@ public class InicioController implements Initializable {
 			alert.setHeaderText("Intento de inicio de sesion");
 			alert.setContentText("Usuario y/o contraseña incorrectos");
 			alert.showAndWait();
+		
 		}
 	}
 
@@ -157,6 +158,15 @@ public class InicioController implements Initializable {
 	public String getUsername() {
 		return txtUsuario.getText();
 	}
+	
+	public void setTxtUsuario(TextField txtUsuario) {
+	    this.txtUsuario = txtUsuario;
+	}
+
+	public void setPassword(PasswordField password) {
+	    this.password = password;
+	}
+
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
