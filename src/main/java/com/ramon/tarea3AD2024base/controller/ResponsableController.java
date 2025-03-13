@@ -47,6 +47,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+/**
+ * @author Ramon
+ * @since 01-01-2025
+ */
+
 @Controller
 public class ResponsableController implements Initializable {
 

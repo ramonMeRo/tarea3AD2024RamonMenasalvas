@@ -27,7 +27,6 @@ import com.ramon.tarea3AD2024base.services.PeregrinoService;
 import com.ramon.tarea3AD2024base.services.VisitaService;
 
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -48,7 +47,8 @@ class RegistroControllerTest {
 
 	@BeforeAll
 	static void initJfx() {
-		new JFXPanel();
+		Platform.startup(() -> {
+		});
 	}
 
 	@BeforeEach

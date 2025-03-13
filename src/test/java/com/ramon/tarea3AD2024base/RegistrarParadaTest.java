@@ -21,7 +21,6 @@ import com.ramon.tarea3AD2024base.services.ParadaService;
 import com.ramon.tarea3AD2024base.services.UsuarioService;
 
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -35,7 +34,8 @@ public class RegistrarParadaTest {
     @BeforeAll
     public static void initJFX() {
         // Inicializamos JavaFX para poder trabajar con controles
-        new JFXPanel();
+    	Platform.startup(() -> {
+		});
     }
 
     @Test

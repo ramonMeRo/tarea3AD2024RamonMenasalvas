@@ -65,6 +65,11 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 
+/**
+ * @author Ramon
+ * @since 01-01-2025
+ */
+
 @Controller
 public class PeregrinoController implements Initializable {
 
