@@ -725,6 +725,15 @@ public class ResponsableController implements Initializable {
 			@SuppressWarnings("unused")
 			Carnet actualizaCarnet = carnetService.update(carnet);
 		}
+		servicioSelect.clear();
+		
+		txtExtra.clear();
+		txtAlto.clear();
+		txtAncho.clear();
+		txtLargo.clear();
+		txtCalle.clear();
+		txtPeso.clear();
+		txtLocalidad.clear();
 	}
 
 	private boolean valida(String campo, String valor, String patron) {

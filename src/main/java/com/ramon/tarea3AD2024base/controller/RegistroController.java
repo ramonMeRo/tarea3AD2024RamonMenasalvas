@@ -357,7 +357,7 @@ public class RegistroController implements Initializable {
 
 						String carnetGuardar = VistaUtils.ExportarCarnet(nuevoPeregrino);
 						
-						existdbService.guardarCarnetsPorParada(parada.getNombre(), peregrino.getNombre()+" "+peregrino.getApellidos() ,carnetGuardar);
+						existdbService.guardarCarnetsPorParada(parada.getNombre(), peregrino.getNombre()+peregrino.getApellidos() ,carnetGuardar);
 
 						guardarAlerta(peregrino);
 

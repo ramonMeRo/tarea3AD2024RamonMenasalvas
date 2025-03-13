@@ -494,6 +494,9 @@ public class AdministradorController implements Initializable {
 			db4oService.updateServicio(servicioActualizar);
 			actualizarAlerta(servicioActualizar);
 		}
+		
+		limpiarCamposServicio();
+		
 		loadServicioDetails();
 	}
 

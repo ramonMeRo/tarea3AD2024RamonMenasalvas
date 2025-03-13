@@ -21,7 +21,7 @@ public class ExistdbService {
 		existdb.guardarCarnetsPorParada(parada, fichero, contenido);
 	}
 	
-	public List<String> obtenerCarnetsPorParada(String parada){
-		return existdb.obtenerCarnetsPorParada(parada);
+	public List<String> contenidoCarnet(String parada){
+		return existdb.contenidoCarnet(parada);
 	}
 }

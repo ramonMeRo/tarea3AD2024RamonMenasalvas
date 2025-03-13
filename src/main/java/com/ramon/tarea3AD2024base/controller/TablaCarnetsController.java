@@ -58,7 +58,7 @@ public class TablaCarnetsController implements Initializable {
 	private void mostrarCarnets() {
 		sesion = InicioController.sesion;
 		usuario = sesion.getUsuario();
-		List<String> carnets = existdbService.obtenerCarnetsPorParada(paradaService.findByUsuario(usuario).getNombre());
+		List<String> carnets = existdbService.contenidoCarnet(paradaService.findByUsuario(usuario).getNombre());
 
 		TreeItem<String> root = new TreeItem<>("Carnets");
 		root.setExpanded(true);

@@ -1,5 +1,6 @@
 package com.ramon.tarea3AD2024base.repositorios;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,11 +10,9 @@ import org.springframework.stereotype.Repository;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.Resource;
-import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.CollectionManagementService;
 import org.xmldb.api.modules.XMLResource;
-import org.xmldb.api.modules.XPathQueryService;
 
 import com.ramon.tarea3AD2024base.data.ExistdbConnection;
 
@@ -87,41 +86,28 @@ public class ExistdbRepository {
 		return xml;
 	}
 
-	public List<String> obtenerCarnetsPorParada(String parada) {
-		Collection baseColeccion = existdb.getInstance();
+	public List<String> contenidoCarnet(String parada) {
 		List<String> carnets = new ArrayList<>();
-		Collection coleccion = null;
+		
+		Collection baseColeccion = existdb.getInstance();
 
 		try {
 			String ruta = existdb.getUrl() + "/" + parada;
-			coleccion = DatabaseManager.getCollection(ruta, existdb.getUsuario(), existdb.getPassword());
+			Collection coleccion = DatabaseManager.getCollection(ruta, existdb.getUsuario(), existdb.getPassword());
 
 			if (coleccion == null) {
-				return carnets;
+				return null;
 			}
 
-			XPathQueryService xpathService = (XPathQueryService) coleccion.getService("XPathQueryService", "1.0");
+			String[] contenido = coleccion.listResources();
 
-			String consulta = "//carnet";
-			ResourceSet resultado = xpathService.query(consulta);
-
-			long size = resultado.getSize();
-			for (long i = 0; i <= size; i++) {
-
-				Resource resource = resultado.getResource(i);
-
-				if (resource != null) {
-
-					String contenido = (String) resource.getContent();
-					carnets.add(contenido);
-
-				}
+			for (String datos : contenido) {
+				carnets.add(datos);
 			}
 
-		} catch (XMLDBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
+		} catch (Exception e) {
+			System.out.println("Falla aqui");
+		}
 		return carnets;
 	}
 }
