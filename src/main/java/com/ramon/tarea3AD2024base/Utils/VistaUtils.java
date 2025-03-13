@@ -1,11 +1,13 @@
 package com.ramon.tarea3AD2024base.Utils;
 
 import java.io.File;
+import java.io.StringWriter;
 import java.time.LocalDate;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -55,8 +57,8 @@ public class VistaUtils {
 
 		});
 	}
-	
-	public static void ExportarCarnet(Peregrino p) {
+
+	public static String ExportarCarnet(Peregrino p) {
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder constructorDocument;
@@ -158,19 +160,32 @@ public class VistaUtils {
 			}
 			System.out.println("----- Generando el fichero XML");
 			Source fuente = new DOMSource(documento);
-			File fichero = new File("src/main/resources/carnets/"+p.getNombre().replace(" ", "")+p.getApellidos().replace(" ", "") + "_peregrino.xml");
+			File fichero = new File("src/main/resources/carnets/" + p.getNombre().replace(" ", "")
+					+ p.getApellidos().replace(" ", "") + "_peregrino.xml");
 			Result resultado = new StreamResult(fichero);
 			TransformerFactory fabricaTransformador = TransformerFactory.newInstance();
 			Transformer transformador = fabricaTransformador.newTransformer();
-			transformador.transform(fuente, resultado);
+
+			transformador.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+			transformador.setOutputProperty(OutputKeys.METHOD, "xml");
+			transformador.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformador.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+
+			StringWriter escribe = new StringWriter();
+			transformador.transform(new DOMSource(documento), new StreamResult(escribe));
+
+			return escribe.toString();
+
 		} catch (ParserConfigurationException ex) {
 			System.out.println("Error: " + ex.getMessage());
 		} catch (TransformerConfigurationException ex) {
 			System.out.println("Error: " + ex.getMessage());
-		} catch (TransformerException ex) {
-			System.out.println("Error: " + ex.getMessage());
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		return null;
 
 	}
-	
+
 }

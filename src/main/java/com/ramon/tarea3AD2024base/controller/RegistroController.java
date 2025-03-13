@@ -33,6 +33,7 @@ import com.ramon.tarea3AD2024base.modelo.Perfil;
 import com.ramon.tarea3AD2024base.modelo.Sesion;
 import com.ramon.tarea3AD2024base.modelo.Usuario;
 import com.ramon.tarea3AD2024base.modelo.Visita;
+import com.ramon.tarea3AD2024base.services.ExistdbService;
 import com.ramon.tarea3AD2024base.services.ParadaService;
 import com.ramon.tarea3AD2024base.services.PeregrinoService;
 import com.ramon.tarea3AD2024base.services.VisitaService;
@@ -103,6 +104,9 @@ public class RegistroController implements Initializable {
 
 	@Autowired
 	private VisitaService visitaService;
+	
+	@Autowired
+	private ExistdbService existdbService;
 
 	public Sesion sesion;
 
@@ -351,7 +355,9 @@ public class RegistroController implements Initializable {
 
 						peregrino.getParadasVisitadas().add(visita);
 
-						VistaUtils.ExportarCarnet(nuevoPeregrino);
+						String carnetGuardar = VistaUtils.ExportarCarnet(nuevoPeregrino);
+						
+						existdbService.guardarCarnetsPorParada(parada.getNombre(), peregrino.getNombre()+" "+peregrino.getApellidos() ,carnetGuardar);
 
 						guardarAlerta(peregrino);
 

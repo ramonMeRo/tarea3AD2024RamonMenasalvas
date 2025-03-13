@@ -17,6 +17,7 @@ import com.ramon.tarea3AD2024base.modelo.Perfil;
 import com.ramon.tarea3AD2024base.modelo.Servicio;
 import com.ramon.tarea3AD2024base.modelo.Usuario;
 import com.ramon.tarea3AD2024base.services.Db4oService;
+import com.ramon.tarea3AD2024base.services.ExistdbService;
 import com.ramon.tarea3AD2024base.services.ParadaService;
 import com.ramon.tarea3AD2024base.services.UsuarioService;
 import com.ramon.tarea3AD2024base.view.FxmlView;
@@ -152,6 +153,8 @@ public class AdministradorController implements Initializable {
 	private ParadaService paradaService;
 	@Autowired
 	private Db4oService db4oService;
+	@Autowired
+	private ExistdbService existdbService;
 
 	private ObservableList<Parada> paradaList = FXCollections.observableArrayList();
 
@@ -385,8 +388,10 @@ public class AdministradorController implements Initializable {
 					Usuario newUser = userService.save(user);
 					parada.setUsuario(user);
 
-					@SuppressWarnings("unused")
+					
 					Parada nuevaParada = paradaService.save(parada);
+					
+					existdbService.crearColeccion(nuevaParada.getNombre());
 
 					guardarAlerta(newUser);
 				}
