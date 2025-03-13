@@ -1,5 +1,7 @@
 package com.ramon.tarea3AD2024base.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,5 +19,9 @@ public class ExistdbService {
 
 	public void guardarCarnetsPorParada(String parada, String fichero, String contenido) {
 		existdb.guardarCarnetsPorParada(parada, fichero, contenido);
+	}
+	
+	public List<String> obtenerCarnetsPorParada(String parada){
+		return existdb.obtenerCarnetsPorParada(parada);
 	}
 }

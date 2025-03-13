@@ -57,6 +57,16 @@ public enum FxmlView {
 		public String getFxmlFile() {
 			return "/fxml/Registro.fxml";
 		}
+	},
+	CARNETS{
+		@Override
+		public String getTitle() {
+			return getStringFromResourceBundle("tabla.title");
+		}
+		@Override
+		public String getFxmlFile() {
+			return "/fxml/TablaCarnets.fxml";
+		}
 	};
 	
 

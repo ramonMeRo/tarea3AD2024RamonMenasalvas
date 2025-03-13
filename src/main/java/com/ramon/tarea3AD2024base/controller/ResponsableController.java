@@ -270,6 +270,11 @@ public class ResponsableController implements Initializable {
 		columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
 
 	}
+	
+	@FXML
+	private void verCarnets() {
+		stagemanager.switchScene(FxmlView.CARNETS);
+	}
 
 	private void setColumnProperties() {
 		colIdServicio.setCellValueFactory(new PropertyValueFactory<>("id"));

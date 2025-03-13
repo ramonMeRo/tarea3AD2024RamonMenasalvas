@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane onKeyPressed="#ayudaF1" prefHeight="644.0" prefWidth="958.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.ResponsableController">
+<BorderPane onKeyPressed="#ayudaF1" prefHeight="475.0" prefWidth="958.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ramon.tarea3AD2024base.controller.ResponsableController">
    <left>
       <VBox prefHeight="575.0" prefWidth="292.0" spacing="10.0" styleClass="background" stylesheets="@../styles/Styles.css" BorderPane.alignment="CENTER">
          <children>
@@ -308,6 +308,14 @@
                   <Insets left="5.0" right="5.0" />
                </VBox.margin>
             </TableView>
+            <Button onAction="#verCarnets" prefHeight="42.0" prefWidth="95.0" styleClass="btnGreen" text="Carntes" textFill="#2d4491">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <VBox.margin>
+                  <Insets right="140.0" />
+               </VBox.margin>
+            </Button>
          </children>
       </VBox>
    </center>
