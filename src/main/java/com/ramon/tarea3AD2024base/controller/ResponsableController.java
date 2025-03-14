@@ -270,7 +270,7 @@ public class ResponsableController implements Initializable {
 		columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
 
 	}
-	
+
 	@FXML
 	private void verCarnets() {
 		stagemanager.switchScene(FxmlView.CARNETS);
@@ -333,20 +333,29 @@ public class ResponsableController implements Initializable {
 		Parada parada = paradaService.findByUsuario(usuario);
 		EstanciaTabla estanciaTabla = new EstanciaTabla();
 		listaFxEstancia.clear();
-		if (fechaInicio.getValue().isBefore(fechaFin.getValue())) {
+		if (fechaInicio.getValue().isBefore(fechaFin.getValue())
+				|| fechaInicio.getValue().equals(fechaFin.getValue())) {
 			Set<Estancia> listaEstancias = parada.getListaEstancias();
 			for (Estancia estancia : listaEstancias) {
-				estanciaTabla = new EstanciaTabla();
-				estanciaTabla.setId(estancia.getId());
-				estanciaTabla.setNombreParada(estancia.getParada().getNombre());
-				estanciaTabla.setNombrePeregrino(
-						estancia.getPeregrino().getNombre() + " " + estancia.getPeregrino().getApellidos());
-				estanciaTabla.setVip(estancia.isVip());
-				estanciaTabla.setFecha(estancia.getFecha());
 
-				System.out.println(estanciaTabla.toString());
+				if (estancia.getFecha().isAfter(fechaInicio.getValue())
+						|| estancia.getFecha().equals(fechaInicio.getValue())
+								&& estancia.getFecha().isBefore(fechaFin.getValue())
+						|| estancia.getFecha().equals(fechaFin.getValue())) {
+					
+					estanciaTabla = new EstanciaTabla();
+					estanciaTabla.setId(estancia.getId());
+					estanciaTabla.setNombreParada(estancia.getParada().getNombre());
+					estanciaTabla.setNombrePeregrino(
+							estancia.getPeregrino().getNombre() + " " + estancia.getPeregrino().getApellidos());
+					estanciaTabla.setVip(estancia.isVip());
+					estanciaTabla.setFecha(estancia.getFecha());
 
-				listaFxEstancia.add(estanciaTabla);
+					System.out.println(estanciaTabla.toString());
+
+					listaFxEstancia.add(estanciaTabla);
+				}
+				
 			}
 			tablaEstancias.setItems(listaFxEstancia);
 		}
@@ -387,7 +396,8 @@ public class ResponsableController implements Initializable {
 			servicioSi.setDisable(false);
 			servicioNo.setDisable(false);
 
-		} if (servicioSi.isSelected() && estanciaSi.isSelected()) {
+		}
+		if (servicioSi.isSelected() && estanciaSi.isSelected()) {
 			efectivo.setDisable(false);
 			tarjeta.setDisable(false);
 			bizum.setDisable(false);
@@ -502,9 +512,8 @@ public class ResponsableController implements Initializable {
 			if (pc.getServicios().contains(db4oService.findByServicioNombre("ENVIO A CASA").getId())) {
 				EnvioACasa envio = new EnvioACasa();
 
-				if (valida("Peso", getTxtPeso(), "^(0|[1-9]\\d*)([.]\\d)?$")
-						&& valida("Alto", getTxtAlto(), "^[0-9]+$") && valida("Ancho", getTxtAncho(), "^[0-9]+$")
-						&& valida("Largo", getTxtLargo(), "^[0-9]+$")
+				if (valida("Peso", getTxtPeso(), "^(0|[1-9]\\d*)([.]\\d)?$") && valida("Alto", getTxtAlto(), "^[0-9]+$")
+						&& valida("Ancho", getTxtAncho(), "^[0-9]+$") && valida("Largo", getTxtLargo(), "^[0-9]+$")
 						&& valida("Calle", getTxtCalle(), "^[a-zA-Z0-9\\s]+$")
 						&& valida("Localidad", getTxtLocalidad(), "^[a-zA-Z\\s]+$")) {
 
@@ -726,7 +735,7 @@ public class ResponsableController implements Initializable {
 			Carnet actualizaCarnet = carnetService.update(carnet);
 		}
 		servicioSelect.clear();
-		
+
 		txtExtra.clear();
 		txtAlto.clear();
 		txtAncho.clear();
