@@ -18,6 +18,7 @@ import com.ramon.tarea3AD2024base.modelo.Servicio;
 import com.ramon.tarea3AD2024base.modelo.Usuario;
 import com.ramon.tarea3AD2024base.services.Db4oService;
 import com.ramon.tarea3AD2024base.services.ExistdbService;
+import com.ramon.tarea3AD2024base.services.MongodbService;
 import com.ramon.tarea3AD2024base.services.ParadaService;
 import com.ramon.tarea3AD2024base.services.UsuarioService;
 import com.ramon.tarea3AD2024base.view.FxmlView;
@@ -155,6 +156,8 @@ public class AdministradorController implements Initializable {
 	private Db4oService db4oService;
 	@Autowired
 	private ExistdbService existdbService;
+	@Autowired
+	private MongodbService mongodbService;
 
 	private ObservableList<Parada> paradaList = FXCollections.observableArrayList();
 
@@ -498,6 +501,11 @@ public class AdministradorController implements Initializable {
 		limpiarCamposServicio();
 		
 		loadServicioDetails();
+	}
+	
+	@FXML
+	private void generarCopia() {
+		mongodbService.generarBackupCarnets();
 	}
 
 	@FXML

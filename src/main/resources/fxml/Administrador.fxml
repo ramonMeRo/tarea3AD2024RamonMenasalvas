@@ -184,6 +184,11 @@
                   <Insets right="5.0" />
                </VBox.margin>
             </Button>
+            <Button mnemonicParsing="false" onAction="#generarCopia" prefHeight="40.0" prefWidth="150.0" styleClass="btnGreen" text="Generar copia" textFill="#2d4491">
+               <VBox.margin>
+                  <Insets right="120.0" top="15.0" />
+               </VBox.margin>
+            </Button>
 			</children>
 		</VBox>
 	</center>
