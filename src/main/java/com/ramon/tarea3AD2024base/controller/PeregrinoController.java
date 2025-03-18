@@ -66,6 +66,9 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 /**
+ * Controlador de la ventana del Peregrino que tiene funciones para la
+ * exportación de su carnet y la modificación de sus datos.
+ * 
  * @author Ramon
  * @since 01-01-2025
  */
@@ -113,6 +116,12 @@ public class PeregrinoController implements Initializable {
 
 	public Peregrino peregrino;
 
+	/**
+	 * Muestra una alerta de confirmación para permitir la edición de los datos del
+	 * peregrino. Si el usuario confirma la acción, los campos se habilitan y se
+	 * resaltan visualmente. Si el usuario cancela, los datos se restauran a su
+	 * estado original y los campos permanecen deshabilitados.
+	 */
 	@FXML
 	private void activarEdicion() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -158,6 +167,9 @@ public class PeregrinoController implements Initializable {
 		}
 	}
 
+	/**
+	 * Restaura los datos del peregrino a su estado original antes de la edición.
+	 */
 	@FXML
 	private void reiniciar() {
 		nombre.setText(peregrino.getNombre());
@@ -168,6 +180,10 @@ public class PeregrinoController implements Initializable {
 		nacionalidad.setValue(peregrino.getNacionalidad());
 	}
 
+	/**
+	 * Valida y actualiza los datos del peregrino si cumplen con los requisitos.
+	 * Muestra una alerta informando del éxito de la actualización.
+	 */
 	@FXML
 	public void actualizarPeregrino() {
 		if (valida("Nombre", nombre.getText(), "^[a-zA-Z\\s]+$")
@@ -189,6 +205,16 @@ public class PeregrinoController implements Initializable {
 		}
 	}
 
+	/**
+	 * Exporta el carnet del peregrino actual.
+	 * 
+	 * Este método muestra una alerta de confirmación preguntando si el usuario
+	 * desea exportar su carnet. Si el usuario acepta, se llama al método
+	 * {@code VistaUtils.ExportarCarnet(peregrino)} para exportar el carnet y luego
+	 * se genera un informe con {@code generarInforme()}.
+	 * 
+	 * Si el usuario cancela la exportación, se muestra un mensaje de cancelación.
+	 */
 	@FXML
 	private void exportarCarnetPeregrino() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -215,17 +241,39 @@ public class PeregrinoController implements Initializable {
 
 	}
 
+	/**
+	 * Redirige a la pantalla de inicio.
+	 */
 	@FXML
 	private void volver() {
 		stagemanager.switchScene(FxmlView.INICIO);
 	}
 
+	/**
+	 * Llena el comboBox de nacionalidades con la lista de países extraída del
+	 * archivo XML.
+	 * 
+	 * Este método obtiene la lista de países a través del método
+	 * {@code leerNaciones()} y la añade al ComboBox {@code nacionalidad}, limpiando
+	 * previamente los datos existentes.
+	 */
 	private void llenarNaciones() {
 		List<String> naciones = leerNaciones();
 		nacionalidad.getItems().clear();
 		nacionalidad.getItems().addAll(naciones);
 	}
 
+	/**
+	 * Lee un archivo XML que contiene una lista de países y devuelve sus nombres en
+	 * una lista.
+	 * 
+	 * El archivo XML se encuentra en la ruta
+	 * {@code src/main/resources/readOnly/paises.xml}. Se utiliza un
+	 * {@code DocumentBuilder} para parsear el XML y extraer los nombres de los
+	 * países.
+	 *
+	 * @return Lista de nombres de países extraídos del archivo XML.
+	 */
 	private List<String> leerNaciones() {
 		File naciones = new File("src/main/resources/readOnly/paises.xml");
 		List<String> listNaciones = new ArrayList<>();
@@ -263,6 +311,17 @@ public class PeregrinoController implements Initializable {
 		return listNaciones;
 	}
 
+	/**
+	 * Valida si un valor dado cumple con un patrón especificado.
+	 *
+	 * Se utiliza una expresión regular para validar el formato del valor. Si el
+	 * valor no es válido, se muestra una alerta indicando el problema.
+	 *
+	 * @param campo  El nombre del campo que se está validando.
+	 * @param valor  El valor ingresado que debe ser validado.
+	 * @param patron La expresión regular que define el formato válido del campo.
+	 * @return true si el valor cumple con el patrón, false en caso contrario.
+	 */
 	private boolean valida(String campo, String valor, String patron) {
 		if (!valor.isEmpty()) {
 			Pattern p = Pattern.compile(patron);
@@ -275,10 +334,13 @@ public class PeregrinoController implements Initializable {
 			}
 		} else {
 			validacionAlerta(campo, true);
-			return false; 
+			return false;
 		}
 	}
 
+	/**
+	 * Muestra la ventana de ayuda con el manual de usuario.
+	 */
 	@FXML
 	private void ayuda() {
 		try {
@@ -303,16 +365,17 @@ public class PeregrinoController implements Initializable {
 		}
 	}
 
-	@SuppressWarnings("unused")
-	private boolean validacionVacia(String campo, boolean vacio) {
-		if (!vacio) {
-			return true;
-		} else {
-			validacionAlerta(campo, true);
-			return false;
-		}
-	}
-
+	/**
+	 * Muestra una alerta de validación para indicar que un campo está vacío o tiene
+	 * un valor inválido.
+	 * 
+	 * Si el campo está vacío, se muestra un mensaje indicando que debe completarse.
+	 * Si el campo tiene un valor incorrecto, se muestra un mensaje solicitando un
+	 * valor válido.
+	 *
+	 * @param campo El nombre del campo que se está validando.
+	 * @param vacio true si el campo está vacío, false si tiene un valor incorrecto.
+	 */
 	private void validacionAlerta(String campo, boolean vacio) {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Error de Validación");
@@ -324,6 +387,20 @@ public class PeregrinoController implements Initializable {
 
 		alert.showAndWait();
 	}
+
+	/**
+	 * Inicializa el controlador y carga los datos del peregrino en la interfaz de
+	 * usuario.
+	 * 
+	 * Se recupera la sesión del usuario desde el controlador de inicio, se cargan
+	 * los datos del peregrino asociado y se rellenan los campos de la interfaz con
+	 * la información obtenida. También se configuran las columnas de la tabla de
+	 * estancias y se cargan los detalles de estancias del peregrino.
+	 *
+	 * @param location  La ubicación utilizada para resolver rutas relativas de
+	 *                  objetos raíz.
+	 * @param resources Los recursos utilizados para localizar el objeto raíz.
+	 */
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -343,29 +420,59 @@ public class PeregrinoController implements Initializable {
 
 		setColumnProperties();
 
-		loadUserDetails();
+		loadEstanciaDetails();
 
 	}
 
+	/**
+	 * Configura las propiedades de las columnas en la tabla de estancias.
+	 * 
+	 * Se establecen los valores de las columnas para que muestren la información
+	 * correspondiente de cada estancia, incluyendo el identificador, la fecha y el
+	 * estado VIP.
+	 */
 	private void setColumnProperties() {
 		idEstancia.setCellValueFactory(new PropertyValueFactory<>("id"));
 		fecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
 		vip.setCellValueFactory(new PropertyValueFactory<>("vip"));
 	}
 
-	private void loadUserDetails() {
+	/**
+	 * Carga y muestra los detalles de las estancias del peregrino en la tabla de la
+	 * interfaz.
+	 *
+	 * Se limpia la lista de estancias, se obtienen todas las estancias asociadas al
+	 * peregrino actual y se añaden a la tabla de la interfaz gráfica.
+	 */
+	private void loadEstanciaDetails() {
 		estanciaList.clear();
 		estanciaList.addAll(estanciaService.findByPeregrino(peregrino));
 
 		estancias.setItems(estanciaList);
 	}
 
+	/**
+	 * Maneja la pulsación de la tecla F1 para mostrar la ayuda.
+	 * 
+	 * @param event Evento del teclado.
+	 */
 	public void ayudaF1(KeyEvent event) {
 		if (event.getCode().toString().equals("F1")) {
 			ayuda();
 		}
 	}
 
+	/**
+	 * Genera un informe en formato PDF para un carnet de peregrino utilizando
+	 * JasperReports.
+	 * 
+	 * Se obtiene la plantilla del reporte, se establecen los parámetros necesarios
+	 * y se genera un archivo PDF con la información del peregrino. Luego, se
+	 * intenta abrir el archivo generado.
+	 * 
+	 * @throws JRException  Si ocurre un error durante la generación del reporte.
+	 * @throws SQLException Si hay un problema al conectar con la base de datos.
+	 */
 	public void generarInforme() {
 		Connection conexion = null;
 		try {
@@ -406,6 +513,14 @@ public class PeregrinoController implements Initializable {
 		}
 	}
 
+	/**
+	 * Abre un archivo PDF utilizando el visor de PDF predeterminado del sistema
+	 * operativo.
+	 * 
+	 * Si el archivo no existe, se muestra un mensaje de error en la consola.
+	 *
+	 * @param rutaSalida La ruta del archivo PDF que se desea abrir.
+	 */
 	public void abrirPDF(String rutaSalida) {
 		File archivoPDF = new File(rutaSalida);
 		if (!archivoPDF.exists()) {
@@ -420,6 +535,15 @@ public class PeregrinoController implements Initializable {
 		}
 	}
 
+	/**
+	 * Obtiene una conexión con la base de datos MySQL.
+	 * 
+	 * Se configura un `DriverManagerDataSource` con las credenciales y la URL de la
+	 * base de datos.
+	 *
+	 * @return Un objeto `DataSource` configurado para la conexión con la base de
+	 *         datos.
+	 */
 	private DataSource getDataSource() {
 		DriverManagerDataSource ds = new DriverManagerDataSource();
 		ds.setUrl("jdbc:mysql://localhost:3306/bdtarea3adramonmenasalvas?useSSL=false");
@@ -429,10 +553,21 @@ public class PeregrinoController implements Initializable {
 		return ds;
 	}
 
+	/**
+	 * Obtiene el DatePicker que representa la fecha de nacimiento del peregrino.
+	 *
+	 * @return Un objeto {@link DatePicker} con la fecha de nacimiento seleccionada.
+	 */
 	public DatePicker getFechaNac() {
 		return fechaNac;
 	}
 
+	/**
+	 * Establece el DatePicker con la fecha de nacimiento del peregrino.
+	 *
+	 * @param fechaNac Un objeto {@link DatePicker} que representa la fecha de
+	 *                 nacimiento.
+	 */
 	public void setFechaNac(DatePicker fechaNac) {
 		this.fechaNac = fechaNac;
 	}

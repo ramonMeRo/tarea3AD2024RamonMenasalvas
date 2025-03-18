@@ -48,6 +48,10 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 /**
+ * Controlador de la ventana del responsable de una parada que tiene funciones
+ * para la administración de su parada, sellado del carnet de peregrinos y la
+ * contratacion de servicios por parte de estos
+ * 
  * @author Ramon
  * @since 01-01-2025
  */
@@ -115,11 +119,39 @@ public class ResponsableController implements Initializable {
 	@Autowired
 	private VisitaService visitaService;
 
+	/**
+	 * Vuelve a la pantalla de inicio de la aplicación.
+	 * 
+	 * @see StageManager#switchScene(FxmlView)
+	 */
 	@FXML
 	private void volver() {
 		stagemanager.switchScene(FxmlView.INICIO);
 	}
 
+	/**
+	 * Exporta la información de estancias registradas en una parada específica.
+	 * 
+	 * Este método obtiene la lista de estancias asociadas a la parada gestionada
+	 * por el usuario actual. Si la fecha de inicio es anterior a la fecha de fin,
+	 * recorre todas las estancias y las almacena en una lista `listaFxEstancia`
+	 * para su visualización en la interfaz gráfica.
+	 * 
+	 * 
+	 * Cada estancia se transforma en un objeto `EstanciaTabla`, el cual contiene:
+	 * 
+	 * ID de la estancia Nombre de la parada Nombre completo del peregrino Si la
+	 * estancia fue VIP Fecha de la estancia
+	 * 
+	 * 
+	 * Luego, la lista `listaFxEstancia` se asigna a `tablaEstancias` para
+	 * actualizar la interfaz gráfica.
+	 * 
+	 * @see ParadaService#findByUsuario(Usuario)
+	 * @see Parada#getListaEstancias()
+	 * @see EstanciaTabla
+	 * @see javafx.scene.control.TableView#setItems(javafx.collections.ObservableList)
+	 */
 	@FXML
 	private void exportarParada() {
 
@@ -145,12 +177,20 @@ public class ResponsableController implements Initializable {
 		}
 	}
 
+	/**
+	 * Maneja la pulsación de la tecla F1 para mostrar la ayuda.
+	 * 
+	 * @param event Evento del teclado.
+	 */
 	public void ayudaF1(KeyEvent event) {
 		if (event.getCode().toString().equals("F1")) {
 			ayuda();
 		}
 	}
 
+	/**
+	 * Muestra la ventana de ayuda con el manual de usuario.
+	 */
 	@FXML
 	private void ayuda() {
 		try {
@@ -175,6 +215,23 @@ public class ResponsableController implements Initializable {
 		}
 	}
 
+	/**
+	 * Gestiona la disponibilidad de las opciones VIP en función de la selección de
+	 * estancia.
+	 * 
+	 * Si el usuario selecciona que no se quedará en la parada (estanciaNo),
+	 * entonces las opciones de VIP (vipSi y vipNo) se deshabilitan, ya que solo
+	 * pueden aplicarse cuando hay una estancia. En caso contrario, si el usuario
+	 * elige quedarse (estanciaSi), las opciones de VIP se habilitan nuevamente.
+	 * 
+	 * Este método se activa cuando el usuario interactúa con los botones de radio
+	 * para seleccionar si se quedará en la parada.
+	 * 
+	 * @see #estanciaNo
+	 * @see #estanciaSi
+	 * @see #vipSi
+	 * @see #vipNo
+	 */
 	@FXML
 	private void gestionarEstancia() {
 		if (estanciaNo.isSelected()) {
@@ -186,6 +243,30 @@ public class ResponsableController implements Initializable {
 		}
 	}
 
+	/**
+	 * Realiza el proceso de sellado del carnet de un peregrino en la parada actual.
+	 * 
+	 * Este método verifica que el peregrino no haya sellado su carnet en la fecha
+	 * actual y, dependiendo de si ha realizado una estancia y si ha sido VIP,
+	 * actualiza los registros en la base de datos, incluyendo las entidades
+	 * Estancia, Visita y Carnet.
+	 * 
+	 * Si el peregrino ya selló en el día actual, se muestra un mensaje de error.
+	 * 
+	 * Si se ha seleccionado estancia y VIP, se registra la estancia como VIP y se
+	 * actualiza la distancia y visitas VIP del carnet.
+	 * 
+	 * Si solo se ha seleccionado estancia, se registra sin VIP y se actualiza la
+	 * distancia del carnet.
+	 * 
+	 * Si no se selecciona estancia, solo se registra la visita y se actualiza la
+	 * distancia del carnet.
+	 * 
+	 * Si el proceso se completa correctamente, se almacenan los cambios en la base
+	 * de datos.
+	 *
+	 * @throws NullPointerException si no se selecciona un peregrino.
+	 */
 	@FXML
 	private void sellarCarnet() {
 
@@ -290,12 +371,22 @@ public class ResponsableController implements Initializable {
 		}
 	}
 
+	/**
+	 * Llena el ComboBox con la lista de peregrinos disponibles en la base de datos.
+	 * Se obtiene la lista de peregrinos desde el servicio y se actualiza la
+	 * interfaz.
+	 */
 	private void llenarChoiceConPeregrinos() {
 		List<Peregrino> peregrinos = peregrinoService.findAll();
 		choicePeregrinos.getItems().clear();
 		choicePeregrinos.getItems().addAll(peregrinos);
 	}
 
+	/**
+	 * Llena los campos de texto con los datos del peregrino seleccionado en el
+	 * ComboBox. Al seleccionar un peregrino, sus datos se reflejan en los campos de
+	 * la interfaz.
+	 */
 	@FXML
 	private void llenarCamposPeregrino() {
 		Peregrino p = choicePeregrinos.getValue();
@@ -304,6 +395,15 @@ public class ResponsableController implements Initializable {
 		fechaNacSellar.setValue(p.getFechaNac());
 	}
 
+	/**
+	 * Inicializa la ventana al cargar la interfaz de usuario.
+	 * 
+	 * @param location  La ubicación utilizada para resolver rutas relativas para el
+	 *                  objeto raíz, o null si no se proporciona.
+	 * 
+	 * @param resources Los recursos utilizados para localizar la interfaz de
+	 *                  usuario, o null si no se proporciona.
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
@@ -342,106 +442,241 @@ public class ResponsableController implements Initializable {
 		columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
 	}
 
+	/**
+	 * Obtiene el ComboBox de peregrinos disponibles.
+	 * 
+	 * @return El ComboBox que contiene los peregrinos.
+	 */
 	public ComboBox<Peregrino> getChoicePeregrinos() {
 		return choicePeregrinos;
 	}
 
+	/**
+	 * Establece el ComboBox de peregrinos.
+	 * 
+	 * @param choicePeregrinos El ComboBox a establecer.
+	 */
 	public void setChoicePeregrinos(ComboBox<Peregrino> choicePeregrinos) {
 		this.choicePeregrinos = choicePeregrinos;
 	}
 
+	/**
+	 * Obtiene el texto del campo de nombre del peregrino a sellar.
+	 * 
+	 * @return El nombre del peregrino a sellar.
+	 */
 	public String getNombreSellar() {
 		return nombreSellar.getText();
 	}
 
+	/**
+	 * Establece el campo de texto del nombre del peregrino a sellar.
+	 * 
+	 * @param nombreSellar El campo de texto a establecer.
+	 */
 	public void setNombreSellar(TextField nombreSellar) {
 		this.nombreSellar = nombreSellar;
 	}
 
+	/**
+	 * Obtiene el texto del campo de apellidos del peregrino a sellar.
+	 * 
+	 * @return Los apellidos del peregrino a sellar.
+	 */
 	public String getApellidoSellar() {
 		return apellidosSellar.getText();
 	}
 
+	/**
+	 * Establece el campo de texto de los apellidos del peregrino a sellar.
+	 * 
+	 * @param apellidoSellar El campo de texto a establecer.
+	 */
 	public void setApellidoSellar(TextField apellidoSellar) {
 		this.apellidosSellar = apellidoSellar;
 	}
 
+	/**
+	 * Obtiene la fecha de nacimiento del peregrino a sellar.
+	 * 
+	 * @return Un DatePicker con la fecha de nacimiento.
+	 */
 	public DatePicker getFechaNacSellar() {
 		return fechaNacSellar;
 	}
 
+	/**
+	 * Establece la fecha de nacimiento del peregrino a sellar.
+	 * 
+	 * @param fechaNacSellar El DatePicker a establecer.
+	 */
 	public void setFechaNacSellar(DatePicker fechaNacSellar) {
 		this.fechaNacSellar = fechaNacSellar;
 	}
 
+	/**
+	 * Obtiene el RadioButton que indica si el peregrino ha realizado una estancia.
+	 * 
+	 * @return El RadioButton correspondiente.
+	 */
 	public RadioButton getEstanciaSi() {
 		return estanciaSi;
 	}
 
+	/**
+	 * Establece el RadioButton que indica si el peregrino ha realizado una
+	 * estancia.
+	 * 
+	 * @param estanciaSi El RadioButton a establecer.
+	 */
 	public void setEstanciaSi(RadioButton estanciaSi) {
 		this.estanciaSi = estanciaSi;
 	}
 
+	/**
+	 * Obtiene el RadioButton que indica si el peregrino no ha realizado una
+	 * estancia.
+	 * 
+	 * @return El RadioButton correspondiente.
+	 */
 	public RadioButton getEstanciaNo() {
 		return estanciaNo;
 	}
 
+	/**
+	 * Establece el RadioButton que indica si el peregrino no ha realizado una
+	 * estancia.
+	 * 
+	 * @param estanciaNo El RadioButton a establecer.
+	 */
 	public void setEstanciaNo(RadioButton estanciaNo) {
 		this.estanciaNo = estanciaNo;
 	}
 
+	/**
+	 * Obtiene el RadioButton que indica si el peregrino tiene categoría VIP.
+	 * 
+	 * @return El RadioButton correspondiente.
+	 */
 	public RadioButton getVipSi() {
 		return vipSi;
 	}
 
+	/**
+	 * Establece el RadioButton que indica si el peregrino tiene categoría VIP.
+	 * 
+	 * @param vipSi El RadioButton a establecer.
+	 */
 	public void setVipSi(RadioButton vipSi) {
 		this.vipSi = vipSi;
 	}
 
+	/**
+	 * Obtiene el RadioButton que indica si el peregrino no tiene categoría VIP.
+	 * 
+	 * @return El RadioButton correspondiente.
+	 */
 	public RadioButton getVipNo() {
 		return vipNo;
 	}
 
+	/**
+	 * Establece el RadioButton que indica si el peregrino no tiene categoría VIP.
+	 * 
+	 * @param vipNo El RadioButton a establecer.
+	 */
 	public void setVipNo(RadioButton vipNo) {
 		this.vipNo = vipNo;
 	}
 
+	/**
+	 * Obtiene el ToggleGroup para seleccionar si el peregrino realizó una estancia.
+	 * 
+	 * @return El ToggleGroup correspondiente.
+	 */
 	public ToggleGroup getAfirmacionEstancia() {
 		return afirmacionEstancia;
 	}
 
+	/**
+	 * Establece el ToggleGroup para seleccionar si el peregrino realizó una
+	 * estancia.
+	 * 
+	 * @param afirmacionEstancia El ToggleGroup a establecer.
+	 */
 	public void setAfirmacionEstancia(ToggleGroup afirmacionEstancia) {
 		this.afirmacionEstancia = afirmacionEstancia;
 	}
 
+	/**
+	 * Obtiene el ToggleGroup para seleccionar si el peregrino tiene categoría VIP.
+	 * 
+	 * @return El ToggleGroup correspondiente.
+	 */
 	public ToggleGroup getAfirmacionVip() {
 		return afirmacionVip;
 	}
 
+	/**
+	 * Establece el ToggleGroup para seleccionar si el peregrino tiene categoría
+	 * VIP.
+	 * 
+	 * @param afirmacionVip El ToggleGroup a establecer.
+	 */
 	public void setAfirmacionVip(ToggleGroup afirmacionVip) {
 		this.afirmacionVip = afirmacionVip;
 	}
 
+	/**
+	 * Obtiene la tabla de estancias registradas.
+	 * 
+	 * @return La TableView de estancias.
+	 */
 	public TableView<EstanciaTabla> getTablaEstancias() {
 		return tablaEstancias;
 	}
 
+	/**
+	 * Establece la tabla de estancias registradas.
+	 * 
+	 * @param tablaEstancias La TableView a establecer.
+	 */
 	public void setTablaPeregrinos(TableView<EstanciaTabla> tablaEstancias) {
 		this.tablaEstancias = tablaEstancias;
 	}
 
+	/**
+	 * Obtiene el administrador de ventanas de la aplicación.
+	 * 
+	 * @return El StageManager actual.
+	 */
 	public StageManager getStagemanager() {
 		return stagemanager;
 	}
 
+	/**
+	 * Establece el administrador de ventanas de la aplicación.
+	 * 
+	 * @param stagemanager El StageManager a establecer.
+	 */
 	public void setStagemanager(StageManager stagemanager) {
 		this.stagemanager = stagemanager;
 	}
 
+	/**
+	 * Obtiene el servicio de gestión de peregrinos.
+	 * 
+	 * @return El servicio de PeregrinoService.
+	 */
 	public PeregrinoService getPeregrinoService() {
 		return peregrinoService;
 	}
 
+	/**
+	 * Establece el servicio de gestión de peregrinos.
+	 * 
+	 * @param peregrinoService El PeregrinoService a establecer.
+	 */
 	public void setPeregrinoService(PeregrinoService peregrinoService) {
 		this.peregrinoService = peregrinoService;
 	}

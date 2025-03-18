@@ -56,6 +56,9 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 /**
+ * Controlador de la ventana del Registro que tiene funciones para el registro
+ * de un usuario peregrino.
+ * 
  * @author Ramon
  * @since 01-01-2025
  */
@@ -109,12 +112,23 @@ public class RegistroController implements Initializable {
 	@Autowired
 	public VisitaService visitaService;
 
-	private String contra="";
-	
-	private String contra1="";
-	
+	private String contra = "";
+
+	private String contra1 = "";
+
 	public Sesion sesion;
 
+	/**
+	 * Inicializa la interfaz gráfica de Registro al cargar la vista. Configura los
+	 * comportamientos de los campos de contraseña, los selectores de paradas y
+	 * nacionalidades.
+	 * 
+	 * @param location  La ubicación utilizada para resolver rutas relativas a
+	 *                  recursos de la raíz del objeto.
+	 * 
+	 * @param resources Los recursos utilizados para la localización de la interfaz
+	 *                  de usuario.
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
@@ -133,7 +147,7 @@ public class RegistroController implements Initializable {
 				passwordVisible1.setText(password.getText());
 				passwordVisible1.setVisible(true);
 				password.setVisible(false);
-			
+
 			} else {
 
 				btnVisible1.setImage(iconoCerrado);
@@ -192,12 +206,20 @@ public class RegistroController implements Initializable {
 
 	}
 
+	/**
+	 * Maneja la pulsación de la tecla F1 para mostrar la ayuda.
+	 * 
+	 * @param event Evento del teclado.
+	 */
 	public void ayudaF1(KeyEvent event) {
 		if (event.getCode().toString().equals("F1")) {
 			ayuda();
 		}
 	}
 
+	/**
+	 * Muestra la ventana de ayuda con el manual de usuario.
+	 */
 	@FXML
 	private void ayuda() {
 		try {
@@ -222,6 +244,10 @@ public class RegistroController implements Initializable {
 		}
 	}
 
+	/**
+	 * Muestra una alerta de confirmación para registrar un peregrino. Si el usuario
+	 * acepta, llama al método registrarPeregrino().
+	 */
 	@FXML
 	private void confirmar() {
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -235,22 +261,37 @@ public class RegistroController implements Initializable {
 		}
 	}
 
+	/**
+	 * Cambia la escena actual a la pantalla de inicio.
+	 */
 	@FXML
 	private void volver() {
 		stageManager.switchScene(FxmlView.INICIO);
 	}
 
+	/**
+	 * Cierra la aplicación invocando el método de utilidad VistaUtils.
+	 */
 	@FXML
 	private void salir() {
 		VistaUtils.Salir();
 	}
 
+	/**
+	 * Llena el ComboBox de nacionalidades con los valores obtenidos del archivo XML
+	 * de países.
+	 */
 	private void llenarChoiceConNaciones() {
 		List<String> naciones = leerNaciones();
 		choiceNacionalidad.getItems().clear();
 		choiceNacionalidad.getItems().addAll(naciones);
 	}
 
+	/**
+	 * Llena el ComboBox de paradas con los valores obtenidos de la base de datos.
+	 * Si no hay paradas disponibles, muestra una alerta de error y redirige a la
+	 * pantalla de inicio.
+	 */
 	private void llenarChoiceConParadas() {
 		List<Parada> paradas = paradaService.findAll();
 		if (paradas.isEmpty()) {
@@ -266,6 +307,12 @@ public class RegistroController implements Initializable {
 		}
 	}
 
+	/**
+	 * Lee la lista de países desde un archivo XML y la devuelve en forma de lista
+	 * de Strings.
+	 *
+	 * @return Una lista con los nombres de los países extraídos del archivo XML.
+	 */
 	private List<String> leerNaciones() {
 		File naciones = new File("src/main/resources/readOnly/paises.xml");
 		List<String> listNaciones = new ArrayList<>();
@@ -303,6 +350,14 @@ public class RegistroController implements Initializable {
 		return listNaciones;
 	}
 
+	/**
+	 * Registra un nuevo peregrino en el sistema. Valida los datos ingresados,
+	 * verifica que los campos no estén vacíos y que la información cumpla con los
+	 * formatos requeridos. Si las validaciones son exitosas, se crea un usuario, un
+	 * peregrino, un carnet y se guarda una visita inicial en la base de datos.
+	 * Finalmente, se exporta el carnet del peregrino y se muestra una alerta de
+	 * éxito. En caso de error, se muestra una alerta informando el fallo.
+	 */
 	@FXML
 	public void registrarPeregrino() {
 		if (valida("Nombre de Usuario", getUsuario(), "^[a-zA-Z0-9]+$")
@@ -380,6 +435,12 @@ public class RegistroController implements Initializable {
 		}
 	}
 
+	/**
+	 * Muestra una alerta informando que el peregrino ha sido registrado
+	 * exitosamente.
+	 *
+	 * @param peregrino El objeto Peregrino recién registrado.
+	 */
 	private void guardarAlerta(Peregrino peregrino) {
 
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -390,6 +451,15 @@ public class RegistroController implements Initializable {
 		alert.showAndWait();
 	}
 
+	/**
+	 * Valida un campo utilizando una expresión regular.
+	 *
+	 * @param campo  Nombre del campo a validar.
+	 * @param valor  Valor ingresado en el campo.
+	 * @param patron Expresión regular para validar el valor.
+	 * @return true si el valor cumple con la expresión regular, false en caso
+	 *         contrario.
+	 */
 	private boolean valida(String campo, String valor, String patron) {
 		if (!valor.isEmpty()) {
 			Pattern p = Pattern.compile(patron);
@@ -406,6 +476,15 @@ public class RegistroController implements Initializable {
 		}
 	}
 
+	/**
+	 * Verifica si un campo está vacío y muestra una alerta si es necesario.
+	 *
+	 * @param field Nombre del campo a verificar.
+	 * @param empty {@code true} si el campo está vacío, {@code false} en caso
+	 *              contrario.
+	 * @return true si el campo no está vacío, false si está vacío y muestra una
+	 *         alerta.
+	 */
 	private boolean validacionVacia(String field, boolean empty) {
 		if (!empty) {
 			return true;
@@ -415,6 +494,13 @@ public class RegistroController implements Initializable {
 		}
 	}
 
+	/**
+	 * Muestra una alerta de validación en caso de que un campo esté vacío o tenga
+	 * un valor inválido.
+	 *
+	 * @param field Nombre del campo que se está validando.
+	 * @param empty true si el campo está vacío, false si el valor no es válido.
+	 */
 	private void validacionAlerta(String field, boolean empty) {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Error de Validación");
@@ -432,6 +518,9 @@ public class RegistroController implements Initializable {
 		alert.showAndWait();
 	}
 
+	/**
+	 * Limpia los campos de entrada en el formulario de registro.
+	 */
 	@FXML
 	private void limpiarCampos() {
 		usuario.clear();
@@ -446,6 +535,13 @@ public class RegistroController implements Initializable {
 		choiceNacionalidad.setValue(null);
 	}
 
+	/**
+	 * Verifica si las contraseñas ingresadas coinciden.
+	 *
+	 * @param password  Primera contraseña ingresada.
+	 * @param cPassword Confirmación de la contraseña.
+	 * @return true si las contraseñas coinciden, false en caso contrario.
+	 */
 	private boolean passwordsCoinciden(String password, String cPassword) {
 		if (cPassword.equals(password))
 			return true;
@@ -453,82 +549,191 @@ public class RegistroController implements Initializable {
 			return false;
 	}
 
+	/**
+	 * Obtiene el texto ingresado en el campo de usuario.
+	 *
+	 * @return Un {@link String} con el nombre de usuario.
+	 */
 	public String getUsuario() {
 		return usuario.getText();
 	}
 
+	/**
+	 * Establece el campo de usuario.
+	 *
+	 * @param usuarioRegis Un objeto {@link TextField} que representa el campo de
+	 *                     usuario.
+	 */
 	public void setUsuario(TextField usuarioRegis) {
 		this.usuario = usuarioRegis;
 	}
 
+	/**
+	 * Obtiene el nombre ingresado en el campo de texto.
+	 *
+	 * @return Un {@link String} con el nombre del usuario.
+	 */
 	public String getNombre() {
 		return nombre.getText();
 	}
 
+	/**
+	 * Establece el nombre en el campo de texto.
+	 *
+	 * @param nombreRegis Un objeto {@link TextField} con el nombre del usuario.
+	 */
 	public void setNombre(TextField nombreRegis) {
 		this.nombre = nombreRegis;
 	}
 
+	/**
+	 * Obtiene los apellidos ingresados en el campo de texto.
+	 *
+	 * @return Un {@link String} con los apellidos del usuario.
+	 */
 	public String getApellidos() {
 		return apellidos.getText();
 	}
 
+	/**
+	 * Establece los apellidos en el campo de texto.
+	 *
+	 * @param apellidosRegis Un objeto {@link TextField} con los apellidos del
+	 *                       usuario.
+	 */
 	public void setApellidos(TextField apellidosRegis) {
 		this.apellidos = apellidosRegis;
 	}
 
+	/**
+	 * Obtiene el correo electrónico ingresado en el campo de texto.
+	 *
+	 * @return Un {@link String} con la dirección de correo electrónico.
+	 */
 	public String getEmail() {
 		return email.getText();
 	}
 
+	/**
+	 * Establece el correo electrónico en el campo de texto.
+	 *
+	 * @param emailRegis Un objeto {@link TextField} con la dirección de correo
+	 *                   electrónico.
+	 */
 	public void setEmail(TextField emailRegis) {
 		this.email = emailRegis;
 	}
 
+	/**
+	 * Obtiene la contraseña ingresada en el campo de texto.
+	 *
+	 * @return Un {@link String} con la contraseña del usuario.
+	 */
 	public String getPassword() {
 		return password.getText();
 	}
 
+	/**
+	 * Establece la contraseña en el campo de texto.
+	 *
+	 * @param passwordRegis Un objeto {@link TextField} con la contraseña del
+	 *                      usuario.
+	 */
 	public void setPassword(TextField passwordRegis) {
 		this.password = passwordRegis;
 	}
 
+	/**
+	 * Obtiene la confirmación de la contraseña ingresada en el campo de texto.
+	 *
+	 * @return Un {@link String} con la confirmación de la contraseña.
+	 */
 	public String getCPassword() {
 		return cPassword.getText();
 	}
 
+	/**
+	 * Establece la confirmación de la contraseña en el campo de texto.
+	 *
+	 * @param cPasswordRegis Un objeto {@link TextField} con la confirmación de la
+	 *                       contraseña.
+	 */
 	public void setCPassword(TextField cPasswordRegis) {
 		this.cPassword = cPasswordRegis;
 	}
 
+	/**
+	 * Obtiene el ComboBox de nacionalidades.
+	 *
+	 * @return Un {@link ComboBox} con las opciones de nacionalidad.
+	 */
 	public ComboBox<String> getChoiceNacionalidad() {
 		return choiceNacionalidad;
 	}
 
+	/**
+	 * Establece el ComboBox de nacionalidades.
+	 *
+	 * @param choiceNacionalidad Un objeto {@link ComboBox} con las opciones de
+	 *                           nacionalidad.
+	 */
 	public void setChoiceNacionalidad(ComboBox<String> choiceNacionalidad) {
 		this.choiceNacionalidad = choiceNacionalidad;
 	}
 
+	/**
+	 * Obtiene el ComboBox de paradas disponibles.
+	 *
+	 * @return Un {@link ComboBox} con las paradas disponibles.
+	 */
 	public ComboBox<Parada> getChoiceParadas() {
 		return choiceParadas;
 	}
 
+	/**
+	 * Establece el ComboBox de paradas disponibles.
+	 *
+	 * @param choiceParadas Un objeto {@link ComboBox} con las paradas disponibles.
+	 */
 	public void setChoiceParadas(ComboBox<Parada> choiceParadas) {
 		this.choiceParadas = choiceParadas;
 	}
 
+	/**
+	 * Obtiene el servicio de paradas.
+	 *
+	 * @return Un objeto {@link ParadaService} que maneja las operaciones sobre las
+	 *         paradas.
+	 */
 	public ParadaService getParadaService() {
 		return paradaService;
 	}
 
+	/**
+	 * Establece el servicio de paradas.
+	 *
+	 * @param paradaService Un objeto {@link ParadaService} que maneja las
+	 *                      operaciones sobre las paradas.
+	 */
 	public void setParadaService(ParadaService paradaService) {
 		this.paradaService = paradaService;
 	}
 
+	/**
+	 * Obtiene la fecha de nacimiento del usuario.
+	 *
+	 * @return Un objeto {@link DatePicker} con la fecha de nacimiento seleccionada.
+	 */
 	public DatePicker getFechaNac() {
 		return fechaNac;
 	}
 
+	/**
+	 * Establece la fecha de nacimiento del usuario.
+	 *
+	 * @param fechaNac Un objeto {@link DatePicker} con la fecha de nacimiento
+	 *                 seleccionada.
+	 */
 	public void setFechaNac(DatePicker fechaNac) {
 		this.fechaNac = fechaNac;
 	}

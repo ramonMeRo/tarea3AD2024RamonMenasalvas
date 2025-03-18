@@ -61,6 +61,10 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 /**
+ * Controlador de la ventana del administrador que tiene funciones para la
+ * administración de paradas y usuarios Permite la gestión de paradas, registro
+ * de usuarios y generación de informes
+ * 
  * @author Ramon
  * @since 01-01-2025
  */
@@ -136,16 +140,27 @@ public class AdministradorController implements Initializable {
 
 	private ObservableList<Parada> paradaList = FXCollections.observableArrayList();
 
+	/**
+	 * Redirige a la pantalla de inicio.
+	 */
 	@FXML
 	private void volver() {
 		stageManager.switchScene(FxmlView.INICIO);
 	}
 
+	/**
+	 * Limpia los campos de entrada en el formulario.
+	 */
 	@FXML
 	void reset(ActionEvent event) {
 		limpiarCampos();
 	}
 
+	/**
+	 * Registra un nuevo usuario y su respectiva parada.
+	 * 
+	 * @param event Evento de acción.
+	 */
 	@FXML
 	public void registrarUsuario(ActionEvent event) {
 
@@ -195,11 +210,14 @@ public class AdministradorController implements Initializable {
 			}
 
 			limpiarCampos();
-			loadUserDetails();
+			loadParadaDetails();
 		}
 
 	}
 
+	/**
+	 * Limpia los campos de entrada del formulario.
+	 */
 	private void limpiarCampos() {
 		userId.setText(null);
 		regionParada.clear();
@@ -211,6 +229,11 @@ public class AdministradorController implements Initializable {
 		passwordConf.clear();
 	}
 
+	/**
+	 * Muestra un mensaje de alerta cuando un usuario se guarda correctamente.
+	 * 
+	 * @param user Usuario registrado
+	 */
 	private void guardarAlerta(Usuario user) {
 
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -220,6 +243,12 @@ public class AdministradorController implements Initializable {
 		alert.showAndWait();
 	}
 
+	/**
+	 * Muestra una alerta indicando que un usuario ha sido actualizado
+	 * correctamente.
+	 *
+	 * @param user El usuario que ha sido actualizado.
+	 */
 	private void actualizarAlerta(Usuario user) {
 
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -229,62 +258,12 @@ public class AdministradorController implements Initializable {
 		alert.showAndWait();
 	}
 
-	public String getNombreParada() {
-		return nombreParada.getText();
-	}
-
-	public char getRegionParada() {
-		return regionParada.getText().charAt(0);
-	}
-
-	public void setRegionParada(TextField regionParada) {
-		this.regionParada = regionParada;
-	}
-
-	public String getUsuarioResponsable() {
-		return usuarioResponsable.getText(); 
-	}
-
-	public void setUsuarioResponsable(TextField usuarioResponsable) {
-		this.usuarioResponsable = usuarioResponsable;
-	}
-
-	public String getNombreResponsable() {
-		return nombreResponsable.getText();
-	}
-
-	public void setNombreResponsable(TextField nombreResponsable) {
-		this.nombreResponsable = nombreResponsable;
-	}
-
-	public String getPasswordConf() {
-		return passwordConf.getText();
-	}
-
-	public void setPasswordConf(PasswordField passwordConf) {
-		this.passwordConf = passwordConf;
-	}
-
-	public void setNombreParada(TextField nombreParada) {
-		this.nombreParada = nombreParada;
-	}
-
-	public void setEmail(TextField email) {
-		this.email = email;
-	}
-
-	public void setPassword(PasswordField password) {
-		this.password = password;
-	}
-
-	public String getEmail() {
-		return email.getText();
-	}
-
-	public String getPassword() {
-		return password.getText();
-	}
-
+	/**
+	 * Inicializa la vista, Cargando las tablas con datos.
+	 * 
+	 * @param location  URL de inicialización.
+	 * @param resources Recursos para la inicialización.
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -293,11 +272,11 @@ public class AdministradorController implements Initializable {
 		setColumnProperties();
 
 		// Add all users into table
-		loadUserDetails();
+		loadParadaDetails();
 	}
 
-	/*
-	 * Set All userTable column properties
+	/**
+	 * Configura las propiedades de las columnas de la tabla.
 	 */
 	private void setColumnProperties() {
 		colParadaId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -348,18 +327,23 @@ public class AdministradorController implements Initializable {
 		}
 	};
 
-	/*
-	 * Add All users to observable list and update table
+	/**
+	 * Carga los detalles de las paradas en la tabla.
 	 */
-	private void loadUserDetails() {
+	private void loadParadaDetails() {
 		paradaList.clear();
 		paradaList.addAll(paradaService.findAll());
 
 		userTable.setItems(paradaList);
 	}
 
-	/*
-	 * Validations
+	/**
+	 * Valida los campos de entrada con expresiones regulares.
+	 * 
+	 * @param campo  Nombre del campo
+	 * @param valor  Valor ingresado
+	 * @param patron Expresión regular a validar
+	 * @return true si es válido, false en caso contrario
 	 */
 	private boolean valida(String campo, String valor, String patron) {
 		if (!valor.isEmpty()) {
@@ -377,12 +361,20 @@ public class AdministradorController implements Initializable {
 		}
 	}
 
+	/**
+	 * Maneja la pulsación de la tecla F1 para mostrar la ayuda.
+	 * 
+	 * @param event Evento del teclado.
+	 */
 	public void ayudaF1(KeyEvent event) {
 		if (event.getCode().toString().equals("F1")) {
 			ayuda();
 		}
 	}
 
+	/**
+	 * Muestra la ventana de ayuda con el manual de usuario.
+	 */
 	@FXML
 	private void ayuda() {
 		try {
@@ -428,6 +420,9 @@ public class AdministradorController implements Initializable {
 		alert.showAndWait();
 	}
 
+	/**
+	 * Genera un informe en formato PDF de las estancias por parada.
+	 */
 	public void generarInforme() {
 		Connection conexion = null;
 		try {
@@ -468,6 +463,11 @@ public class AdministradorController implements Initializable {
 		}
 	}
 
+	/**
+	 * Abre un archivo PDF generado previamente.
+	 * 
+	 * @param rutaSalida Ruta del archivo a abrir.
+	 */
 	public void abrirPDF(String rutaSalida) {
 		File archivoPDF = new File(rutaSalida);
 		if (!archivoPDF.exists()) {
@@ -482,6 +482,11 @@ public class AdministradorController implements Initializable {
 		}
 	}
 
+	/**
+	 * Obtiene el origen de datos para la conexión con la base de datos.
+	 * 
+	 * @return DataSource Configuración de conexión a la BD.
+	 */
 	private DataSource getDataSource() {
 		DriverManagerDataSource ds = new DriverManagerDataSource();
 		ds.setUrl("jdbc:mysql://localhost:3306/bdtarea3adramonmenasalvas?useSSL=false");
@@ -489,6 +494,132 @@ public class AdministradorController implements Initializable {
 		ds.setPassword("");
 		ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
 		return ds;
+	}
+
+	/**
+	 * Obtiene el nombre de la parada ingresado en el campo de texto.
+	 * 
+	 * @return Nombre de la parada.
+	 */
+	public String getNombreParada() {
+		return nombreParada.getText();
+	}
+
+	/**
+	 * Obtiene la región de la parada ingresada en el campo de texto.
+	 * 
+	 * @return Primera letra de la región como un carácter.
+	 */
+	public char getRegionParada() {
+		return regionParada.getText().charAt(0);
+	}
+
+	/**
+	 * Establece el campo de texto de la región de la parada.
+	 * 
+	 * @param regionParada Campo de texto de la región de la parada.
+	 */
+	public void setRegionParada(TextField regionParada) {
+		this.regionParada = regionParada;
+	}
+
+	/**
+	 * Obtiene el usuario responsable ingresado en el campo de texto.
+	 * 
+	 * @return Nombre del usuario responsable.
+	 */
+	public String getUsuarioResponsable() {
+		return usuarioResponsable.getText();
+	}
+
+	/**
+	 * Establece el campo de texto del usuario responsable.
+	 * 
+	 * @param usuarioResponsable Campo de texto del usuario responsable.
+	 */
+	public void setUsuarioResponsable(TextField usuarioResponsable) {
+		this.usuarioResponsable = usuarioResponsable;
+	}
+
+	/**
+	 * Obtiene el nombre del responsable ingresado en el campo de texto.
+	 * 
+	 * @return Nombre del responsable.
+	 */
+	public String getNombreResponsable() {
+		return nombreResponsable.getText();
+	}
+
+	/**
+	 * Establece el campo de texto del nombre del responsable.
+	 * 
+	 * @param nombreResponsable Campo de texto del nombre del responsable.
+	 */
+	public void setNombreResponsable(TextField nombreResponsable) {
+		this.nombreResponsable = nombreResponsable;
+	}
+
+	/**
+	 * Obtiene la confirmación de la contraseña ingresada en el campo de texto.
+	 * 
+	 * @return Confirmación de la contraseña.
+	 */
+	public String getPasswordConf() {
+		return passwordConf.getText();
+	}
+
+	/**
+	 * Establece el campo de texto de confirmación de contraseña.
+	 * 
+	 * @param passwordConf Campo de texto de confirmación de contraseña.
+	 */
+	public void setPasswordConf(PasswordField passwordConf) {
+		this.passwordConf = passwordConf;
+	}
+
+	/**
+	 * Establece el campo de texto del nombre de la parada.
+	 * 
+	 * @param nombreParada Campo de texto del nombre de la parada.
+	 */
+	public void setNombreParada(TextField nombreParada) {
+		this.nombreParada = nombreParada;
+	}
+
+	/**
+	 * Establece el campo de texto del correo electrónico.
+	 * 
+	 * @param email Campo de texto del correo electrónico.
+	 */
+	public void setEmail(TextField email) {
+		this.email = email;
+	}
+
+	/**
+	 * Establece el campo de texto de la contraseña.
+	 * 
+	 * @param password Campo de texto de la contraseña.
+	 */
+	public void setPassword(PasswordField password) {
+		this.password = password;
+	}
+
+	/**
+	 * Obtiene el correo electrónico ingresado en el campo de texto.
+	 * 
+	 * @return Correo electrónico.
+	 */
+	public String getEmail() {
+		return email.getText();
+	}
+
+	/**
+	 * Obtiene la contraseña ingresada en el campo de texto.
+	 * 
+	 * @return Contraseña.
+	 */
+	public String getPassword() {
+		return password.getText();
 	}
 
 }

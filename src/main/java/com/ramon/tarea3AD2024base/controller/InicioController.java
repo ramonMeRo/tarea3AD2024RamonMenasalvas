@@ -35,6 +35,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
+ * Controlador de la ventana del inicio que tiene funciones para la
+ * autentificación de un usuario y en funcion del tipo le redirige a una ventana
+ * u otra y la redireccion a la ventana de registro de peregrinos.
+ * 
  * @author Ramon
  * @since 01-01-2025
  */
@@ -71,15 +75,24 @@ public class InicioController implements Initializable {
 	@Lazy
 	@Autowired
 	public StageManager stageManager;
-	
 
 	public static Sesion sesion = new Sesion();
 
+	/**
+	 * Cierra la aplicación.
+	 */
 	@FXML
 	private void salir() {
 		VistaUtils.Salir();
 	}
 
+	/**
+	 * Maneja el evento de inicio de sesión. Verifica las credenciales del usuario y
+	 * redirige a la vista correspondiente según el perfil.
+	 * 
+	 * @param event Evento del botón de inicio de sesión.
+	 * @throws IOException Si ocurre un error al cambiar de escena.
+	 */
 	@FXML
 	public void login(ActionEvent event) throws IOException {
 		if (userService.authenticate(getUsername(), getPassword())) {
@@ -110,16 +123,24 @@ public class InicioController implements Initializable {
 			alert.setHeaderText("Intento de inicio de sesion");
 			alert.setContentText("Usuario y/o contraseña incorrectos");
 			alert.showAndWait();
-		
+
 		}
 	}
 
+	/**
+	 * Maneja la pulsación de la tecla F1 para mostrar la ayuda.
+	 * 
+	 * @param event Evento del teclado.
+	 */
 	public void ayudaF1(KeyEvent event) {
 		if (event.getCode().toString().equals("F1")) {
 			ayuda();
 		}
 	}
 
+	/**
+	 * Muestra la ventana de ayuda con el manual de usuario.
+	 */
 	@FXML
 	private void ayuda() {
 		try {
@@ -144,6 +165,11 @@ public class InicioController implements Initializable {
 		}
 	}
 
+	/**
+	 * Redirige al usuario a la pantalla de registro.
+	 * 
+	 * @param event Evento del botón de registro.
+	 */
 	@FXML
 	private void registrarse(ActionEvent event) {
 		if (hlRegistro.isPressed())
@@ -151,47 +177,73 @@ public class InicioController implements Initializable {
 		stageManager.switchScene(FxmlView.REGISTRO);
 	}
 
+	/**
+	 * Obtiene la contraseña ingresada.
+	 * 
+	 * @return Contraseña ingresada en el campo de texto.
+	 */
 	public String getPassword() {
 		return password.getText();
 	}
 
+	/**
+	 * Obtiene el nombre de usuario ingresado.
+	 * 
+	 * @return Nombre de usuario ingresado en el campo de texto.
+	 */
 	public String getUsername() {
 		return txtUsuario.getText();
 	}
-	
+
+	/**
+	 * Establece el campo de texto del nombre de usuario.
+	 * 
+	 * @param txtUsuario Campo de texto del nombre de usuario.
+	 */
 	public void setTxtUsuario(TextField txtUsuario) {
-	    this.txtUsuario = txtUsuario;
+		this.txtUsuario = txtUsuario;
 	}
 
+	/**
+	 * Establece el campo de texto de la contraseña.
+	 * 
+	 * @param password Campo de texto de la contraseña.
+	 */
 	public void setPassword(PasswordField password) {
-	    this.password = password;
+		this.password = password;
 	}
 
-
+	/**
+	 * Inicializa la vista, configurando la funcionalidad de mostrar u ocultar la
+	 * contraseña.
+	 * 
+	 * @param location  URL de inicialización.
+	 * @param resources Recursos para la inicialización.
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
 		passwordVisible.textProperty().bindBidirectional(password.textProperty());
-		
+
 		Image iconoCerrado = new Image(getClass().getResourceAsStream("/img/ojoCerrado.png"));
 		Image iconoAbierto = new Image(getClass().getResourceAsStream("/img/ojoAbierto.png"));
 
 		btnVisible.setOnMouseClicked(event -> {
-		    mostrarContraseña = !mostrarContraseña;
-		    
-		    if (mostrarContraseña) {
-		        btnVisible.setImage(iconoAbierto);
-		        passwordVisible.setVisible(true);
-		        passwordVisible.setManaged(true);
-		        password.setVisible(false);
-		        password.setManaged(false);
-		    } else {
-		        btnVisible.setImage(iconoCerrado);
-		        password.setVisible(true);
-		        password.setManaged(true);
-		        passwordVisible.setVisible(false);
-		        passwordVisible.setManaged(false);
-		    }
+			mostrarContraseña = !mostrarContraseña;
+
+			if (mostrarContraseña) {
+				btnVisible.setImage(iconoAbierto);
+				passwordVisible.setVisible(true);
+				passwordVisible.setManaged(true);
+				password.setVisible(false);
+				password.setManaged(false);
+			} else {
+				btnVisible.setImage(iconoCerrado);
+				password.setVisible(true);
+				password.setManaged(true);
+				passwordVisible.setVisible(false);
+				passwordVisible.setManaged(false);
+			}
 		});
 
 	}
