@@ -268,7 +268,7 @@ public class ResponsableController implements Initializable {
 	 * @throws NullPointerException si no se selecciona un peregrino.
 	 */
 	@FXML
-	private void sellarCarnet() {
+	public void sellarCarnet() {
 
 		if (choicePeregrinos.getValue() == null) {
 			Alert alert = new Alert(AlertType.ERROR);

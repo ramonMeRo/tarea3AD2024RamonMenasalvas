@@ -41,6 +41,12 @@ public class Visita implements Serializable {
 	public Visita() {
 	}
 
+	public Visita(Peregrino peregrino, Parada parada, LocalDate fecha) {
+		this.peregrino = peregrino;
+		this.parada = parada;
+		this.fecha = fecha;
+	}
+
 	public Visita(Long id, Peregrino peregrino, Parada parada, LocalDate fecha) {
 		this.id = id;
 		this.peregrino = peregrino;
