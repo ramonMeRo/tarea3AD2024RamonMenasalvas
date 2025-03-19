@@ -70,7 +70,7 @@ public class MongodbService {
 		}
 
 		String nombreBackup = "backupcarnets_"
-				+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss"));
+				+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy_HH:mm:ss"));
 
 		Map<String, Object> backup = new HashMap<>();
 		backup.put("nombre", nombreBackup);
