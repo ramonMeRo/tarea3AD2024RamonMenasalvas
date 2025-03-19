@@ -29,10 +29,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 @ExtendWith(MockitoExtension.class)
-class LoginControllerTest {
+class LoginTest {
 
+	@Mock
 	InicioController controller;
-
 	@Mock
 	UsuarioService userService;
 	@Mock
@@ -40,8 +40,7 @@ class LoginControllerTest {
 
 	@BeforeAll
 	static void initJfx() {
-		Platform.startup(() -> {
-		});
+		Platform.startup(() -> {});
 	}
 
 	@BeforeEach
@@ -49,7 +48,6 @@ class LoginControllerTest {
 		controller = new InicioController();
 		controller.userService = userService;
 		controller.stageManager = stageManager;
-
 		controller.txtUsuario = new TextField();
 		controller.password = new PasswordField();
 	}
